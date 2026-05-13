@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>LEM Admin | ORCA Studios</title>
+    
+    <link rel="manifest" href="manifest-admin.json">
+    <meta name="theme-color" content="#784311">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+    <script src="https://unpkg.com/html5-qrcode"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-database-compat.js"></script>
+
+    <style>
+        :root { 
+            --lem-gold: #d4a373; 
+            --lem-verde: #38b000; 
+            --silver-admin: #bdc3c7;
+            --gold-admin: #d4af37;
+        }
+        body { background: #000; color: #fff; font-family: 'Inter', sans-serif; margin: 0; padding: 20px; text-align: center; }
+        .header { margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid #222; }
+        #reader { width: 100%; max-width: 400px; margin: 0 auto; border: 2px solid var(--lem-gold); border-radius: 25px; overflow: hidden; }
+        
+        .admin-card { background: #0a0a0a; border: 1px solid var(--lem-gold); border-radius: 30px; padding: 25px; margin-top: 20px; display: none; }
+        .btn-action { background: var(--lem-gold); color: #000; border: none; padding: 18px 25px; border-radius: 15px; font-weight: bold; text-transform: uppercase; margin: 8px; width: 45%; }
+        .btn-scan-again { background: transparent; color: var(--lem-gold); border: 1px solid var(--lem-gold); margin-top: 20px; width: 100%; padding: 15px; border-radius: 15px; font-weight: bold; text-transform: uppercase; }
+        .status-msg { color: var(--lem-verde); font-weight: bold; margin-top: 15px; }
+
+        .reward-alert { 
+            padding: 15px; border-radius: 15px; margin: 15px 0; display: none;
+            border-width: 2px; border-style: solid;
+            animation: pulse-soft 2s infinite;
+        }
+
+        .alert-silver { 
+            background: rgba(189, 195, 199, 0.1); 
+            border-color: var(--silver-admin); 
+            color: var(--silver-admin);
+        }
+
+        .alert-gold { 
+            background: rgba(212, 175, 55, 0.1); 
+            border-color: var(--gold-admin); 
+            color: var(--gold-admin);
+        }
+
+        @keyframes pulse-soft {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); opacity: 0.8; }
+            100% { transform: scale(1); }
+        }
+
+        .btn-reset { background: #660000; color: #fff; border: none; padding: 10px; border-radius: 10px; font-size: 0.7rem; margin-top: 10px; width: 100%; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h2 style="color: var(--lem-gold); letter-spacing: 3px; margin: 0;">LEM MODA</h2>
+        <p style="font-size: 0.65rem; color: #555; margin: 5px 0;">PANEL DE CONTROL ADMIN</p>
+    </div>
+
+    <div id="reader-container">
+        <div id="reader"></div>
+    </div>
+
+    <div id="adminPanel" class="admin-card">
+        <h3 id="clientPhone" style="color: var(--lem-gold); font-weight: 300;">WhatsApp: ---</h3>
+        <p style="margin: 5px 0; font-size: 0.8rem; color: #666;">Puntos Actuales:</p>
+        <span id="currentPoints" style="font-size: 3rem; color: #fff; font-weight: bold;">0</span>
+        
+        <div id="adminRewardAlert" class="reward-alert">
+            <span id="rewardText" style="font-size: 1rem; font-weight: bold; letter-spacing: 1px;"></span>
+        </div>
+
+        <div style="display: flex; justify-content: center; margin-top: 20px;">
+            <button class="btn-action" onclick="adjustPoints(1)">+ SELLO</button>
+            <button class="btn-action" style="background: #222; color: #fff;" onclick="adjustPoints(-1)">- QUITAR</button>
+        </div>
+
+        <button id="resetBtn" class="btn-reset" style="display:none;" onclick="resetCard()">REINICIAR TARJETA (PREMIO ENTREGADO)</button>
+
+        <p id="logMsg" class="status-msg"></p>
+        <button class="btn-scan-again" onclick="restartScanner()">VOLVER A ESCANEAR</button>
+    </div>
+
+    <script>
+        const firebaseConfig = { 
+            databaseURL: "https://lem-moda-loyalty-default-rtdb.firebaseio.com/",
+            appId: "1:901791881107:web:e1ff85e3fc768064eeba66"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
+        let html5QrCode;
+
+        // FUNCIÓN DE REPORTE DIARIO (Cierre de día)
+        function actualizarRegistroDelDia(phone, puntosFinales) {
+            const ahora = new Date();
+            const carpetaFecha = ahora.getFullYear() + "-" + 
+                                String(ahora.getMonth() + 1).padStart(2, '0') + "-" + 
+                                String(ahora.getDate()).padStart(2, '0');
+            
+            // Usamos .set() con el teléfono como ID para que el cliente sea único por fecha
+            db.ref('reporte_diario/' + carpetaFecha + '/' + phone).set({
+                whatsapp: phone,
+                puntos_al_cierre: puntosFinales,
+                hora_ultima_accion: ahora.toLocaleTimeString()
+            });
+        }
+
+        async function startScanner() {
+            html5QrCode = new Html5Qrcode("reader");
+            const config = { fps: 15, qrbox: { width: 250, height: 250 } };
+            try {
+                await html5QrCode.start({ facingMode: "environment" }, config, (decodedText) => {
+                    html5QrCode.stop().then(() => {
+                        document.getElementById('reader-container').style.display = 'none';
+                        document.getElementById('adminPanel').style.display = 'block';
+                        loadUserData(decodedText);
+                    });
+                });
+            } catch (err) { console.error("Error al iniciar cámara", err); }
+        }
+
+        function loadUserData(phone) {
+            db.ref('lem_users/' + phone).on('value', (snap) => {
+                const data = snap.val();
+                const puntos = data ? (data.puntos || 0) : 0;
+                document.getElementById('clientPhone').innerText = "WhatsApp: " + phone;
+                document.getElementById('currentPoints').innerText = puntos;
+                updateAdminAlerts(puntos);
+            });
+        }
+
+        function updateAdminAlerts(puntos) {
+            const alertBox = document.getElementById('adminRewardAlert');
+            const alertText = document.getElementById('rewardText');
+            const resetBtn = document.getElementById('resetBtn');
+
+            alertBox.classList.remove('alert-silver', 'alert-gold');
+
+            if (puntos === 4) {
+                alertBox.style.display = 'block';
+                alertBox.classList.add('alert-silver');
+                alertText.innerHTML = "🥈 ENTREGAR BENEFICIO:<br>50% DESCUENTO";
+                resetBtn.style.display = 'none';
+            } else if (puntos >= 8) {
+                alertBox.style.display = 'block';
+                alertBox.classList.add('alert-gold');
+                alertText.innerHTML = "🏆 ENTREGAR BENEFICIO:<br>PRENDA DE REGALO";
+                resetBtn.style.display = 'block'; 
+            } else {
+                alertBox.style.display = 'none';
+                resetBtn.style.display = 'none';
+            }
+        }
+
+        function adjustPoints(change) {
+            const phone = document.getElementById('clientPhone').innerText.replace("WhatsApp: ", "");
+            const ref = db.ref('lem_users/' + phone + '/puntos');
+            ref.transaction((c) => {
+                let newVal = (c || 0) + change;
+                return (newVal < 0) ? 0 : (newVal > 8 ? 8 : newVal);
+            }, (error, committed, snapshot) => {
+                if (committed) {
+                    actualizarRegistroDelDia(phone, snapshot.val());
+                }
+            });
+        }
+
+        function resetCard() {
+            if(confirm("¿Confirmas que ya entregaste el premio y quieres reiniciar los puntos a 0?")) {
+                const phone = document.getElementById('clientPhone').innerText.replace("WhatsApp: ", "");
+                db.ref('lem_users/' + phone + '/puntos').set(0);
+                actualizarRegistroDelDia(phone, 0);
+            }
+        }
+
+        function restartScanner() {
+            const phone = document.getElementById('clientPhone').innerText.replace("WhatsApp: ", "");
+            db.ref('lem_users/' + phone).off(); 
+            document.getElementById('adminPanel').style.display = 'none';
+            document.getElementById('reader-container').style.display = 'block';
+            startScanner();
+        }
+
+        window.onload = startScanner;
+    </script>
+</body>
+</html>
