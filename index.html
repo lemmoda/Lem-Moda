@@ -29,7 +29,6 @@
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-database-compat.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     
-    <!-- Librería de iconos para el nuevo botón -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
     <style>
@@ -37,7 +36,6 @@
             --lem-cafe: #784311; 
             --lem-gold: #d4a373; 
             --lem-verde: #38b000;
-            /* Nuevos colores para marcos */
             --silver-fine: #bdc3c7;
             --gold-fine: #d4af37;
         }
@@ -51,10 +49,19 @@
             align-items: center; 
             justify-content: center; 
             min-height: 100vh; 
-            overflow: hidden; 
+            /* CAMBIO CLAVE: Permitir scroll si el contenido es muy alto */
+            overflow-y: auto; 
         }
 
-        .container { width: 90%; max-width: 380px; text-align: center; position: relative; z-index: 10; }
+        /* Ajuste para que en PC no se pegue al techo */
+        .container { 
+            width: 90%; 
+            max-width: 380px; 
+            text-align: center; 
+            position: relative; 
+            z-index: 10; 
+            padding: 40px 0; /* Margen arriba y abajo */
+        }
         
         .brand-circle {
             width: 120px; height: 120px;
@@ -93,7 +100,6 @@
         .slot::before { content: attr(data-index); color: #444; font-weight: bold; position: absolute; font-size: 0.7rem; }
         .slot.active::before { display: none; }
 
-        /* Estilos añadidos para marcos y textos interiores */
         .silver-frame { border: 1.5px solid var(--silver-fine) !important; }
         .gold-frame { border: 1.5px solid var(--gold-fine) !important; }
         .premio-text { font-size: 0.55rem; line-height: 1.1; font-weight: bold; padding: 2px; text-transform: uppercase; }
@@ -119,7 +125,6 @@
             cursor: pointer; font-size: 0.7rem; letter-spacing: 1px; text-transform: uppercase;
         }
 
-        /* --- NUEVO ESTILO: BOTÓN TIENDA (Añadido sin tocar lo anterior) --- */
         .btn-web-store {
             background: rgba(212, 163, 115, 0.05);
             border: 1px solid rgba(212, 163, 115, 0.3);
@@ -142,7 +147,6 @@
             background: rgba(212, 163, 115, 0.15);
             border-color: var(--lem-gold);
         }
-        /* ----------------------------------------------------------------- */
 
         .modal {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -171,6 +175,10 @@
             background: #000; border: 1px solid var(--lem-gold); 
             border-radius: 35px; padding: 30px; width: 80%; text-align: center; 
         }
+
+        /* Ocultar scrollbar pero mantener funcionalidad */
+        body::-webkit-scrollbar { display: none; }
+        body { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
 <body>
@@ -218,7 +226,6 @@
                 </div>
             </div>
 
-            <!-- INSERTADO AQUÍ: El nuevo botón de tienda -->
             <a href="https://lemmoda.github.io/LEMMODA/" target="_blank" class="btn-web-store">
                 <i class="fa-solid fa-bag-shopping"></i> Ir a la Tienda Online
             </a>
@@ -271,14 +278,12 @@
                     s.className = 'slot' + (isActive ? ' active' : '');
                     s.setAttribute('data-index', index);
 
-                    // Aplicar marcos en 4 y 8
                     if(index === 4) s.classList.add('silver-frame');
                     if(index === 8) s.classList.add('gold-frame');
 
                     if(isActive) {
                         s.innerHTML = '<img src="2.png.png">';
                     } else {
-                        // Textos dentro de los círculos vacíos
                         if(index === 4) s.innerHTML = '<span class="premio-text silver">50% OFF<br>PRENDA</span>';
                         else if (index === 8) s.innerHTML = '<span class="premio-text gold">PRENDA<br>REGALO</span>';
                         else s.innerHTML = ''; 
