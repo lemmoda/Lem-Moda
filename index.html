@@ -49,18 +49,16 @@
             align-items: center; 
             justify-content: center; 
             min-height: 100vh; 
-            /* CAMBIO CLAVE: Permitir scroll si el contenido es muy alto */
             overflow-y: auto; 
         }
 
-        /* Ajuste para que en PC no se pegue al techo */
         .container { 
             width: 90%; 
             max-width: 380px; 
             text-align: center; 
             position: relative; 
             z-index: 10; 
-            padding: 40px 0; /* Margen arriba y abajo */
+            padding: 40px 0;
         }
         
         .brand-circle {
@@ -176,7 +174,6 @@
             border-radius: 35px; padding: 30px; width: 80%; text-align: center; 
         }
 
-        /* Ocultar scrollbar pero mantener funcionalidad */
         body::-webkit-scrollbar { display: none; }
         body { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
@@ -226,7 +223,7 @@
                 </div>
             </div>
 
-            <a href="(AQUI PONER LINK)" target="_blank" class="btn-web-store">
+            <a href="https://lemmoda.github.io/LEMMODA/" target="_blank" class="btn-web-store">
                 <i class="fa-solid fa-bag-shopping"></i> Ir a la Tienda Online
             </a>
 
@@ -252,11 +249,21 @@
             const pin = document.getElementById('userPin').value.trim();
             if(!phone || !pin) return;
             const userRef = db.ref('lem_users/' + phone);
+            
+            // Generamos una marca de tiempo con la hora actual exacta
+            const timestampActual = new Date().toISOString();
+
             userRef.once('value', (snap) => {
                 const data = snap.val();
-                if(!data) userRef.set({pin, puntos: 0}).then(() => login(phone));
-                else if(data.pin === pin) login(phone);
-                else alert("PIN incorrecto");
+                if(!data) {
+                    // SI ES NUEVO: Se guarda con la fecha de hoy (Aparecerá impecable en tu reporte diario)
+                    userRef.set({pin, puntos: 0, fecha_registro: timestampActual, ultima_actividad: timestampActual}).then(() => login(phone));
+                } else if(data.pin === pin) {
+                    // SI YA EXISTÍA: No altera tu reporte, pero actualiza en Firebase quién entró último
+                    userRef.update({ultima_actividad: timestampActual}).then(() => login(phone));
+                } else {
+                    alert("PIN incorrecto");
+                }
             });
         }
 
