@@ -100,7 +100,7 @@
 
         let html5QrCode;
         let nombreClienteMemoria = "Cliente VIP";
-        let telefonoActualLimpio = ""; // Variable global para no depender del texto de la pantalla
+        let telefonoActualLimpio = "";
 
         function actualizarRegistroDelDia(phone, puntosFinales) {
             const ahora = new Date();
@@ -108,7 +108,9 @@
                                 String(ahora.getMonth() + 1).padStart(2, '0') + "-" + 
                                 String(ahora.getDate()).padStart(2, '0');
             
-            console.log("Intentando guardar reporte diario para:", phone, "con puntos:", puntosFinales);
+            // Forzar una alerta visual en la pantalla para saber qué pasa
+            document.getElementById('logMsg').innerText = "Guardando reporte...";
+            document.getElementById('logMsg').style.color = "#d4a373";
 
             db.ref('reporte_diario/' + carpetaFecha + '/' + phone).set({
                 nombre: nombreClienteMemoria,
@@ -116,9 +118,13 @@
                 puntos_al_cierre: puntosFinales,
                 hora_ultima_accion: ahora.toLocaleTimeString()
             }).then(() => {
-                console.log("¡Éxito! Reporte diario creado en Firebase.");
+                document.getElementById('logMsg').innerText = "¡Reporte guardado con éxito!";
+                document.getElementById('logMsg').style.color = "var(--lem-verde)";
             }).catch((err) => {
-                console.error("Error crítico al guardar en reporte_diario:", err);
+                // SI ESTO FALLA, VA A SALTAR UN MENSAJE EN TU CELULAR EXPLICANDO POR QUÉ
+                alert("ERROR EN REPORTE: " + err.message);
+                document.getElementById('logMsg').innerText = "Error al guardar reporte.";
+                document.getElementById('logMsg').style.color = "#ff0000";
             });
         }
 
@@ -133,19 +139,17 @@
                         loadUserData(decodedText);
                     });
                 });
-            } catch (err) { console.error("Error al iniciar cámara", err); }
+            } catch (err) { alert("Error de cámara: " + err); }
         }
 
         function loadUserData(rawPhone) {
-            // Limpieza absoluta por Expresión Regular: extrae única y exclusivamente los números
             let phone = rawPhone.replace(/[^0-9]/g, "");
             
-            // Si venía una URL completa y quedan números raros del dominio, tomamos los últimos 10 dígitos (estándar celular)
             if (phone.length > 10) {
                 phone = phone.slice(-10);
             }
 
-            telefonoActualLimpio = phone; // Guardamos el número puro de forma segura
+            telefonoActualLimpio = phone;
 
             db.ref('lem_users/' + phone).on('value', (snap) => {
                 const data = snap.val();
@@ -157,7 +161,7 @@
                 document.getElementById('currentPoints').innerText = puntos;
                 updateAdminAlerts(puntos);
             }, (error) => {
-                console.error("Error al obtener datos de Firebase:", error);
+                alert("Error al leer usuario: " + error.message);
             });
         }
 
@@ -186,7 +190,7 @@
 
         function adjustPoints(change) {
             if (!telefonoActualLimpio || telefonoActualLimpio === "") {
-                alert("Error: No hay un número de cliente válido en memoria.");
+                alert("Error: No hay un número de cliente válido.");
                 return;
             }
 
@@ -196,9 +200,8 @@
                 return (newVal < 0) ? 0 : (newVal > 8 ? 8 : newVal);
             }, (error, committed, snapshot) => {
                 if (error) {
-                    console.error("Error en transacción:", error);
+                    alert("Error en transacción de puntos: " + error.message);
                 } else if (committed) {
-                    // Llamamos al reporte usando la variable global garantizada libre de textos
                     actualizarRegistroDelDia(telefonoActualLimpio, snapshot.val());
                 }
             });
@@ -223,6 +226,7 @@
             
             document.getElementById('clientName').innerText = "Cargando...";
             document.getElementById('clientPhone').innerText = "WhatsApp: ---";
+            document.getElementById('logMsg').innerText = "";
             
             startScanner();
         }
