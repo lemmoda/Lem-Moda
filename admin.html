@@ -99,26 +99,26 @@
         const db = firebase.database();
 
         let html5QrCode;
-        // Almacenamos temporalmente el nombre en memoria activa para pasarlo al reporte diario
         let nombreClienteMemoria = "Cliente VIP";
+        let telefonoActualLimpio = ""; // Variable global para no depender del texto de la pantalla
 
-        // FUNCIÓN DE REPORTE DIARIO ACTUALIZADA
         function actualizarRegistroDelDia(phone, puntosFinales) {
             const ahora = new Date();
             const carpetaFecha = ahora.getFullYear() + "-" + 
                                 String(ahora.getMonth() + 1).padStart(2, '0') + "-" + 
                                 String(ahora.getDate()).padStart(2, '0');
             
-            // Registramos incluyendo la propiedad "nombre" obtenida de la base de datos
+            console.log("Intentando guardar reporte diario para:", phone, "con puntos:", puntosFinales);
+
             db.ref('reporte_diario/' + carpetaFecha + '/' + phone).set({
                 nombre: nombreClienteMemoria,
                 whatsapp: phone,
                 puntos_al_cierre: puntosFinales,
                 hora_ultima_accion: ahora.toLocaleTimeString()
             }).then(() => {
-                console.log("Reporte diario guardado exitosamente para:", nombreClienteMemoria);
+                console.log("¡Éxito! Reporte diario creado en Firebase.");
             }).catch((err) => {
-                console.error("Error al guardar reporte diario:", err);
+                console.error("Error crítico al guardar en reporte_diario:", err);
             });
         }
 
@@ -136,21 +136,19 @@
             } catch (err) { console.error("Error al iniciar cámara", err); }
         }
 
-        function loadUserData(phone) {
-            // BLINDAJE DE SEGURIDAD: Extrae solo los números en caso de que venga una URL completa en el QR
-            if (phone.includes("phone=")) {
-                phone = phone.split("phone=")[1].split("&")[0];
-            } else if (phone.includes("?")) {
-                phone = phone.split("?")[1].replace(/[^0-9]/g, "");
-            } else if (phone.includes("http")) {
-                const partes = phone.split('/');
-                phone = partes[partes.length - 1].replace(/[^0-9]/g, "");
+        function loadUserData(rawPhone) {
+            // Limpieza absoluta por Expresión Regular: extrae única y exclusivamente los números
+            let phone = rawPhone.replace(/[^0-9]/g, "");
+            
+            // Si venía una URL completa y quedan números raros del dominio, tomamos los últimos 10 dígitos (estándar celular)
+            if (phone.length > 10) {
+                phone = phone.slice(-10);
             }
+
+            telefonoActualLimpio = phone; // Guardamos el número puro de forma segura
 
             db.ref('lem_users/' + phone).on('value', (snap) => {
                 const data = snap.val();
-                
-                // Evaluamos si 'data' existe para evitar crasheos por valores null
                 const puntos = data ? (data.puntos || 0) : 0;
                 nombreClienteMemoria = data && data.nombre ? data.nombre : "Cliente Nuevo / VIP";
                 
@@ -187,16 +185,12 @@
         }
 
         function adjustPoints(change) {
-            // Extraemos puramente los números del contenedor visual para evitar textos ilegales en Firebase
-            const phoneRaw = document.getElementById('clientPhone').innerText;
-            const phone = phoneRaw.replace(/[^0-9]/g, ""); 
-
-            if (!phone || phone === "") {
-                alert("Error: No se ha detectado un número de teléfono válido.");
+            if (!telefonoActualLimpio || telefonoActualLimpio === "") {
+                alert("Error: No hay un número de cliente válido en memoria.");
                 return;
             }
 
-            const ref = db.ref('lem_users/' + phone + '/puntos');
+            const ref = db.ref('lem_users/' + telefonoActualLimpio + '/puntos');
             ref.transaction((c) => {
                 let newVal = (c || 0) + change;
                 return (newVal < 0) ? 0 : (newVal > 8 ? 8 : newVal);
@@ -204,29 +198,26 @@
                 if (error) {
                     console.error("Error en transacción:", error);
                 } else if (committed) {
-                    actualizarRegistroDelDia(phone, snapshot.val());
+                    // Llamamos al reporte usando la variable global garantizada libre de textos
+                    actualizarRegistroDelDia(telefonoActualLimpio, snapshot.val());
                 }
             });
         }
 
         function resetCard() {
             if(confirm("¿Confirmas que ya entregaste el premio y quieres reiniciar los puntos a 0?")) {
-                const phoneRaw = document.getElementById('clientPhone').innerText;
-                const phone = phoneRaw.replace(/[^0-9]/g, ""); 
-                
-                db.ref('lem_users/' + phone + '/puntos').set(0);
-                actualizarRegistroDelDia(phone, 0);
+                if (!telefonoActualLimpio) return;
+                db.ref('lem_users/' + telefonoActualLimpio + '/puntos').set(0);
+                actualizarRegistroDelDia(telefonoActualLimpio, 0);
             }
         }
 
         function restartScanner() {
-            const phoneRaw = document.getElementById('clientPhone').innerText;
-            const phone = phoneRaw.replace(/[^0-9]/g, ""); 
-            
-            if(phone) {
-                db.ref('lem_users/' + phone).off(); 
+            if(telefonoActualLimpio) {
+                db.ref('lem_users/' + telefonoActualLimpio).off(); 
             }
             
+            telefonoActualLimpio = "";
             document.getElementById('adminPanel').style.display = 'none';
             document.getElementById('reader-container').style.display = 'block';
             
