@@ -99,17 +99,16 @@
         const db = firebase.database();
 
         let html5QrCode;
-        // Almacenamos temporalmente el nombre en memoria activa para pasarlo al reporte diario
+        // Almacenamos el nombre en memoria activa para pasarlo de forma segura al reporte diario
         let nombreClienteMemoria = "Cliente VIP";
 
-        // FUNCIÓN DE REPORTE DIARIO ACTUALIZADA (Ahora guarda el nombre del cliente)
+        // FUNCIÓN DE REPORTE DIARIO ACTUALIZADA
         function actualizarRegistroDelDia(phone, puntosFinales) {
             const ahora = new Date();
             const carpetaFecha = ahora.getFullYear() + "-" + 
                                 String(ahora.getMonth() + 1).padStart(2, '0') + "-" + 
                                 String(ahora.getDate()).padStart(2, '0');
             
-            // Registramos incluyendo la propiedad "nombre" obtenida de la base de datos
             db.ref('reporte_diario/' + carpetaFecha + '/' + phone).set({
                 nombre: nombreClienteMemoria,
                 whatsapp: phone,
@@ -137,18 +136,30 @@
         }
 
         function loadUserData(phone) {
+            // BLINDAJE DE SEGURIDAD: Si el QR tiene un enlace completo con el parámetro phone, extrae solo el número
+            if (phone.includes("phone=")) {
+                phone = phone.split("phone=")[1].split("&")[0];
+            } else if (phone.includes("?")) {
+                phone = phone.split("?")[1].replace(/[^0-9]/g, "");
+            } else if (phone.includes("http")) {
+                // En caso de URLs limpias al final
+                const partes = phone.split('/');
+                phone = partes[partes.length - 1].replace(/[^0-9]/g, "");
+            }
+
             db.ref('lem_users/' + phone).on('value', (snap) => {
                 const data = snap.val();
+                
+                // Corrección del error crítico: Evaluamos si 'data' es null antes de leer propiedades
                 const puntos = data ? (data.puntos || 0) : 0;
+                nombreClienteMemoria = data && data.nombre ? data.nombre : "Cliente Nuevo / VIP";
                 
-                // Extraemos el nombre asignado o ponemos "Cliente VIP" por defecto si es antiguo y no lo tiene
-                nombreClienteMemoria = data && data.nombre ? data.nombre : "Cliente VIP";
-                
-                // Imprimimos la información en el panel visual
                 document.getElementById('clientName').innerText = nombreClienteMemoria;
                 document.getElementById('clientPhone').innerText = "WhatsApp: " + phone;
                 document.getElementById('currentPoints').innerText = puntos;
                 updateAdminAlerts(puntos);
+            }, (error) => {
+                console.error("Error al obtener datos de Firebase:", error);
             });
         }
 
@@ -177,6 +188,11 @@
 
         function adjustPoints(change) {
             const phone = document.getElementById('clientPhone').innerText.replace("WhatsApp: ", "");
+            if (!phone || phone === "---") {
+                alert("Error: No se ha detectado un número de teléfono válido.");
+                return;
+            }
+
             const ref = db.ref('lem_users/' + phone + '/puntos');
             ref.transaction((c) => {
                 let newVal = (c || 0) + change;
@@ -202,7 +218,6 @@
             document.getElementById('adminPanel').style.display = 'none';
             document.getElementById('reader-container').style.display = 'block';
             
-            // Limpiamos los textos anteriores antes del nuevo escaneo
             document.getElementById('clientName').innerText = "Cargando...";
             document.getElementById('clientPhone').innerText = "WhatsApp: ---";
             
