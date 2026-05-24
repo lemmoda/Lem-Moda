@@ -37,15 +37,11 @@
         }
 
         .alert-silver { 
-            background: rgba(189, 195, 199, 0.1); 
-            border-color: var(--silver-admin); 
-            color: var(--silver-admin);
+            background: rgba(189, 195, 199, 0.1); border-color: var(--silver-admin); color: var(--silver-admin);
         }
 
         .alert-gold { 
-            background: rgba(212, 175, 55, 0.1); 
-            border-color: var(--gold-admin); 
-            color: var(--gold-admin);
+            background: rgba(212, 175, 55, 0.1); border-color: var(--gold-admin); color: var(--gold-admin);
         }
 
         @keyframes pulse-soft {
@@ -100,7 +96,7 @@
 
         let html5QrCode;
         let nombreClienteMemoria = "Cliente VIP";
-        let telefonoActualLimpio = "";
+        let telefonoOriginalEscaneado = ""; // Volvemos al método directo del admin antiguo
 
         function actualizarRegistroDelDia(phone, puntosFinales) {
             const ahora = new Date();
@@ -108,10 +104,10 @@
                                 String(ahora.getMonth() + 1).padStart(2, '0') + "-" + 
                                 String(ahora.getDate()).padStart(2, '0');
             
-            // Forzar una alerta visual en la pantalla para saber qué pasa
             document.getElementById('logMsg').innerText = "Guardando reporte...";
             document.getElementById('logMsg').style.color = "#d4a373";
 
+            // Se guarda con la ruta e ID exactos del formato antiguo
             db.ref('reporte_diario/' + carpetaFecha + '/' + phone).set({
                 nombre: nombreClienteMemoria,
                 whatsapp: phone,
@@ -121,10 +117,7 @@
                 document.getElementById('logMsg').innerText = "¡Reporte guardado con éxito!";
                 document.getElementById('logMsg').style.color = "var(--lem-verde)";
             }).catch((err) => {
-                // SI ESTO FALLA, VA A SALTAR UN MENSAJE EN TU CELULAR EXPLICANDO POR QUÉ
                 alert("ERROR EN REPORTE: " + err.message);
-                document.getElementById('logMsg').innerText = "Error al guardar reporte.";
-                document.getElementById('logMsg').style.color = "#ff0000";
             });
         }
 
@@ -139,29 +132,22 @@
                         loadUserData(decodedText);
                     });
                 });
-            } catch (err) { alert("Error de cámara: " + err); }
+            } catch (err) { console.error("Error de cámara: ", err); }
         }
 
-        function loadUserData(rawPhone) {
-            let phone = rawPhone.replace(/[^0-9]/g, "");
-            
-            if (phone.length > 10) {
-                phone = phone.slice(-10);
-            }
-
-            telefonoActualLimpio = phone;
+        function loadUserData(phone) {
+            // Regresamos al mapeo 1:1 del archivo original para mantener compatibilidad
+            telefonoOriginalEscaneado = phone;
 
             db.ref('lem_users/' + phone).on('value', (snap) => {
                 const data = snap.val();
                 const puntos = data ? (data.puntos || 0) : 0;
-                nombreClienteMemoria = data && data.nombre ? data.nombre : "Cliente Nuevo / VIP";
+                nombreClienteMemoria = data && data.nombre ? data.nombre : "Cliente VIP";
                 
                 document.getElementById('clientName').innerText = nombreClienteMemoria;
                 document.getElementById('clientPhone').innerText = "WhatsApp: " + phone;
                 document.getElementById('currentPoints').innerText = puntos;
                 updateAdminAlerts(puntos);
-            }, (error) => {
-                alert("Error al leer usuario: " + error.message);
             });
         }
 
@@ -189,38 +175,36 @@
         }
 
         function adjustPoints(change) {
-            if (!telefonoActualLimpio || telefonoActualLimpio === "") {
-                alert("Error: No hay un número de cliente válido.");
+            if (!telefonoOriginalEscaneado) {
+                alert("Error: No hay teléfono detectado.");
                 return;
             }
 
-            const ref = db.ref('lem_users/' + telefonoActualLimpio + '/puntos');
+            const ref = db.ref('lem_users/' + telefonoOriginalEscaneado + '/puntos');
             ref.transaction((c) => {
                 let newVal = (c || 0) + change;
                 return (newVal < 0) ? 0 : (newVal > 8 ? 8 : newVal);
             }, (error, committed, snapshot) => {
-                if (error) {
-                    alert("Error en transacción de puntos: " + error.message);
-                } else if (committed) {
-                    actualizarRegistroDelDia(telefonoActualLimpio, snapshot.val());
+                if (committed) {
+                    actualizarRegistroDelDia(telefonoOriginalEscaneado, snapshot.val());
                 }
             });
         }
 
         function resetCard() {
             if(confirm("¿Confirmas que ya entregaste el premio y quieres reiniciar los puntos a 0?")) {
-                if (!telefonoActualLimpio) return;
-                db.ref('lem_users/' + telefonoActualLimpio + '/puntos').set(0);
-                actualizarRegistroDelDia(telefonoActualLimpio, 0);
+                if (!telefonoOriginalEscaneado) return;
+                db.ref('lem_users/' + telefonoOriginalEscaneado + '/puntos').set(0);
+                actualizarRegistroDelDia(telefonoOriginalEscaneado, 0);
             }
         }
 
         function restartScanner() {
-            if(telefonoActualLimpio) {
-                db.ref('lem_users/' + telefonoActualLimpio).off(); 
+            if(telefonoOriginalEscaneado) {
+                db.ref('lem_users/' + telefonoOriginalEscaneado).off(); 
             }
             
-            telefonoActualLimpio = "";
+            telefonoOriginalEscaneado = "";
             document.getElementById('adminPanel').style.display = 'none';
             document.getElementById('reader-container').style.display = 'block';
             
