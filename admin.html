@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>LEM Admin | Tienda Quito</title>
-    
+    <title>LEM Admin | Panel de Control</title>
+
     <link rel="manifest" href="manifest-admin.json">
-    <meta name="theme-color" content="#784311">
+    <meta name="theme-color" content="#0a0a0a">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
@@ -14,217 +14,631 @@
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-database-compat.js"></script>
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
     <style>
-        :root { 
-            --lem-gold: #d4a373; 
-            --lem-verde: #38b000; 
-            --silver-admin: #bdc3c7;
-            --gold-admin: #d4af37;
-        }
-        body { background: #000; color: #fff; font-family: 'Inter', sans-serif; margin: 0; padding: 20px; text-align: center; }
-        .header { margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid #222; }
-        #reader { width: 100%; max-width: 400px; margin: 0 auto; border: 2px solid var(--lem-gold); border-radius: 25px; overflow: hidden; }
-        
-        .admin-card { background: #0a0a0a; border: 1px solid var(--lem-gold); border-radius: 30px; padding: 25px; margin-top: 20px; display: none; }
-        .btn-action { background: var(--lem-gold); color: #000; border: none; padding: 18px 25px; border-radius: 15px; font-weight: bold; text-transform: uppercase; margin: 8px; width: 45%; }
-        .btn-scan-again { background: transparent; color: var(--lem-gold); border: 1px solid var(--lem-gold); margin-top: 20px; width: 100%; padding: 15px; border-radius: 15px; font-weight: bold; text-transform: uppercase; }
-        .status-msg { color: var(--lem-verde); font-weight: bold; margin-top: 15px; }
-
-        .reward-alert { 
-            padding: 15px; border-radius: 15px; margin: 15px 0; display: none;
-            border-width: 2px; border-style: solid;
-            animation: pulse-soft 2s infinite;
+        :root {
+            --gold: #c9a84c;
+            --gold-dim: rgba(201,168,76,0.12);
+            --gold-border: rgba(201,168,76,0.28);
+            --silver: #b8c0cc;
+            --silver-dim: rgba(184,192,204,0.1);
+            --green: #4caf7d;
+            --red: #e05252;
+            --bg: #050505;
+            --surface: #0d0d0d;
+            --surface-2: #111;
+            --text: #f0ece4;
+            --text-dim: #5a5550;
         }
 
-        .alert-silver { 
-            background: rgba(189, 195, 199, 0.1); 
-            border-color: var(--silver-admin); 
-            color: var(--silver-admin);
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Montserrat', sans-serif;
+            min-height: 100vh;
+            overflow-y: auto;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+            padding: 0 0 40px;
         }
 
-        .alert-gold { 
-            background: rgba(212, 175, 55, 0.1); 
-            border-color: var(--gold-admin); 
-            color: var(--gold-admin);
+        body::-webkit-scrollbar { display: none; }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: 
+                radial-gradient(ellipse 100% 40% at 50% -5%, rgba(201,168,76,0.06) 0%, transparent 60%);
+            pointer-events: none;
+            z-index: 0;
         }
 
-        @keyframes pulse-soft {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.02); opacity: 0.8; }
-            100% { transform: scale(1); }
+        .wrap {
+            max-width: 440px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 1;
         }
 
-        .btn-reset { background: #660000; color: #fff; border: none; padding: 10px; border-radius: 10px; font-size: 0.7rem; margin-top: 10px; width: 100%; cursor: pointer; }
+        /* ── HEADER ── */
+        .admin-header {
+            padding: 22px 0 18px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .admin-brand {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            font-weight: 300;
+            letter-spacing: 0.35em;
+            color: var(--text);
+        }
+
+        .admin-badge {
+            background: var(--gold-dim);
+            border: 1px solid var(--gold-border);
+            border-radius: 3px;
+            padding: 4px 10px;
+            font-size: 0.5rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--gold);
+            font-weight: 600;
+        }
+
+        /* ── QR SCANNER ── */
+        #reader-container {
+            animation: fadeUp 0.5s ease both;
+        }
+
+        .scanner-label {
+            text-align: center;
+            margin-bottom: 16px;
+        }
+
+        .scanner-label h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4rem;
+            font-weight: 300;
+            letter-spacing: 0.2em;
+            color: var(--text);
+            margin-bottom: 4px;
+        }
+
+        .scanner-label p {
+            font-size: 0.6rem;
+            letter-spacing: 0.18em;
+            color: var(--text-dim);
+            text-transform: uppercase;
+        }
+
+        #reader {
+            width: 100%;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid var(--gold-border);
+            background: #000;
+            position: relative;
+        }
+
+        /* Esquinas decorativas del scanner */
+        .scanner-frame {
+            position: relative;
+        }
+
+        .scanner-corner {
+            position: absolute;
+            width: 20px; height: 20px;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        .scanner-corner::before, .scanner-corner::after {
+            content: '';
+            position: absolute;
+            background: var(--gold);
+        }
+
+        .sc-tl { top: 8px; left: 8px; }
+        .sc-tl::before { width: 2px; height: 20px; top: 0; left: 0; }
+        .sc-tl::after  { width: 20px; height: 2px; top: 0; left: 0; }
+
+        .sc-tr { top: 8px; right: 8px; }
+        .sc-tr::before { width: 2px; height: 20px; top: 0; right: 0; }
+        .sc-tr::after  { width: 20px; height: 2px; top: 0; right: 0; }
+
+        .sc-bl { bottom: 8px; left: 8px; }
+        .sc-bl::before { width: 2px; height: 20px; bottom: 0; left: 0; }
+        .sc-bl::after  { width: 20px; height: 2px; bottom: 0; left: 0; }
+
+        .sc-br { bottom: 8px; right: 8px; }
+        .sc-br::before { width: 2px; height: 20px; bottom: 0; right: 0; }
+        .sc-br::after  { width: 20px; height: 2px; bottom: 0; right: 0; }
+
+        /* ── ADMIN PANEL ── */
+        #adminPanel {
+            display: none;
+            animation: fadeUp 0.5s ease both;
+        }
+
+        .client-card {
+            background: linear-gradient(135deg, #0f0d0b 0%, #1a1410 100%);
+            border: 1px solid rgba(201,168,76,0.2);
+            border-radius: 16px;
+            padding: 28px 24px;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 16px;
+        }
+
+        .client-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--gold), #f0d080, var(--gold), transparent);
+            opacity: 0.5;
+        }
+
+        .client-row {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            margin-bottom: 22px;
+        }
+
+        .client-name {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8rem;
+            font-weight: 400;
+            color: var(--text);
+            line-height: 1.1;
+            letter-spacing: 0.02em;
+        }
+
+        .client-phone {
+            font-size: 0.65rem;
+            color: var(--gold);
+            letter-spacing: 0.15em;
+            margin-top: 4px;
+        }
+
+        .points-display {
+            text-align: right;
+        }
+
+        .points-num {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3.5rem;
+            font-weight: 600;
+            color: var(--gold);
+            line-height: 1;
+        }
+
+        .points-label {
+            font-size: 0.48rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--text-dim);
+            display: block;
+            text-align: right;
+        }
+
+        /* Mini stamp progress */
+        .stamp-mini-grid {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 0;
+        }
+
+        .stamp-mini {
+            flex: 1;
+            height: 5px;
+            border-radius: 2px;
+            background: rgba(255,255,255,0.06);
+            transition: background 0.4s, box-shadow 0.4s;
+        }
+
+        .stamp-mini.filled {
+            background: var(--gold);
+            box-shadow: 0 0 6px rgba(201,168,76,0.4);
+        }
+
+        .stamp-mini:nth-child(4) { background: rgba(184,192,204,0.15); }
+        .stamp-mini:nth-child(4).filled { background: var(--silver); box-shadow: 0 0 6px rgba(184,192,204,0.4); }
+        .stamp-mini:nth-child(8) { background: rgba(201,168,76,0.08); }
+        .stamp-mini:nth-child(8).filled { background: #f0d080; box-shadow: 0 0 8px rgba(201,168,76,0.6); }
+
+        /* Reward alert */
+        .reward-alert {
+            border-radius: 8px;
+            padding: 14px 16px;
+            margin: 14px 0 0;
+            display: none;
+            border-width: 1px;
+            border-style: solid;
+            text-align: center;
+        }
+
+        .alert-silver {
+            background: var(--silver-dim);
+            border-color: rgba(184,192,204,0.25);
+        }
+
+        .alert-gold {
+            background: var(--gold-dim);
+            border-color: var(--gold-border);
+        }
+
+        .reward-icon {
+            font-size: 1.5rem;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .reward-main {
+            font-size: 0.62rem;
+            font-weight: 700;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            display: block;
+        }
+
+        .alert-silver .reward-main { color: var(--silver); }
+        .alert-gold .reward-main { color: var(--gold); }
+
+        /* ── ACTION BUTTONS ── */
+        .action-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .btn-add {
+            background: linear-gradient(135deg, #c9a84c, #a07830);
+            color: #0a0600;
+            border: none;
+            padding: 20px 10px;
+            border-radius: 10px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 0.68rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: opacity 0.2s, transform 0.2s;
+        }
+
+        .btn-add:active { transform: scale(0.97); }
+
+        .btn-remove {
+            background: var(--surface-2);
+            color: rgba(255,255,255,0.5);
+            border: 1px solid rgba(255,255,255,0.06);
+            padding: 20px 10px;
+            border-radius: 10px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            font-size: 0.68rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+
+        .btn-remove:hover { border-color: rgba(255,255,255,0.12); color: rgba(255,255,255,0.7); }
+        .btn-remove:active { transform: scale(0.97); }
+
+        .btn-reset {
+            background: transparent;
+            border: 1px solid rgba(224,82,82,0.25);
+            color: rgba(224,82,82,0.6);
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.58rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            padding: 12px;
+            border-radius: 6px;
+            width: 100%;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: none;
+            margin-bottom: 10px;
+        }
+
+        .btn-reset:hover {
+            background: rgba(224,82,82,0.06);
+            color: var(--red);
+            border-color: rgba(224,82,82,0.4);
+        }
+
+        .status-msg {
+            font-size: 0.62rem;
+            letter-spacing: 0.1em;
+            color: var(--green);
+            text-align: center;
+            min-height: 18px;
+            padding: 8px 0 0;
+        }
+
+        .btn-scan-again {
+            background: transparent;
+            border: 1px solid var(--gold-border);
+            color: var(--gold);
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.62rem;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            padding: 15px;
+            border-radius: 6px;
+            width: 100%;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-scan-again:hover { background: var(--gold-dim); }
+
+        /* Ornament */
+        .ornament {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 16px 0;
+            opacity: 0.2;
+        }
+        .ornament::before, .ornament::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--gold);
+        }
+        .ornament-diamond { width: 4px; height: 4px; background: var(--gold); transform: rotate(45deg); }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(16px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse-glow {
+            0%   { box-shadow: 0 0 0 0 rgba(201,168,76,0.3); }
+            50%  { box-shadow: 0 0 0 8px rgba(201,168,76,0); }
+            100% { box-shadow: 0 0 0 0 rgba(201,168,76,0); }
+        }
+
+        .btn-add { animation: pulse-glow 2.5s infinite; }
     </style>
 </head>
 <body>
+<div class="wrap">
 
-    <div class="header">
-        <h2 style="color: var(--lem-gold); letter-spacing: 3px; margin: 0;">LEM MODA</h2>
-        <p style="font-size: 0.65rem; color: #555; margin: 5px 0;">PANEL DE CONTROL ADMIN</p>
+    <div class="admin-header">
+        <div class="admin-brand">LEM MODA</div>
+        <span class="admin-badge">Admin</span>
     </div>
 
+    <!-- SCANNER -->
     <div id="reader-container">
-        <div id="reader"></div>
+        <div class="scanner-label">
+            <h3>Escanear Cliente</h3>
+            <p>Apunta la cámara al QR del cliente</p>
+        </div>
+        <div class="scanner-frame">
+            <div class="scanner-corner sc-tl"></div>
+            <div class="scanner-corner sc-tr"></div>
+            <div class="scanner-corner sc-bl"></div>
+            <div class="scanner-corner sc-br"></div>
+            <div id="reader"></div>
+        </div>
     </div>
 
-    <div id="adminPanel" class="admin-card">
-        <h2 id="clientName" style="color: #fff; margin: 0 0 5px 0; font-weight: 700; font-size: 1.4rem;">Cargando...</h2>
-        <h3 id="clientPhone" style="color: var(--lem-gold); font-weight: 300; margin-top: 0;">WhatsApp: ---</h3>
-        
-        <p style="margin: 5px 0; font-size: 0.8rem; color: #666;">Puntos Actuales:</p>
-        <span id="currentPoints" style="font-size: 3rem; color: #fff; font-weight: bold;">0</span>
-        
-        <div id="adminRewardAlert" class="reward-alert">
-            <span id="rewardText" style="font-size: 1rem; font-weight: bold; letter-spacing: 1px;"></span>
+    <!-- ADMIN PANEL -->
+    <div id="adminPanel">
+
+        <div class="client-card">
+            <div class="client-row">
+                <div>
+                    <div class="client-name" id="clientName">—</div>
+                    <div class="client-phone" id="clientPhone">WhatsApp: —</div>
+                </div>
+                <div class="points-display">
+                    <span class="points-num" id="currentPoints">0</span>
+                    <span class="points-label">Sellos</span>
+                </div>
+            </div>
+
+            <div class="stamp-mini-grid" id="miniStamps">
+                <!-- 8 mini stamps rendered by JS -->
+            </div>
+
+            <div id="adminRewardAlert" class="reward-alert">
+                <span class="reward-icon" id="rewardIcon"></span>
+                <span class="reward-main" id="rewardText"></span>
+            </div>
         </div>
 
-        <div style="display: flex; justify-content: center; margin-top: 20px;">
-            <button class="btn-action" onclick="adjustPoints(1)">+ SELLO</button>
-            <button class="btn-action" style="background: #222; color: #fff;" onclick="adjustPoints(-1)">- QUITAR</button>
+        <div class="action-grid">
+            <button class="btn-add" onclick="adjustPoints(1)">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                Sello
+            </button>
+            <button class="btn-remove" onclick="adjustPoints(-1)">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                Quitar
+            </button>
         </div>
 
-        <button id="resetBtn" class="btn-reset" style="display:none;" onclick="resetCard()">REINICIAR TARJETA (PREMIO ENTREGADO)</button>
+        <button id="resetBtn" class="btn-reset" onclick="resetCard()">
+            ↺ Reiniciar tarjeta — Premio entregado
+        </button>
 
         <p id="logMsg" class="status-msg"></p>
-        <button class="btn-scan-again" onclick="restartScanner()">VOLVER A ESCANEAR</button>
+
+        <div class="ornament"><div class="ornament-diamond"></div></div>
+
+        <button class="btn-scan-again" onclick="restartScanner()">Escanear otro cliente</button>
     </div>
 
-    <script>
-        const firebaseConfig = { 
-            databaseURL: "https://lem-moda-loyalty-default-rtdb.firebaseio.com/",
-            appId: "1:901791881107:web:e1ff85e3fc768064eeba66"
-        };
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.database();
+</div>
 
-        let html5QrCode;
-        // Almacenamos el nombre en memoria activa para pasarlo de forma segura al reporte diario
-        let nombreClienteMemoria = "Cliente VIP";
+<script>
+    const firebaseConfig = {
+        databaseURL: "https://lem-moda-loyalty-default-rtdb.firebaseio.com/",
+        appId: "1:901791881107:web:e1ff85e3fc768064eeba66"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
 
-        // FUNCIÓN DE REPORTE DIARIO ACTUALIZADA
-        function actualizarRegistroDelDia(phone, puntosFinales) {
-            const ahora = new Date();
-            const carpetaFecha = ahora.getFullYear() + "-" + 
-                                String(ahora.getMonth() + 1).padStart(2, '0') + "-" + 
-                                String(ahora.getDate()).padStart(2, '0');
-            
-            db.ref('reporte_diario/' + carpetaFecha + '/' + phone).set({
-                nombre: nombreClienteMemoria,
-                whatsapp: phone,
-                puntos_al_cierre: puntosFinales,
-                hora_ultima_accion: ahora.toLocaleTimeString()
-            }).then(() => {
-                console.log("Reporte diario guardado exitosamente para:", nombreClienteMemoria);
-            }).catch((err) => {
-                console.error("Error al guardar reporte diario:", err);
-            });
-        }
+    let html5QrCode;
+    let nombreClienteMemoria = "Cliente VIP";
 
-        async function startScanner() {
-            html5QrCode = new Html5Qrcode("reader");
-            const config = { fps: 15, qrbox: { width: 250, height: 250 } };
-            try {
-                await html5QrCode.start({ facingMode: "environment" }, config, (decodedText) => {
-                    html5QrCode.stop().then(() => {
-                        document.getElementById('reader-container').style.display = 'none';
-                        document.getElementById('adminPanel').style.display = 'block';
-                        loadUserData(decodedText);
-                    });
+    function actualizarRegistroDelDia(phone, puntosFinales) {
+        const ahora = new Date();
+        const fecha = ahora.getFullYear() + "-" +
+                      String(ahora.getMonth() + 1).padStart(2, '0') + "-" +
+                      String(ahora.getDate()).padStart(2, '0');
+
+        db.ref('reporte_diario/' + fecha + '/' + phone).set({
+            nombre: nombreClienteMemoria,
+            whatsapp: phone,
+            puntos_al_cierre: puntosFinales,
+            hora_ultima_accion: ahora.toLocaleTimeString()
+        });
+    }
+
+    async function startScanner() {
+        html5QrCode = new Html5Qrcode("reader");
+        const config = { fps: 15, qrbox: { width: 220, height: 220 } };
+        try {
+            await html5QrCode.start({ facingMode: "environment" }, config, (decodedText) => {
+                html5QrCode.stop().then(() => {
+                    document.getElementById('reader-container').style.display = 'none';
+                    document.getElementById('adminPanel').style.display = 'block';
+                    loadUserData(decodedText);
                 });
-            } catch (err) { console.error("Error al iniciar cámara", err); }
-        }
-
-        function loadUserData(phone) {
-            // BLINDAJE DE SEGURIDAD: Si el QR tiene un enlace completo con el parámetro phone, extrae solo el número
-            if (phone.includes("phone=")) {
-                phone = phone.split("phone=")[1].split("&")[0];
-            } else if (phone.includes("?")) {
-                phone = phone.split("?")[1].replace(/[^0-9]/g, "");
-            } else if (phone.includes("http")) {
-                // En caso de URLs limpias al final
-                const partes = phone.split('/');
-                phone = partes[partes.length - 1].replace(/[^0-9]/g, "");
-            }
-
-            db.ref('lem_users/' + phone).on('value', (snap) => {
-                const data = snap.val();
-                
-                // Corrección del error crítico: Evaluamos si 'data' es null antes de leer propiedades
-                const puntos = data ? (data.puntos || 0) : 0;
-                nombreClienteMemoria = data && data.nombre ? data.nombre : "Cliente Nuevo / VIP";
-                
-                document.getElementById('clientName').innerText = nombreClienteMemoria;
-                document.getElementById('clientPhone').innerText = "WhatsApp: " + phone;
-                document.getElementById('currentPoints').innerText = puntos;
-                updateAdminAlerts(puntos);
-            }, (error) => {
-                console.error("Error al obtener datos de Firebase:", error);
             });
+        } catch (err) {
+            console.error("Error al iniciar cámara", err);
+        }
+    }
+
+    function loadUserData(phone) {
+        // Extracción segura del número de teléfono
+        if (phone.includes("phone=")) {
+            phone = phone.split("phone=")[1].split("&")[0];
+        } else if (phone.includes("?")) {
+            phone = phone.split("?")[1].replace(/[^0-9]/g, "");
+        } else if (phone.includes("http")) {
+            const partes = phone.split('/');
+            phone = partes[partes.length - 1].replace(/[^0-9]/g, "");
         }
 
-        function updateAdminAlerts(puntos) {
-            const alertBox = document.getElementById('adminRewardAlert');
-            const alertText = document.getElementById('rewardText');
-            const resetBtn = document.getElementById('resetBtn');
+        db.ref('lem_users/' + phone).on('value', (snap) => {
+            const data = snap.val();
+            const puntos = data ? (data.puntos || 0) : 0;
+            nombreClienteMemoria = data && data.nombre ? data.nombre : "Cliente Nuevo";
 
-            alertBox.classList.remove('alert-silver', 'alert-gold');
+            document.getElementById('clientName').innerText = nombreClienteMemoria;
+            document.getElementById('clientPhone').innerText = phone;
+            document.getElementById('currentPoints').innerText = puntos;
+            renderMiniStamps(puntos);
+            updateAdminAlerts(puntos);
+        }, (err) => console.error(err));
+    }
 
-            if (puntos === 4) {
-                alertBox.style.display = 'block';
-                alertBox.classList.add('alert-silver');
-                alertText.innerHTML = "🥈 ENTREGAR BENEFICIO:<br>50% DESCUENTO";
-                resetBtn.style.display = 'none';
-            } else if (puntos >= 8) {
-                alertBox.style.display = 'block';
-                alertBox.classList.add('alert-gold');
-                alertText.innerHTML = "🏆 ENTREGAR BENEFICIO:<br>PRENDA DE REGALO";
-                resetBtn.style.display = 'block'; 
-            } else {
-                alertBox.style.display = 'none';
-                resetBtn.style.display = 'none';
+    function renderMiniStamps(p) {
+        const grid = document.getElementById('miniStamps');
+        grid.innerHTML = '';
+        for (let i = 0; i < 8; i++) {
+            const d = document.createElement('div');
+            d.className = 'stamp-mini' + (i < p ? ' filled' : '');
+            grid.appendChild(d);
+        }
+    }
+
+    function updateAdminAlerts(puntos) {
+        const alertBox = document.getElementById('adminRewardAlert');
+        const alertIcon = document.getElementById('rewardIcon');
+        const alertText = document.getElementById('rewardText');
+        const resetBtn  = document.getElementById('resetBtn');
+
+        alertBox.classList.remove('alert-silver', 'alert-gold');
+
+        if (puntos === 4) {
+            alertBox.style.display = 'block';
+            alertBox.classList.add('alert-silver');
+            alertIcon.innerText = '🥈';
+            alertText.innerText = 'Entregar: 50% Descuento';
+            resetBtn.style.display = 'none';
+        } else if (puntos >= 8) {
+            alertBox.style.display = 'block';
+            alertBox.classList.add('alert-gold');
+            alertIcon.innerText = '🏆';
+            alertText.innerText = 'Entregar: Prenda de Regalo';
+            resetBtn.style.display = 'block';
+        } else {
+            alertBox.style.display = 'none';
+            resetBtn.style.display = 'none';
+        }
+    }
+
+    function adjustPoints(change) {
+        const phone = document.getElementById('clientPhone').innerText;
+        if (!phone || phone === '—') return;
+
+        const ref = db.ref('lem_users/' + phone + '/puntos');
+        ref.transaction((c) => {
+            let v = (c || 0) + change;
+            return (v < 0) ? 0 : (v > 8 ? 8 : v);
+        }, (error, committed, snapshot) => {
+            if (committed) {
+                const val = snapshot.val();
+                actualizarRegistroDelDia(phone, val);
+                const msg = document.getElementById('logMsg');
+                msg.innerText = change > 0 ? '✓ Sello registrado' : '✓ Sello eliminado';
+                setTimeout(() => { msg.innerText = ''; }, 2500);
             }
+        });
+    }
+
+    function resetCard() {
+        if (confirm("¿Confirmas que entregaste el premio y quieres reiniciar la tarjeta a 0 sellos?")) {
+            const phone = document.getElementById('clientPhone').innerText;
+            db.ref('lem_users/' + phone + '/puntos').set(0);
+            actualizarRegistroDelDia(phone, 0);
         }
+    }
 
-        function adjustPoints(change) {
-            const phone = document.getElementById('clientPhone').innerText.replace("WhatsApp: ", "");
-            if (!phone || phone === "---") {
-                alert("Error: No se ha detectado un número de teléfono válido.");
-                return;
-            }
+    function restartScanner() {
+        const phone = document.getElementById('clientPhone').innerText;
+        db.ref('lem_users/' + phone).off();
+        document.getElementById('adminPanel').style.display = 'none';
+        document.getElementById('reader-container').style.display = 'block';
+        document.getElementById('clientName').innerText = '—';
+        document.getElementById('clientPhone').innerText = '—';
+        startScanner();
+    }
 
-            const ref = db.ref('lem_users/' + phone + '/puntos');
-            ref.transaction((c) => {
-                let newVal = (c || 0) + change;
-                return (newVal < 0) ? 0 : (newVal > 8 ? 8 : newVal);
-            }, (error, committed, snapshot) => {
-                if (committed) {
-                    actualizarRegistroDelDia(phone, snapshot.val());
-                }
-            });
-        }
-
-        function resetCard() {
-            if(confirm("¿Confirmas que ya entregaste el premio y quieres reiniciar los puntos a 0?")) {
-                const phone = document.getElementById('clientPhone').innerText.replace("WhatsApp: ", "");
-                db.ref('lem_users/' + phone + '/puntos').set(0);
-                actualizarRegistroDelDia(phone, 0);
-            }
-        }
-
-        function restartScanner() {
-            const phone = document.getElementById('clientPhone').innerText.replace("WhatsApp: ", "");
-            db.ref('lem_users/' + phone).off(); 
-            document.getElementById('adminPanel').style.display = 'none';
-            document.getElementById('reader-container').style.display = 'block';
-            
-            document.getElementById('clientName').innerText = "Cargando...";
-            document.getElementById('clientPhone').innerText = "WhatsApp: ---";
-            
-            startScanner();
-        }
-
-        window.onload = startScanner;
-    </script>
+    window.onload = startScanner;
+</script>
 </body>
 </html>
