@@ -204,6 +204,8 @@
         <div id="authPanel">
             <div class="brand-circle"><img src="1.png.png" class="circle-logo"></div>
             <h3 style="letter-spacing: 5px; color: var(--lem-gold); font-weight: 300;">BIENVENIDO</h3>
+            
+            <input type="text" id="userName" class="input-box" placeholder="Nombre Completo">
             <input type="tel" id="userPhone" class="input-box" placeholder="WhatsApp">
             <input type="password" id="userPin" class="input-box" placeholder="PIN de 4 dígitos" maxlength="4">
             <button class="btn-main" onclick="accessSystem()">Ingresar</button>
@@ -240,27 +242,53 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
+        let nombreClienteActivo = "Cliente VIP";
+
         function toggleModal(show) {
             document.getElementById('modalBeneficios').style.display = show ? 'flex' : 'none';
         }
 
         function accessSystem() {
+            const name = document.getElementById('userName').value.trim();
             const phone = document.getElementById('userPhone').value.trim();
             const pin = document.getElementById('userPin').value.trim();
             if(!phone || !pin) return;
-            const userRef = db.ref('lem_users/' + phone);
             
-            // Generamos una marca de tiempo con la hora actual exacta
+            const userRef = db.ref('lem_users/' + phone);
             const timestampActual = new Date().toISOString();
 
             userRef.once('value', (snap) => {
                 const data = snap.val();
                 if(!data) {
-                    // SI ES NUEVO: Se guarda con la fecha de hoy (Aparecerá impecable en tu reporte diario)
-                    userRef.set({pin, puntos: 0, fecha_registro: timestampActual, ultima_actividad: timestampActual}).then(() => login(phone));
+                    // SI ES NUEVO: Obligatorio rellenar el campo nombre
+                    if(!name) {
+                        alert("¡Bienvenido a LEM MODA! Al ser tu primera vez ingresando, por favor escribe tu Nombre Completo para registrarte.");
+                        return;
+                    }
+                    nombreClienteActivo = name;
+                    userRef.set({
+                        nombre: name,
+                        pin: pin, 
+                        puntos: 0, 
+                        fecha_registro: timestampActual, 
+                        ultima_actividad: timestampActual
+                    }).then(() => login(phone));
                 } else if(data.pin === pin) {
-                    // SI YA EXISTÍA: No altera tu reporte, pero actualiza en Firebase quién entró último
-                    userRef.update({ultima_actividad: timestampActual}).then(() => login(phone));
+                    // SI YA EXISTÍA: Lógica inteligente para usuarios antiguos sin nombre
+                    if(!data.nombre) {
+                        if(!name) {
+                            alert("Para actualizar tu perfil de fidelidad, por favor escribe tu Nombre Completo en el primer recuadro.");
+                            return;
+                        }
+                        nombreClienteActivo = name;
+                        userRef.update({
+                            nombre: name,
+                            ultima_actividad: timestampActual
+                        }).then(() => login(phone));
+                    } else {
+                        nombreClienteActivo = data.nombre;
+                        userRef.update({ultima_actividad: timestampActual}).then(() => login(phone));
+                    }
                 } else {
                     alert("PIN incorrecto");
                 }
@@ -271,7 +299,6 @@
             document.getElementById('authPanel').style.display = 'none';
             document.getElementById('cardPanel').style.display = 'block';
             QRCode.toCanvas(document.getElementById('qr-canvas'), phone, { width: 120, margin: 1 });
-            
             db.ref('lem_users/' + phone + '/puntos').on('value', (snap) => {
                 const p = snap.val() || 0;
                 document.getElementById('counterLabel').innerText = `${p} DE 8 SELLOS`;
@@ -282,6 +309,7 @@
                     const s = document.createElement('div');
                     const isActive = i < p;
                     const index = i + 1;
+     
                     s.className = 'slot' + (isActive ? ' active' : '');
                     s.setAttribute('data-index', index);
 
@@ -293,7 +321,7 @@
                     } else {
                         if(index === 4) s.innerHTML = '<span class="premio-text silver">50% OFF<br>PRENDA</span>';
                         else if (index === 8) s.innerHTML = '<span class="premio-text gold">PRENDA<br>REGALO</span>';
-                        else s.innerHTML = ''; 
+                        else s.innerHTML = '';
                     }
                     grid.appendChild(s);
                 }
@@ -307,12 +335,12 @@
             const msg = document.getElementById('successMsg');
             const waAction = document.getElementById('waAction');
             const notifBox = document.getElementById('premioNotif');
-
+            
             if (p === 4) {
                 lanzarConfeti();
                 overlay.style.display = 'flex';
                 title.innerText = "¡Recompensa Alcanzada!";
-                msg.innerText = "¡Felicidades! Por tus 4 estampas tienes el 50% de descuento en una prenda.";
+                msg.innerText = `¡Felicidades ${nombreClienteActivo}! Por tus 4 estampas tienes el 50% de descuento en una prenda.`;
                 waAction.innerHTML = `<button class="btn-main" style="background:#25d366; color:white;" onclick="enviarWA('${phone}', 4)">Reclamar por WhatsApp</button>`;
                 notifBox.style.display = 'block';
                 notifBox.innerHTML = `<small style="color:var(--lem-verde)">✓ Tienes un 50% OFF disponible</small>`;
@@ -320,7 +348,7 @@
                 lanzarConfeti();
                 overlay.style.display = 'flex';
                 title.innerText = "¡Nivel Completado!";
-                msg.innerText = "¡Increíble! Has completado las 8 estampas. ¡Tu prenda de regalo te espera!";
+                msg.innerText = `¡Increíble ${nombreClienteActivo}! Has completado las 8 estampas. ¡Tu prenda de regalo te espera!`;
                 waAction.innerHTML = `<button class="btn-main" style="background:#25d366; color:white;" onclick="enviarWA('${phone}', 8)">Reclamar Regalo</button>`;
                 notifBox.style.display = 'block';
                 notifBox.innerHTML = `<small style="color:var(--lem-verde)">✓ ¡Prenda de regalo lista!</small>`;
@@ -334,7 +362,7 @@
         }
 
         function enviarWA(phone, hito) {
-            const waNumber = "593984909967"; 
+            const waNumber = "593984909967";
             let texto = "";
             
             if (hito === 4) {
@@ -342,14 +370,16 @@
                         `Hola, equipo de LEM. 👋\n\n` +
                         `¡Qué buena noticia! Ya completé mis primeras *4 ESTAMPAS* 🎫 y quiero solicitar mi beneficio:\n` +
                         `🎁 *50% DE DESCUENTO* en mi prenda.\n\n` +
-                        `📌 *Mi número registrado:* ${phone}\n\n` +
+                        `📌 *Cliente:* ${nombreClienteActivo}\n` +
+                        `📌 *WhatsApp registrado:* ${phone}\n\n` +
                         `¿Me ayudan para hacerlo efectivo en mi compra? ¡Muchas gracias! 🥂`;
             } else {
                 texto = `👑 *¡OBJETIVO LOGRADO EN LEM MODA!* 👑\n\n` +
                         `¡Hola! 👋 ¡Lo logré!\n\n` +
                         `He completado mis *8 ESTAMPAS* 🏆 y ya tengo mi tarjeta llena.\n` +
                         `🛍️ ¡Vengo por mi *PRENDA DE REGALO*!\n\n` +
-                        `📌 *Mi número registrado:* ${phone}\n\n` +
+                        `📌 *Cliente:* ${nombreClienteActivo}\n` +
+                        `📌 *WhatsApp registrado:* ${phone}\n\n` +
                         `Estoy muy emocionado/a por elegir mi regalo. ¡Gracias! ✨`;
             }
             window.open(`https://wa.me/${waNumber}?text=${encodeURIComponent(texto)}`, '_blank');
