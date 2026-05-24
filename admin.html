@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>LEM Admin | ORCA Studios</title>
+    <title>LEM Admin | Tienda Quito</title>
     
     <link rel="manifest" href="manifest-admin.json">
     <meta name="theme-color" content="#784311">
@@ -69,7 +69,9 @@
     </div>
 
     <div id="adminPanel" class="admin-card">
-        <h3 id="clientPhone" style="color: var(--lem-gold); font-weight: 300;">WhatsApp: ---</h3>
+        <h2 id="clientName" style="color: #fff; margin: 0 0 5px 0; font-weight: 700; font-size: 1.4rem;">Cargando...</h2>
+        <h3 id="clientPhone" style="color: var(--lem-gold); font-weight: 300; margin-top: 0;">WhatsApp: ---</h3>
+        
         <p style="margin: 5px 0; font-size: 0.8rem; color: #666;">Puntos Actuales:</p>
         <span id="currentPoints" style="font-size: 3rem; color: #fff; font-weight: bold;">0</span>
         
@@ -97,19 +99,26 @@
         const db = firebase.database();
 
         let html5QrCode;
+        // Almacenamos temporalmente el nombre en memoria activa para pasarlo al reporte diario
+        let nombreClienteMemoria = "Cliente VIP";
 
-        // FUNCIÓN DE REPORTE DIARIO (Cierre de día)
+        // FUNCIÓN DE REPORTE DIARIO ACTUALIZADA (Ahora guarda el nombre del cliente)
         function actualizarRegistroDelDia(phone, puntosFinales) {
             const ahora = new Date();
             const carpetaFecha = ahora.getFullYear() + "-" + 
                                 String(ahora.getMonth() + 1).padStart(2, '0') + "-" + 
                                 String(ahora.getDate()).padStart(2, '0');
             
-            // Usamos .set() con el teléfono como ID para que el cliente sea único por fecha
+            // Registramos incluyendo la propiedad "nombre" obtenida de la base de datos
             db.ref('reporte_diario/' + carpetaFecha + '/' + phone).set({
+                nombre: nombreClienteMemoria,
                 whatsapp: phone,
                 puntos_al_cierre: puntosFinales,
                 hora_ultima_accion: ahora.toLocaleTimeString()
+            }).then(() => {
+                console.log("Reporte diario guardado exitosamente para:", nombreClienteMemoria);
+            }).catch((err) => {
+                console.error("Error al guardar reporte diario:", err);
             });
         }
 
@@ -131,6 +140,12 @@
             db.ref('lem_users/' + phone).on('value', (snap) => {
                 const data = snap.val();
                 const puntos = data ? (data.puntos || 0) : 0;
+                
+                // Extraemos el nombre asignado o ponemos "Cliente VIP" por defecto si es antiguo y no lo tiene
+                nombreClienteMemoria = data && data.nombre ? data.nombre : "Cliente VIP";
+                
+                // Imprimimos la información en el panel visual
+                document.getElementById('clientName').innerText = nombreClienteMemoria;
                 document.getElementById('clientPhone').innerText = "WhatsApp: " + phone;
                 document.getElementById('currentPoints').innerText = puntos;
                 updateAdminAlerts(puntos);
@@ -186,6 +201,11 @@
             db.ref('lem_users/' + phone).off(); 
             document.getElementById('adminPanel').style.display = 'none';
             document.getElementById('reader-container').style.display = 'block';
+            
+            // Limpiamos los textos anteriores antes del nuevo escaneo
+            document.getElementById('clientName').innerText = "Cargando...";
+            document.getElementById('clientPhone').innerText = "WhatsApp: ---";
+            
             startScanner();
         }
 
