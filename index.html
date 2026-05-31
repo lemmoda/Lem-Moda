@@ -3,90 +3,235 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>LEM Admin | Día del Padre 2026</title>
-    
-    <link rel="manifest" href="manifest-admin.json">
-    <meta name="theme-color" content="#1a2e4a">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>LEM MODA | Tarjeta VIP</title>
 
-    <script src="https://unpkg.com/html5-qrcode"></script>
+    <meta name="description" content="Programa de Lealtad Elite de LEM MODA. Colecciona estampas y obtén beneficios exclusivos.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://lemmoda.vercel.app/"> 
+    <meta property="og:title" content="LEM MODA | Elite">
+    <meta property="og:description" content="¡Colecciona tus estampas y canjea premios exclusivos en LEM MODA!">
+    <meta property="og:image" content="https://lemmoda.vercel.app/logo-lem-elite.png"> 
+    <meta property="og:image:secure_url" content="https://lemmoda.vercel.app/logo-lem-elite.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:type" content="image/png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="LEM MODA | Elite">
+    <meta name="twitter:description" content="¡Colecciona tus estampas y canjea premios exclusivos en LEM MODA!">
+    <meta name="twitter:image" content="https://lemmoda.vercel.app/logo-lem-elite.png">
+
+    <link rel="icon" type="image/png" href="logo-lem-elite.png">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#784311">
+
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-database-compat.js"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
     <style>
         :root { 
-            --lem-gold: #c9a84c; 
-            --lem-verde: #38b000; 
-            --silver-admin: #7a9fc2;
-            --gold-admin: #c9a84c;
-            --navy: #1a2e4a;
-            --navy-light: #243d5e;
+            --lem-cafe: #784311; 
+            --lem-gold: #d4a373; 
+            --lem-verde: #38b000;
+            --silver-fine: #bdc3c7;
+            --gold-fine: #d4af37;
         }
-        body { background: #0a1628; color: #fff; font-family: 'Inter', sans-serif; margin: 0; padding: 20px; text-align: center; }
-        .header { margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid #1a2e4a; }
-        #reader { width: 100%; max-width: 400px; margin: 0 auto; border: 2px solid var(--lem-gold); border-radius: 25px; overflow: hidden; }
+
+        body { 
+            background: radial-gradient(circle, #2a1806 0%, #000000 100%); 
+            color: #fff; 
+            font-family: 'Inter', sans-serif; 
+            margin: 0; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            min-height: 100vh; 
+            overflow-y: auto; 
+        }
+
+        .container { 
+            width: 90%; 
+            max-width: 380px; 
+            text-align: center; 
+            position: relative; 
+            z-index: 10; 
+            padding: 40px 0;
+        }
         
-        .admin-card { background: #0d1e33; border: 1px solid var(--lem-gold); border-radius: 30px; padding: 25px; margin-top: 20px; display: none; }
-        .btn-action { background: var(--lem-gold); color: #000; border: none; padding: 18px 25px; border-radius: 15px; font-weight: bold; text-transform: uppercase; margin: 8px; width: 45%; }
-        .btn-scan-again { background: transparent; color: var(--lem-gold); border: 1px solid var(--lem-gold); margin-top: 20px; width: 100%; padding: 15px; border-radius: 15px; font-weight: bold; text-transform: uppercase; }
-        .status-msg { color: var(--lem-verde); font-weight: bold; margin-top: 15px; }
-
-        .reward-alert { 
-            padding: 15px; border-radius: 15px; margin: 15px 0; display: none;
-            border-width: 2px; border-style: solid;
-            animation: pulse-soft 2s infinite;
+        .brand-circle {
+            width: 120px; height: 120px;
+            background: #fff; border-radius: 50%; 
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 30px; border: 2px solid var(--lem-gold); 
+            box-shadow: 0 0 20px rgba(212, 163, 115, 0.2); 
+        }
+        
+        .circle-logo { width: 70%; height: auto; }
+        
+        .card { 
+            background: rgba(20, 15, 10, 0.6); 
+            border: 1px solid rgba(212, 163, 115, 0.2); 
+            border-radius: 35px; padding: 25px; 
+            backdrop-filter: blur(15px);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.8); 
         }
 
-        .alert-silver { 
-            background: rgba(189, 195, 199, 0.1); border-color: var(--silver-admin); color: var(--silver-admin);
+        .card-logo-box { background: #fff; border-radius: 12px; padding: 8px; display: inline-block; margin-bottom: 20px; }
+        .card-logo { width: 110px; }
+        
+        .stamp-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 20px 0; }
+        
+        .slot { 
+            aspect-ratio: 1; background: rgba(0,0,0,0.8); 
+            border-radius: 50%; display: flex; align-items: center; justify-content: center; 
+            border: 1px solid rgba(212, 163, 115, 0.1); position: relative;
+            flex-direction: column; text-align: center; overflow: hidden;
         }
 
-        .alert-gold { 
-            background: rgba(212, 175, 55, 0.1); border-color: var(--gold-admin); color: var(--gold-admin);
+        .slot.active { background: #fff; border: 2px solid var(--lem-verde); }
+        .slot img { width: 60%; display: none; }
+        .slot.active img { display: block; filter: none; width: 65%; }
+
+        .slot::before { content: attr(data-index); color: #444; font-weight: bold; position: absolute; font-size: 0.7rem; }
+        .slot.active::before { display: none; }
+
+        .silver-frame { border: 1.5px solid var(--silver-fine) !important; }
+        .gold-frame { border: 1.5px solid var(--gold-fine) !important; }
+        .premio-text { font-size: 0.55rem; line-height: 1.1; font-weight: bold; padding: 2px; text-transform: uppercase; }
+        .premio-text.silver { color: #bdc3c7; }
+        .premio-text.gold { color: #d4af37; }
+
+        .input-box { 
+            background: #000; border: 1px solid rgba(212, 163, 115, 0.2); 
+            color: #fff; padding: 16px; border-radius: 15px; width: 100%; 
+            margin-bottom: 12px; box-sizing: border-box; text-align: center; outline: none;
         }
 
-        @keyframes pulse-soft {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.02); opacity: 0.8; }
-            100% { transform: scale(1); }
+        .btn-main { 
+            background: linear-gradient(135deg, #d4a373 0%, #b08968 100%); 
+            color: #000; border: none; padding: 16px; border-radius: 15px; 
+            width: 100%; font-weight: 700; text-transform: uppercase; letter-spacing: 2px;
+            cursor: pointer;
         }
 
-        .btn-reset { background: #660000; color: #fff; border: none; padding: 10px; border-radius: 10px; font-size: 0.7rem; margin-top: 10px; width: 100%; cursor: pointer; }
+        .btn-beneficios {
+            background: transparent; color: var(--lem-gold); border: 1px solid var(--lem-gold);
+            padding: 10px 20px; border-radius: 20px; margin-bottom: 15px;
+            cursor: pointer; font-size: 0.7rem; letter-spacing: 1px; text-transform: uppercase;
+        }
+
+        .btn-web-store {
+            background: rgba(212, 163, 115, 0.05);
+            border: 1px solid rgba(212, 163, 115, 0.3);
+            color: var(--lem-gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 20px;
+            text-decoration: none;
+            padding: 15px;
+            border-radius: 15px;
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-weight: 700;
+            transition: 0.3s;
+        }
+        .btn-web-store:hover {
+            background: rgba(212, 163, 115, 0.15);
+            border-color: var(--lem-gold);
+        }
+
+        .modal {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.95); z-index: 1000; align-items: center; justify-content: center;
+        }
+
+        .modal-content {
+            background: #0a0a0a; border: 1px solid var(--lem-gold); padding: 30px;
+            border-radius: 25px; width: 85%; max-width: 350px; text-align: center;
+        }
+
+        .premio-box {
+            background: rgba(56, 176, 0, 0.1); border: 1px dashed var(--lem-verde);
+            border-radius: 15px; padding: 15px; margin-top: 15px; display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        #success-overlay { 
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(0,0,0,0.98); z-index: 100; align-items: center; justify-content: center; 
+        }
+
+        .success-card { 
+            background: #000; border: 1px solid var(--lem-gold); 
+            border-radius: 35px; padding: 30px; width: 80%; text-align: center; 
+        }
+
+        body::-webkit-scrollbar { display: none; }
+        body { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
 <body>
-
-    <div class="header">
-        <h2 style="color: var(--lem-gold); letter-spacing: 3px; margin: 0;">LEM MODA</h2>
-        <p style="font-size: 0.75rem; color: var(--lem-gold); margin: 4px 0; letter-spacing: 2px; opacity: 0.8;">👔 EDICIÓN DÍA DEL PADRE 2026</p>
-        <p style="font-size: 0.6rem; color: #3a5a8a; margin: 2px 0;">PANEL DE CONTROL ADMIN</p>
+    <div id="modalBeneficios" class="modal">
+        <div class="modal-content">
+            <h3 style="color: var(--lem-gold); letter-spacing: 2px;">BENEFICIOS LEM</h3>
+            <ul style="text-align: left; font-size: 0.85rem; line-height: 1.8; color: #ccc;">
+                <li>• <strong>4 ESTAMPAS:</strong> 50% de descuento en una prenda de tu compra actual.</li>
+                <li>• <strong>8 ESTAMPAS:</strong> 1 Prenda seleccionada de regalo.</li>
+            </ul>
+            <button class="btn-main" style="padding: 10px; margin-top: 20px;" onclick="toggleModal(false)">Cerrar</button>
+        </div>
     </div>
 
-    <div id="reader-container">
-        <div id="reader"></div>
+    <div id="success-overlay">
+        <div class="success-card">
+            <div class="card-logo-box"><img src="1.png.png" style="width: 100px;"></div>
+            <h2 id="successTitle" style="color: var(--lem-gold); font-weight: 300; letter-spacing: 2px;">¡Felicidades!</h2>
+            <p id="successMsg" style="font-size: 0.85rem; color: #aaa; line-height: 1.5;"></p>
+            <div id="waAction"></div>
+            <button class="btn-main" style="margin-top: 15px; background: transparent; color: #555; border: 1px solid #222;" onclick="document.getElementById('success-overlay').style.display='none'">Volver</button>
+        </div>
     </div>
 
-    <div id="adminPanel" class="admin-card">
-        <h2 id="clientName" style="color: #fff; margin: 0 0 5px 0; font-weight: 700; font-size: 1.4rem;">Cargando...</h2>
-        <h3 id="clientPhone" style="color: var(--lem-gold); font-weight: 300; margin-top: 0;">WhatsApp: ---</h3>
-        
-        <p style="margin: 5px 0; font-size: 0.8rem; color: #666;">Puntos Actuales:</p>
-        <span id="currentPoints" style="font-size: 3rem; color: #fff; font-weight: bold;">0</span>
-        
-        <div id="adminRewardAlert" class="reward-alert">
-            <span id="rewardText" style="font-size: 1rem; font-weight: bold; letter-spacing: 1px;"></span>
+    <div class="container">
+        <div id="authPanel">
+            <div class="brand-circle"><img src="1.png.png" class="circle-logo"></div>
+            <h3 style="letter-spacing: 5px; color: var(--lem-gold); font-weight: 300;">BIENVENIDO</h3>
+            
+            <input type="text" id="userName" class="input-box" placeholder="Nombre Completo">
+            <input type="tel" id="userPhone" class="input-box" placeholder="WhatsApp">
+            <input type="password" id="userPin" class="input-box" placeholder="PIN de 4 dígitos" maxlength="4">
+            <button class="btn-main" onclick="accessSystem()">Ingresar</button>
         </div>
 
-        <div style="display: flex; justify-content: center; margin-top: 20px;">
-            <button class="btn-action" onclick="adjustPoints(1)">+ SELLO</button>
-            <button class="btn-action" style="background: #1a2e4a; color: #fff;" onclick="adjustPoints(-1)">- QUITAR</button>
+        <div id="cardPanel" style="display:none">
+            <button class="btn-beneficios" onclick="toggleModal(true)">Ver Beneficios</button>
+            <div class="card">
+                <div class="card-logo-box"><img src="1.png.png" class="card-logo"></div>
+                <div class="stamp-grid" id="stampGrid"></div>
+                <p id="counterLabel" style="color: var(--lem-gold); font-size: 0.75rem; letter-spacing: 1px;">Sincronizando...</p>
+                
+                <div id="premioNotif" class="premio-box"></div>
+
+                <div style="background:#fff; padding:8px; border-radius:12px; display:inline-block; margin-top: 10px;">
+                    <canvas id="qr-canvas"></canvas>
+                </div>
+            </div>
+
+            <a href="aqui va la web" target="_blank" class="btn-web-store">
+                <i class="fa-solid fa-bag-shopping"></i> Muy Pronto Tienda Online
+            </a>
+
+            <button class="btn-main" style="margin-top:20px; background:transparent; color:#555; border:1px solid #222;" onclick="location.reload()">Cerrar Sesión</button>
         </div>
-
-        <button id="resetBtn" class="btn-reset" style="display:none;" onclick="resetCard()">REINICIAR TARJETA (PREMIO ENTREGADO)</button>
-
-        <p id="logMsg" class="status-msg"></p>
-        <button class="btn-scan-again" onclick="restartScanner()">VOLVER A ESCANEAR</button>
+        <p style="font-size: 10px; color: #444; margin-top: 20px;">ORCA Studios &copy; 2026</p>
     </div>
 
     <script>
@@ -97,128 +242,148 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
-        let html5QrCode;
-        let nombreClienteMemoria = "Cliente VIP";
-        let telefonoOriginalEscaneado = ""; // Volvemos al método directo del admin antiguo
+        let nombreClienteActivo = "Cliente VIP";
 
-        function actualizarRegistroDelDia(phone, puntosFinales) {
-            const ahora = new Date();
-            const carpetaFecha = ahora.getFullYear() + "-" + 
-                                String(ahora.getMonth() + 1).padStart(2, '0') + "-" + 
-                                String(ahora.getDate()).padStart(2, '0');
+        function toggleModal(show) {
+            document.getElementById('modalBeneficios').style.display = show ? 'flex' : 'none';
+        }
+
+        function accessSystem() {
+            const name = document.getElementById('userName').value.trim();
+            const phone = document.getElementById('userPhone').value.trim();
+            const pin = document.getElementById('userPin').value.trim();
+            if(!phone || !pin) return;
             
-            document.getElementById('logMsg').innerText = "Guardando reporte...";
-            document.getElementById('logMsg').style.color = "#d4a373";
+            const userRef = db.ref('lem_users/' + phone);
+            const timestampActual = new Date().toISOString();
 
-            // Se guarda con la ruta e ID exactos del formato antiguo
-            db.ref('reporte_diario/' + carpetaFecha + '/' + phone).set({
-                nombre: nombreClienteMemoria,
-                whatsapp: phone,
-                puntos_al_cierre: puntosFinales,
-                hora_ultima_accion: ahora.toLocaleTimeString()
-            }).then(() => {
-                document.getElementById('logMsg').innerText = "¡Reporte guardado con éxito!";
-                document.getElementById('logMsg').style.color = "var(--lem-verde)";
-            }).catch((err) => {
-                alert("ERROR EN REPORTE: " + err.message);
-            });
-        }
-
-        async function startScanner() {
-            html5QrCode = new Html5Qrcode("reader");
-            const config = { fps: 15, qrbox: { width: 250, height: 250 } };
-            try {
-                await html5QrCode.start({ facingMode: "environment" }, config, (decodedText) => {
-                    html5QrCode.stop().then(() => {
-                        document.getElementById('reader-container').style.display = 'none';
-                        document.getElementById('adminPanel').style.display = 'block';
-                        loadUserData(decodedText);
-                    });
-                });
-            } catch (err) { console.error("Error de cámara: ", err); }
-        }
-
-        function loadUserData(phone) {
-            // Regresamos al mapeo 1:1 del archivo original para mantener compatibilidad
-            telefonoOriginalEscaneado = phone;
-
-            db.ref('lem_users/' + phone).on('value', (snap) => {
+            userRef.once('value', (snap) => {
                 const data = snap.val();
-                const puntos = data ? (data.puntos || 0) : 0;
-                nombreClienteMemoria = data && data.nombre ? data.nombre : "Cliente VIP";
-                
-                document.getElementById('clientName').innerText = nombreClienteMemoria;
-                document.getElementById('clientPhone').innerText = "WhatsApp: " + phone;
-                document.getElementById('currentPoints').innerText = puntos;
-                updateAdminAlerts(puntos);
-            });
-        }
-
-        function updateAdminAlerts(puntos) {
-            const alertBox = document.getElementById('adminRewardAlert');
-            const alertText = document.getElementById('rewardText');
-            const resetBtn = document.getElementById('resetBtn');
-
-            alertBox.classList.remove('alert-silver', 'alert-gold');
-
-            if (puntos === 4) {
-                alertBox.style.display = 'block';
-                alertBox.classList.add('alert-silver');
-                alertText.innerHTML = "👔 BENEFICIO PAPÁ:<br>50% DESCUENTO";
-                resetBtn.style.display = 'none';
-            } else if (puntos >= 8) {
-                alertBox.style.display = 'block';
-                alertBox.classList.add('alert-gold');
-                alertText.innerHTML = "👨‍👦 BENEFICIO ESPECIAL:<br>PRENDA DE REGALO";
-                resetBtn.style.display = 'block'; 
-            } else {
-                alertBox.style.display = 'none';
-                resetBtn.style.display = 'none';
-            }
-        }
-
-        function adjustPoints(change) {
-            if (!telefonoOriginalEscaneado) {
-                alert("Error: No hay teléfono detectado.");
-                return;
-            }
-
-            const ref = db.ref('lem_users/' + telefonoOriginalEscaneado + '/puntos');
-            ref.transaction((c) => {
-                let newVal = (c || 0) + change;
-                return (newVal < 0) ? 0 : (newVal > 8 ? 8 : newVal);
-            }, (error, committed, snapshot) => {
-                if (committed) {
-                    actualizarRegistroDelDia(telefonoOriginalEscaneado, snapshot.val());
+                if(!data) {
+                    // SI ES NUEVO: Obligatorio rellenar el campo nombre
+                    if(!name) {
+                        alert("¡Bienvenido a LEM MODA! Al ser tu primera vez ingresando, por favor escribe tu Nombre Completo para registrarte.");
+                        return;
+                    }
+                    nombreClienteActivo = name;
+                    userRef.set({
+                        nombre: name,
+                        pin: pin, 
+                        puntos: 0, 
+                        fecha_registro: timestampActual, 
+                        ultima_actividad: timestampActual
+                    }).then(() => login(phone));
+                } else if(data.pin === pin) {
+                    // SI YA EXISTÍA: Lógica inteligente para usuarios antiguos sin nombre
+                    if(!data.nombre) {
+                        if(!name) {
+                            alert("Para actualizar tu perfil de fidelidad, por favor escribe tu Nombre Completo en el primer recuadro.");
+                            return;
+                        }
+                        nombreClienteActivo = name;
+                        userRef.update({
+                            nombre: name,
+                            ultima_actividad: timestampActual
+                        }).then(() => login(phone));
+                    } else {
+                        nombreClienteActivo = data.nombre;
+                        userRef.update({ultima_actividad: timestampActual}).then(() => login(phone));
+                    }
+                } else {
+                    alert("PIN incorrecto");
                 }
             });
         }
 
-        function resetCard() {
-            if(confirm("¿Confirmas que ya entregaste el premio y quieres reiniciar los puntos a 0?")) {
-                if (!telefonoOriginalEscaneado) return;
-                db.ref('lem_users/' + telefonoOriginalEscaneado + '/puntos').set(0);
-                actualizarRegistroDelDia(telefonoOriginalEscaneado, 0);
+        function login(phone) {
+            document.getElementById('authPanel').style.display = 'none';
+            document.getElementById('cardPanel').style.display = 'block';
+            QRCode.toCanvas(document.getElementById('qr-canvas'), phone, { width: 120, margin: 1 });
+            db.ref('lem_users/' + phone + '/puntos').on('value', (snap) => {
+                const p = snap.val() || 0;
+                document.getElementById('counterLabel').innerText = `${p} DE 8 SELLOS`;
+                const grid = document.getElementById('stampGrid');
+                grid.innerHTML = '';
+                
+                for(let i=0; i<8; i++) {
+                    const s = document.createElement('div');
+                    const isActive = i < p;
+                    const index = i + 1;
+     
+                    s.className = 'slot' + (isActive ? ' active' : '');
+                    s.setAttribute('data-index', index);
+
+                    if(index === 4) s.classList.add('silver-frame');
+                    if(index === 8) s.classList.add('gold-frame');
+
+                    if(isActive) {
+                        s.innerHTML = '<img src="2.png.png">';
+                    } else {
+                        if(index === 4) s.innerHTML = '<span class="premio-text silver">50% OFF<br>PRENDA</span>';
+                        else if (index === 8) s.innerHTML = '<span class="premio-text gold">PRENDA<br>REGALO</span>';
+                        else s.innerHTML = '';
+                    }
+                    grid.appendChild(s);
+                }
+                checkMilestones(p, phone);
+            });
+        }
+
+        function checkMilestones(p, phone) {
+            const overlay = document.getElementById('success-overlay');
+            const title = document.getElementById('successTitle');
+            const msg = document.getElementById('successMsg');
+            const waAction = document.getElementById('waAction');
+            const notifBox = document.getElementById('premioNotif');
+            
+            if (p === 4) {
+                lanzarConfeti();
+                overlay.style.display = 'flex';
+                title.innerText = "¡Recompensa Alcanzada!";
+                msg.innerText = `¡Felicidades ${nombreClienteActivo}! Por tus 4 estampas tienes el 50% de descuento en una prenda.`;
+                waAction.innerHTML = `<button class="btn-main" style="background:#25d366; color:white;" onclick="enviarWA('${phone}', 4)">Reclamar por WhatsApp</button>`;
+                notifBox.style.display = 'block';
+                notifBox.innerHTML = `<small style="color:var(--lem-verde)">✓ Tienes un 50% OFF disponible</small>`;
+            } else if (p >= 8) {
+                lanzarConfeti();
+                overlay.style.display = 'flex';
+                title.innerText = "¡Nivel Completado!";
+                msg.innerText = `¡Increíble ${nombreClienteActivo}! Has completado las 8 estampas. ¡Tu prenda de regalo te espera!`;
+                waAction.innerHTML = `<button class="btn-main" style="background:#25d366; color:white;" onclick="enviarWA('${phone}', 8)">Reclamar Regalo</button>`;
+                notifBox.style.display = 'block';
+                notifBox.innerHTML = `<small style="color:var(--lem-verde)">✓ ¡Prenda de regalo lista!</small>`;
+            } else {
+                notifBox.style.display = 'none';
             }
         }
 
-        function restartScanner() {
-            if(telefonoOriginalEscaneado) {
-                db.ref('lem_users/' + telefonoOriginalEscaneado).off(); 
-            }
-            
-            telefonoOriginalEscaneado = "";
-            document.getElementById('adminPanel').style.display = 'none';
-            document.getElementById('reader-container').style.display = 'block';
-            
-            document.getElementById('clientName').innerText = "Cargando...";
-            document.getElementById('clientPhone').innerText = "WhatsApp: ---";
-            document.getElementById('logMsg').innerText = "";
-            
-            startScanner();
+        function lanzarConfeti() {
+            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#d4a373', '#784311', '#ffffff'] });
         }
 
-        window.onload = startScanner;
+        function enviarWA(phone, hito) {
+            const waNumber = "593984909967";
+            let texto = "";
+            
+            if (hito === 4) {
+                texto = `✨ *¡TENGO UNA RECOMPENSA EN LEM MODA!* ✨\n\n` +
+                        `Hola, equipo de LEM. 👋\n\n` +
+                        `¡Qué buena noticia! Ya completé mis primeras *4 ESTAMPAS* 🎫 y quiero solicitar mi beneficio:\n` +
+                        `🎁 *50% DE DESCUENTO* en mi prenda.\n\n` +
+                        `📌 *Cliente:* ${nombreClienteActivo}\n` +
+                        `📌 *WhatsApp registrado:* ${phone}\n\n` +
+                        `¿Me ayudan para hacerlo efectivo en mi compra? ¡Muchas gracias! 🥂`;
+            } else {
+                texto = `👑 *¡OBJETIVO LOGRADO EN LEM MODA!* 👑\n\n` +
+                        `¡Hola! 👋 ¡Lo logré!\n\n` +
+                        `He completado mis *8 ESTAMPAS* 🏆 y ya tengo mi tarjeta llena.\n` +
+                        `🛍️ ¡Vengo por mi *PRENDA DE REGALO*!\n\n` +
+                        `📌 *Cliente:* ${nombreClienteActivo}\n` +
+                        `📌 *WhatsApp registrado:* ${phone}\n\n` +
+                        `Estoy muy emocionado/a por elegir mi regalo. ¡Gracias! ✨`;
+            }
+            window.open(`https://wa.me/${waNumber}?text=${encodeURIComponent(texto)}`, '_blank');
+        }
     </script>
 </body>
 </html>
