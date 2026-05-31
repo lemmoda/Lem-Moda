@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>LEM MODA | Tarjeta VIP</title>
+    <title>LEM MODA | Feliz Día del Padre 2026</title>
 
     <meta name="description" content="Programa de Lealtad Elite de LEM MODA. Colecciona estampas y obtén beneficios exclusivos.">
     <meta property="og:type" content="website">
@@ -41,7 +41,7 @@
         }
 
         body { 
-            background: radial-gradient(circle, #2a1806 0%, #000000 100%); 
+            background: radial-gradient(circle at top, #0d1e33 0%, #000000 70%); 
             color: #fff; 
             font-family: 'Inter', sans-serif; 
             margin: 0; 
@@ -72,7 +72,7 @@
         .circle-logo { width: 70%; height: auto; }
         
         .card { 
-            background: rgba(20, 15, 10, 0.6); 
+            background: rgba(10, 20, 40, 0.7); 
             border: 1px solid rgba(212, 163, 115, 0.2); 
             border-radius: 35px; padding: 25px; 
             backdrop-filter: blur(15px);
@@ -152,7 +152,7 @@
         }
 
         .modal-content {
-            background: #0a0a0a; border: 1px solid var(--lem-gold); padding: 30px;
+            background: #060e1a; border: 1px solid var(--lem-gold); padding: 30px;
             border-radius: 25px; width: 85%; max-width: 350px; text-align: center;
         }
 
@@ -170,7 +170,7 @@
         }
 
         .success-card { 
-            background: #000; border: 1px solid var(--lem-gold); 
+            background: #060e1a; border: 1px solid var(--lem-gold); 
             border-radius: 35px; padding: 30px; width: 80%; text-align: center; 
         }
 
@@ -203,6 +203,7 @@
     <div class="container">
         <div id="authPanel">
             <div class="brand-circle"><img src="1.png.png" class="circle-logo"></div>
+            <p style="font-size: 0.65rem; letter-spacing: 3px; color: var(--lem-gold); margin: -20px 0 8px; text-transform: uppercase; opacity: 0.85;">👔 Feliz Día del Padre 2026</p>
             <h3 style="letter-spacing: 5px; color: var(--lem-gold); font-weight: 300;">BIENVENIDO</h3>
             
             <input type="text" id="userName" class="input-box" placeholder="Nombre Completo">
@@ -358,7 +359,7 @@
         }
 
         function lanzarConfeti() {
-            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#d4a373', '#784311', '#ffffff'] });
+            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#d4a373', '#1a2e4a', '#c9a84c', '#ffffff'] });
         }
 
         function enviarWA(phone, hito) {
@@ -366,17 +367,17 @@
             let texto = "";
             
             if (hito === 4) {
-                texto = `✨ *¡TENGO UNA RECOMPENSA EN LEM MODA!* ✨\n\n` +
+                texto = `👔 *¡BENEFICIO DÍA DEL PADRE - LEM MODA!* 👔\n\n` +
                         `Hola, equipo de LEM. 👋\n\n` +
-                        `¡Qué buena noticia! Ya completé mis primeras *4 ESTAMPAS* 🎫 y quiero solicitar mi beneficio:\n` +
+                        `¡Ya completé mis primeras *4 ESTAMPAS* 🎫 y quiero solicitar mi beneficio especial del Día del Padre:\n` +
                         `🎁 *50% DE DESCUENTO* en mi prenda.\n\n` +
                         `📌 *Cliente:* ${nombreClienteActivo}\n` +
                         `📌 *WhatsApp registrado:* ${phone}\n\n` +
                         `¿Me ayudan para hacerlo efectivo en mi compra? ¡Muchas gracias! 🥂`;
             } else {
-                texto = `👑 *¡OBJETIVO LOGRADO EN LEM MODA!* 👑\n\n` +
+                texto = `👨‍👦 *¡TARJETA COMPLETA - EDICIÓN PAPÁ LEM MODA!* 👨‍👦\n\n` +
                         `¡Hola! 👋 ¡Lo logré!\n\n` +
-                        `He completado mis *8 ESTAMPAS* 🏆 y ya tengo mi tarjeta llena.\n` +
+                        `He completado mis *8 ESTAMPAS* 🏆 en la edición Día del Padre.\n` +
                         `🛍️ ¡Vengo por mi *PRENDA DE REGALO*!\n\n` +
                         `📌 *Cliente:* ${nombreClienteActivo}\n` +
                         `📌 *WhatsApp registrado:* ${phone}\n\n` +
