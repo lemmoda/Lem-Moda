@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>LEM MODA | Día del Padre 2026</title>
+    <title>LEM MODA | Tarjeta VIP</title>
 
     <meta name="description" content="Programa de Lealtad Elite de LEM MODA. Colecciona estampas y obtén beneficios exclusivos.">
     <meta property="og:type" content="website">
@@ -41,7 +41,7 @@
         }
 
         body { 
-            background: radial-gradient(circle at top, #0d1e33 0%, #000000 70%); 
+            background: radial-gradient(circle, #2a1806 0%, #000000 100%); 
             color: #fff; 
             font-family: 'Inter', sans-serif; 
             margin: 0; 
@@ -72,7 +72,7 @@
         .circle-logo { width: 70%; height: auto; }
         
         .card { 
-            background: rgba(10, 20, 40, 0.7); 
+            background: rgba(20, 15, 10, 0.6); 
             border: 1px solid rgba(212, 163, 115, 0.2); 
             border-radius: 35px; padding: 25px; 
             backdrop-filter: blur(15px);
@@ -152,7 +152,7 @@
         }
 
         .modal-content {
-            background: #060e1a; border: 1px solid var(--lem-gold); padding: 30px;
+            background: #0a0a0a; border: 1px solid var(--lem-gold); padding: 30px;
             border-radius: 25px; width: 85%; max-width: 350px; text-align: center;
         }
 
@@ -170,7 +170,7 @@
         }
 
         .success-card { 
-            background: #060e1a; border: 1px solid var(--lem-gold); 
+            background: #000; border: 1px solid var(--lem-gold); 
             border-radius: 35px; padding: 30px; width: 80%; text-align: center; 
         }
 
@@ -179,9 +179,6 @@
     </style>
 </head>
 <body>
-    <canvas id="mundialCanvas" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1;"></canvas>
-    <canvas id="padreCanvas"   style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:2;opacity:0.62;"></canvas>
-
     <div id="modalBeneficios" class="modal">
         <div class="modal-content">
             <h3 style="color: var(--lem-gold); letter-spacing: 2px;">BENEFICIOS LEM</h3>
@@ -206,7 +203,6 @@
     <div class="container">
         <div id="authPanel">
             <div class="brand-circle"><img src="1.png.png" class="circle-logo"></div>
-            <p style="font-size: 0.65rem; letter-spacing: 3px; color: var(--lem-gold); margin: -20px 0 8px; text-transform: uppercase; opacity: 0.85;">👔 Edición Día del Padre 2026</p>
             <h3 style="letter-spacing: 5px; color: var(--lem-gold); font-weight: 300;">BIENVENIDO</h3>
             
             <input type="text" id="userName" class="input-box" placeholder="Nombre Completo">
@@ -362,7 +358,7 @@
         }
 
         function lanzarConfeti() {
-            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#d4a373', '#1a2e4a', '#c9a84c', '#ffffff'] });
+            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#d4a373', '#784311', '#ffffff'] });
         }
 
         function enviarWA(phone, hito) {
@@ -370,17 +366,17 @@
             let texto = "";
             
             if (hito === 4) {
-                texto = `👔 *¡BENEFICIO DÍA DEL PADRE - LEM MODA!* 👔\n\n` +
+                texto = `✨ *¡TENGO UNA RECOMPENSA EN LEM MODA!* ✨\n\n` +
                         `Hola, equipo de LEM. 👋\n\n` +
-                        `¡Ya completé mis primeras *4 ESTAMPAS* 🎫 y quiero solicitar mi beneficio especial del Día del Padre:\n` +
+                        `¡Qué buena noticia! Ya completé mis primeras *4 ESTAMPAS* 🎫 y quiero solicitar mi beneficio:\n` +
                         `🎁 *50% DE DESCUENTO* en mi prenda.\n\n` +
                         `📌 *Cliente:* ${nombreClienteActivo}\n` +
                         `📌 *WhatsApp registrado:* ${phone}\n\n` +
                         `¿Me ayudan para hacerlo efectivo en mi compra? ¡Muchas gracias! 🥂`;
             } else {
-                texto = `👨‍👦 *¡TARJETA COMPLETA - EDICIÓN PAPÁ LEM MODA!* 👨‍👦\n\n` +
+                texto = `👑 *¡OBJETIVO LOGRADO EN LEM MODA!* 👑\n\n` +
                         `¡Hola! 👋 ¡Lo logré!\n\n` +
-                        `He completado mis *8 ESTAMPAS* 🏆 en la edición Día del Padre.\n` +
+                        `He completado mis *8 ESTAMPAS* 🏆 y ya tengo mi tarjeta llena.\n` +
                         `🛍️ ¡Vengo por mi *PRENDA DE REGALO*!\n\n` +
                         `📌 *Cliente:* ${nombreClienteActivo}\n` +
                         `📌 *WhatsApp registrado:* ${phone}\n\n` +
@@ -388,372 +384,6 @@
             }
             window.open(`https://wa.me/${waNumber}?text=${encodeURIComponent(texto)}`, '_blank');
         }
-    </script>
-
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
-    <script>
-        (function() {
-            const canvas = document.getElementById('padreCanvas');
-            const ctx = canvas.getContext('2d');
-
-            const words = [
-                'Papá',       'Dad',          'Père',        'Padre',
-                'Vater',      'Pai',          'Baba',        'Otosan',
-                'Appa',       'Tata',         'Táta',        'Bapa',
-                'Babbo',      'Pappa',        'Tatay',       'Bapak',
-                'Papà',       'Päpa',         'Dada',
-                'Sabio',      'Fuerte',       'Mi Héroe',    'Valiente',
-                'Confiable',  'Brillante',    'Maestro',     'Amado',
-                'Talentoso',  'Comprensivo',  'Inteligente', 'Alegre',
-                'Divertido',  'Trabajador',   'Único',       'El Rey',
-                'Mi Apoyo',   'Invencible',   'Coach',       'Chef',
-                'Inspiración','Simpático',    'Jefe',        'Cool',
-                'Mi mejor amigo', 'Apasionado', 'Perseverante'
-            ];
-
-            const DAD_WORDS = new Set([
-                'Papá','Dad','Père','Padre','Vater','Pai','Baba','Otosan',
-                'Appa','Tata','Táta','Bapa','Babbo','Pappa','Tatay','Bapak',
-                'Papà','Päpa','Dada'
-            ]);
-
-            const FILLS   = ['#c9a84c', '#f0d080', '#ffffff', '#b8d8f0', '#e8c87a'];
-            const STROKES = ['#0a1628', '#0a1628', '#0a1628', '#0a1628', '#0a1628'];
-
-            const QUALITY_FILLS   = ['#c9a84c', '#f0d080', '#ffb347', '#ffd700'];
-            const QUALITY_STROKES = ['#0a1628', '#0a1628', '#0a1628', '#0a1628'];
-
-            let particles = [];
-            let W, H;
-            let fontReady = false;
-
-            document.fonts.load('900 20px "Fredoka One"').then(() => { fontReady = true; });
-
-            function resize() {
-                W = canvas.width = window.innerWidth;
-                H = canvas.height = window.innerHeight;
-            }
-
-            function rand(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
-
-            function createParticle() {
-                const side = Math.floor(Math.random() * 4);
-                let x, y, vx, vy;
-                const speed = 0.22 + Math.random() * 0.35;
-                if (side === 0)      { x = Math.random() * W; y = -30;    vx = (Math.random()-0.5)*0.3; vy = speed; }
-                else if (side === 1) { x = W+30;  y = Math.random()*H;    vx = -speed; vy = (Math.random()-0.5)*0.3; }
-                else if (side === 2) { x = Math.random()*W;  y = H+30;    vx = (Math.random()-0.5)*0.3; vy = -speed; }
-                else                 { x = -30;   y = Math.random()*H;    vx = speed;  vy = (Math.random()-0.5)*0.3; }
-
-                const text = rand(words);
-                const isQuality = !DAD_WORDS.has(text);
-                const fills  = isQuality ? QUALITY_FILLS  : FILLS;
-                const strks  = isQuality ? QUALITY_STROKES : STROKES;
-                const ci = Math.floor(Math.random() * fills.length);
-
-                return {
-                    x, y, vx, vy,
-                    text,
-                    fill: fills[ci],
-                    stroke: strks[ci],
-                    size: isQuality
-                        ? 14 + Math.floor(Math.random() * 10)
-                        : 18 + Math.floor(Math.random() * 14),
-                    alpha: 0,
-                    life: 0,
-                    maxLife: isQuality
-                        ? 220 + Math.floor(Math.random() * 140)
-                        : 300 + Math.floor(Math.random() * 200),
-                    angle: (Math.random() - 0.5) * 0.25
-                };
-            }
-
-            function isOff(p) {
-                return p.x < -200 || p.x > W+200 || p.y < -60 || p.y > H+60;
-            }
-
-            function animate() {
-                ctx.clearRect(0, 0, W, H);
-
-                if (fontReady && particles.length < 12 && Math.random() < 0.045) {
-                    particles.push(createParticle());
-                }
-
-                particles = particles.filter(p => {
-                    p.life++;
-                    p.x += p.vx;
-                    p.y += p.vy;
-
-                    const fz = 50;
-                    if (p.life < fz) {
-                        p.alpha = p.life / fz;
-                    } else if (p.life > p.maxLife - fz) {
-                        p.alpha = Math.max(0, (p.maxLife - p.life) / fz);
-                    } else {
-                        p.alpha = 1;
-                    }
-
-                    if (p.life >= p.maxLife || isOff(p)) return false;
-
-                    ctx.save();
-                    ctx.globalAlpha = p.alpha * 0.92;
-                    ctx.translate(p.x, p.y);
-                    ctx.rotate(p.angle);
-                    ctx.font = `900 ${p.size}px "Fredoka One", cursive`;
-                    ctx.textBaseline = 'middle';
-
-                    ctx.strokeStyle = p.stroke;
-                    ctx.lineWidth = p.size * 0.22;
-                    ctx.lineJoin = 'round';
-                    ctx.strokeText(p.text, 0, 0);
-
-                    ctx.fillStyle = p.fill;
-                    ctx.fillText(p.text, 0, 0);
-
-                    ctx.restore();
-                    return true;
-                });
-
-                requestAnimationFrame(animate);
-            }
-
-            resize();
-            window.addEventListener('resize', resize);
-
-            setTimeout(() => {
-                for (let i = 0; i < 6; i++) {
-                    const p = createParticle();
-                    p.x = 30 + Math.random() * (W - 60);
-                    p.y = 30 + Math.random() * (H - 60);
-                    p.life = Math.floor(Math.random() * 120);
-                    particles.push(p);
-                }
-                animate();
-            }, 400);
-        })();
-    </script>
-
-    <script>
-    (function() {
-        const cv = document.getElementById('mundialCanvas');
-        const cx = cv.getContext('2d');
-        let W, H, t = 0;
-
-        // ── Stars / sparkles background ─────────────────────────────────────
-        const STARS = Array.from({length: 60}, () => ({
-            x: Math.random(), y: Math.random(),
-            r: 0.5 + Math.random() * 1.4,
-            phase: Math.random() * Math.PI * 2,
-            speed: 0.01 + Math.random() * 0.025
-        }));
-
-        // ── Confetti particles (ECU colors) ─────────────────────────────────
-        const ECU = ['#FFD100', '#003893', '#CC0000'];
-        const CONF = Array.from({length: 38}, () => ({
-            x: Math.random(), y: Math.random() - 0.1,
-            vy: 0.0004 + Math.random() * 0.0007,
-            vx: (Math.random() - 0.5) * 0.0003,
-            w: 5 + Math.random() * 7,
-            h: 3 + Math.random() * 4,
-            angle: Math.random() * Math.PI,
-            spin: (Math.random() - 0.5) * 0.04,
-            color: ECU[Math.floor(Math.random() * 3)],
-            alpha: 0.55 + Math.random() * 0.35
-        }));
-
-        function resize() {
-            W = cv.width  = window.innerWidth;
-            H = cv.height = window.innerHeight;
-        }
-
-        // ── Draw Ecuador flag (waving) ───────────────────────────────────────
-        function drawFlag(cx, x, y, w, h, t) {
-            const segs = 18;
-            const sw = w / segs;
-            cx.save();
-            cx.globalAlpha = 0.18;
-
-            const stripes = [
-                { color: '#FFD100', from: 0,    to: 0.5  },
-                { color: '#003893', from: 0.5,  to: 0.75 },
-                { color: '#CC0000', from: 0.75, to: 1    }
-            ];
-
-            for (const s of stripes) {
-                for (let i = 0; i < segs; i++) {
-                    const px = x + i * sw;
-                    const wave1 = Math.sin(i * 0.55 + t * 1.6) * h * 0.09;
-                    const wave2 = Math.sin(i * 0.55 + t * 1.6 + 1) * h * 0.09;
-                    const top1  = y + h * s.from + wave1;
-                    const top2  = y + h * s.from + wave2;
-                    const bot1  = y + h * s.to   + wave1;
-                    const bot2  = y + h * s.to   + wave2;
-
-                    cx.beginPath();
-                    cx.moveTo(px, top1);
-                    cx.lineTo(px + sw, top2);
-                    cx.lineTo(px + sw, bot2);
-                    cx.lineTo(px, bot1);
-                    cx.closePath();
-                    cx.fillStyle = s.color;
-                    cx.fill();
-                }
-            }
-            // flagpole
-            cx.globalAlpha = 0.22;
-            cx.fillStyle = '#c9a84c';
-            cx.fillRect(x - 3, y - h * 0.1, 3, h * 1.2);
-            cx.restore();
-        }
-
-        // ── Draw trophy (SVG-style on canvas) ───────────────────────────────
-        function drawTrophy(cx, cx2, cy, size, t) {
-            const pulse = 1 + Math.sin(t * 1.2) * 0.025;
-            const s = size * pulse;
-            cx.save();
-            cx.translate(cx2, cy);
-            cx.globalAlpha = 0.22 + Math.sin(t * 0.8) * 0.04;
-
-            // glow
-            const grd = cx.createRadialGradient(0, 0, s * 0.1, 0, 0, s * 0.9);
-            grd.addColorStop(0, 'rgba(255,209,0,0.35)');
-            grd.addColorStop(1, 'rgba(255,209,0,0)');
-            cx.fillStyle = grd;
-            cx.beginPath(); cx.arc(0, 0, s * 0.9, 0, Math.PI * 2); cx.fill();
-
-            cx.strokeStyle = '#FFD100';
-            cx.lineWidth = s * 0.07;
-            cx.lineJoin = 'round';
-            cx.lineCap  = 'round';
-
-            // cup body
-            cx.beginPath();
-            cx.moveTo(-s * 0.38, -s * 0.5);
-            cx.lineTo(-s * 0.42, -s * 0.1);
-            cx.quadraticCurveTo(-s * 0.42, s * 0.22, 0, s * 0.28);
-            cx.quadraticCurveTo( s * 0.42, s * 0.22,  s * 0.42, -s * 0.1);
-            cx.lineTo( s * 0.38, -s * 0.5);
-            cx.closePath();
-            cx.fillStyle = '#c9a84c';
-            cx.fill(); cx.stroke();
-
-            // handles
-            cx.beginPath();
-            cx.moveTo(-s*0.38, -s*0.28);
-            cx.quadraticCurveTo(-s*0.65, -s*0.1, -s*0.38, s*0.08);
-            cx.stroke();
-            cx.beginPath();
-            cx.moveTo( s*0.38, -s*0.28);
-            cx.quadraticCurveTo( s*0.65, -s*0.1,  s*0.38, s*0.08);
-            cx.stroke();
-
-            // base stem
-            cx.beginPath();
-            cx.moveTo(-s*0.12, s*0.28); cx.lineTo(-s*0.12, s*0.44);
-            cx.moveTo( s*0.12, s*0.28); cx.lineTo( s*0.12, s*0.44);
-            cx.stroke();
-
-            // base plate
-            cx.beginPath();
-            cx.moveTo(-s*0.32, s*0.44); cx.lineTo(s*0.32, s*0.44);
-            cx.lineWidth = s * 0.1;
-            cx.stroke();
-
-            // star on cup
-            cx.fillStyle = '#FFD100';
-            cx.globalAlpha = 0.9;
-            const sr = s * 0.09, sr2 = s * 0.04, pts = 5;
-            cx.beginPath();
-            for (let i = 0; i < pts * 2; i++) {
-                const a = (i * Math.PI / pts) - Math.PI / 2;
-                const r = i % 2 === 0 ? sr : sr2;
-                i === 0 ? cx.moveTo(Math.cos(a)*r, -s*0.25 + Math.sin(a)*r)
-                        : cx.lineTo(Math.cos(a)*r, -s*0.25 + Math.sin(a)*r);
-            }
-            cx.closePath(); cx.fill();
-
-            cx.restore();
-        }
-
-        // ── Epic text ────────────────────────────────────────────────────────
-        function drawEpicText(cx, t) {
-            cx.save();
-            const pulse = 1 + Math.sin(t * 1.5) * 0.015;
-
-            // MUNDIAL 2026
-            const fs1 = Math.min(W * 0.055, 38) * pulse;
-            cx.font = `900 ${fs1}px "Fredoka One", cursive`;
-            cx.textAlign = 'center';
-            cx.globalAlpha = 0.28 + Math.sin(t * 0.7) * 0.06;
-            cx.strokeStyle = '#003893';
-            cx.lineWidth = fs1 * 0.18;
-            cx.lineJoin = 'round';
-            cx.strokeText('⚽ MUNDIAL 2026 ⚽', W * 0.5, H * 0.08);
-            cx.fillStyle = '#FFD100';
-            cx.fillText('⚽ MUNDIAL 2026 ⚽', W * 0.5, H * 0.08);
-
-            // FELIZ DÍA PAPÁ
-            const fs2 = Math.min(W * 0.044, 30) * pulse;
-            cx.font = `900 ${fs2}px "Fredoka One", cursive`;
-            cx.globalAlpha = 0.22 + Math.sin(t * 0.9 + 1) * 0.05;
-            cx.strokeStyle = '#003893';
-            cx.lineWidth = fs2 * 0.18;
-            cx.strokeText('🏆 FELIZ DÍA PAPÁ 🏆', W * 0.5, H * 0.94);
-            cx.fillStyle = '#FFD100';
-            cx.fillText('🏆 FELIZ DÍA PAPÁ 🏆', W * 0.5, H * 0.94);
-
-            cx.restore();
-        }
-
-        // ── Main render loop ─────────────────────────────────────────────────
-        function draw() {
-            cx.clearRect(0, 0, W, H);
-            t += 0.016;
-
-            // twinkling stars
-            for (const s of STARS) {
-                s.phase += s.speed;
-                const alpha = 0.12 + Math.sin(s.phase) * 0.1;
-                cx.globalAlpha = alpha;
-                cx.fillStyle = '#FFD100';
-                cx.beginPath();
-                cx.arc(s.x * W, s.y * H, s.r, 0, Math.PI * 2);
-                cx.fill();
-            }
-
-            // confetti rain
-            for (const c of CONF) {
-                c.x += c.vx; c.y += c.vy; c.angle += c.spin;
-                if (c.y > 1.05) { c.y = -0.02; c.x = Math.random(); }
-                cx.save();
-                cx.globalAlpha = c.alpha * 0.5;
-                cx.translate(c.x * W, c.y * H);
-                cx.rotate(c.angle);
-                cx.fillStyle = c.color;
-                cx.fillRect(-c.w/2, -c.h/2, c.w, c.h);
-                cx.restore();
-            }
-
-            // flags — corners
-            const fw = Math.min(W * 0.28, 180);
-            const fh = fw * 0.55;
-            drawFlag(cx, 18,          18,          fw, fh, t);
-            drawFlag(cx, W - fw - 18, H - fh - 18, fw, fh, t);
-
-            // trophy — center bottom area, subtle
-            const ts = Math.min(W * 0.07, 48);
-            drawTrophy(cx, W * 0.5, H * 0.5, ts, t);
-
-            // epic text top & bottom
-            drawEpicText(cx, t);
-
-            requestAnimationFrame(draw);
-        }
-
-        resize();
-        window.addEventListener('resize', resize);
-        draw();
-    })();
     </script>
 </body>
 </html>
