@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>LEM MODA | Tarjeta VIP</title>
+    <title>LEM MODA | Día del Padre 2026</title>
 
     <meta name="description" content="Programa de Lealtad Elite de LEM MODA. Colecciona estampas y obtén beneficios exclusivos.">
     <meta property="og:type" content="website">
@@ -41,7 +41,7 @@
         }
 
         body { 
-            background: radial-gradient(circle, #2a1806 0%, #000000 100%); 
+            background: radial-gradient(circle at top, #0d1e33 0%, #000000 70%); 
             color: #fff; 
             font-family: 'Inter', sans-serif; 
             margin: 0; 
@@ -72,7 +72,7 @@
         .circle-logo { width: 70%; height: auto; }
         
         .card { 
-            background: rgba(20, 15, 10, 0.6); 
+            background: rgba(10, 20, 40, 0.7); 
             border: 1px solid rgba(212, 163, 115, 0.2); 
             border-radius: 35px; padding: 25px; 
             backdrop-filter: blur(15px);
@@ -152,7 +152,7 @@
         }
 
         .modal-content {
-            background: #0a0a0a; border: 1px solid var(--lem-gold); padding: 30px;
+            background: #060e1a; border: 1px solid var(--lem-gold); padding: 30px;
             border-radius: 25px; width: 85%; max-width: 350px; text-align: center;
         }
 
@@ -170,7 +170,7 @@
         }
 
         .success-card { 
-            background: #000; border: 1px solid var(--lem-gold); 
+            background: #060e1a; border: 1px solid var(--lem-gold); 
             border-radius: 35px; padding: 30px; width: 80%; text-align: center; 
         }
 
@@ -179,6 +179,9 @@
     </style>
 </head>
 <body>
+    <canvas id="mundialCanvas" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1;"></canvas>
+    <canvas id="padreCanvas"   style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:2;opacity:0.62;"></canvas>
+
     <div id="modalBeneficios" class="modal">
         <div class="modal-content">
             <h3 style="color: var(--lem-gold); letter-spacing: 2px;">BENEFICIOS LEM</h3>
@@ -203,6 +206,7 @@
     <div class="container">
         <div id="authPanel">
             <div class="brand-circle"><img src="1.png.png" class="circle-logo"></div>
+            <p style="font-size: 0.65rem; letter-spacing: 3px; color: var(--lem-gold); margin: -20px 0 8px; text-transform: uppercase; opacity: 0.85;">Feliz Mes del Padre 2026</p>
             <h3 style="letter-spacing: 5px; color: var(--lem-gold); font-weight: 300;">BIENVENIDO</h3>
             
             <input type="text" id="userName" class="input-box" placeholder="Nombre Completo">
@@ -358,7 +362,7 @@
         }
 
         function lanzarConfeti() {
-            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#d4a373', '#784311', '#ffffff'] });
+            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#d4a373', '#1a2e4a', '#c9a84c', '#ffffff'] });
         }
 
         function enviarWA(phone, hito) {
@@ -366,17 +370,17 @@
             let texto = "";
             
             if (hito === 4) {
-                texto = `✨ *¡TENGO UNA RECOMPENSA EN LEM MODA!* ✨\n\n` +
+                texto = `👔 *¡BENEFICIO DÍA DEL PADRE - LEM MODA!* 👔\n\n` +
                         `Hola, equipo de LEM. 👋\n\n` +
-                        `¡Qué buena noticia! Ya completé mis primeras *4 ESTAMPAS* 🎫 y quiero solicitar mi beneficio:\n` +
+                        `¡Ya completé mis primeras *4 ESTAMPAS* 🎫 y quiero solicitar mi beneficio especial del Día del Padre:\n` +
                         `🎁 *50% DE DESCUENTO* en mi prenda.\n\n` +
                         `📌 *Cliente:* ${nombreClienteActivo}\n` +
                         `📌 *WhatsApp registrado:* ${phone}\n\n` +
                         `¿Me ayudan para hacerlo efectivo en mi compra? ¡Muchas gracias! 🥂`;
             } else {
-                texto = `👑 *¡OBJETIVO LOGRADO EN LEM MODA!* 👑\n\n` +
+                texto = `👨‍👦 *¡TARJETA COMPLETA - EDICIÓN PAPÁ LEM MODA!* 👨‍👦\n\n` +
                         `¡Hola! 👋 ¡Lo logré!\n\n` +
-                        `He completado mis *8 ESTAMPAS* 🏆 y ya tengo mi tarjeta llena.\n` +
+                        `He completado mis *8 ESTAMPAS* 🏆 en la edición Día del Padre.\n` +
                         `🛍️ ¡Vengo por mi *PRENDA DE REGALO*!\n\n` +
                         `📌 *Cliente:* ${nombreClienteActivo}\n` +
                         `📌 *WhatsApp registrado:* ${phone}\n\n` +
@@ -384,6 +388,356 @@
             }
             window.open(`https://wa.me/${waNumber}?text=${encodeURIComponent(texto)}`, '_blank');
         }
+    </script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
+    <script>
+        (function() {
+            const canvas = document.getElementById('padreCanvas');
+            const ctx = canvas.getContext('2d');
+
+            const words = [
+                'Papá',       'Dad',          'Père',        'Padre',
+                'Vater',      'Pai',          'Baba',        'Otosan',
+                'Appa',       'Tata',         'Táta',        'Bapa',
+                'Babbo',      'Pappa',        'Tatay',       'Bapak',
+                'Papà',       'Päpa',         'Dada',
+                'Sabio',      'Fuerte',       'Mi Héroe',    'Valiente',
+                'Confiable',  'Brillante',    'Maestro',     'Amado',
+                'Talentoso',  'Comprensivo',  'Inteligente', 'Alegre',
+                'Divertido',  'Trabajador',   'Único',       'El Rey',
+                'Mi Apoyo',   'Invencible',   'Coach',       'Chef',
+                'Inspiración','Simpático',    'Jefe',        'Cool',
+                'Mi mejor amigo', 'Apasionado', 'Perseverante'
+            ];
+
+            const DAD_WORDS = new Set([
+                'Papá','Dad','Père','Padre','Vater','Pai','Baba','Otosan',
+                'Appa','Tata','Táta','Bapa','Babbo','Pappa','Tatay','Bapak',
+                'Papà','Päpa','Dada'
+            ]);
+
+            const FILLS   = ['#c9a84c', '#f0d080', '#ffffff', '#b8d8f0', '#e8c87a'];
+            const STROKES = ['#0a1628', '#0a1628', '#0a1628', '#0a1628', '#0a1628'];
+
+            const QUALITY_FILLS   = ['#c9a84c', '#f0d080', '#ffb347', '#ffd700'];
+            const QUALITY_STROKES = ['#0a1628', '#0a1628', '#0a1628', '#0a1628'];
+
+            let particles = [];
+            let W, H;
+            let fontReady = false;
+
+            document.fonts.load('900 20px "Fredoka One"').then(() => { fontReady = true; });
+
+            function resize() {
+                W = canvas.width = window.innerWidth;
+                H = canvas.height = window.innerHeight;
+            }
+
+            function rand(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+
+            function createParticle() {
+                const side = Math.floor(Math.random() * 4);
+                let x, y, vx, vy;
+                const speed = 0.22 + Math.random() * 0.35;
+                if (side === 0)      { x = Math.random() * W; y = -30;    vx = (Math.random()-0.5)*0.3; vy = speed; }
+                else if (side === 1) { x = W+30;  y = Math.random()*H;    vx = -speed; vy = (Math.random()-0.5)*0.3; }
+                else if (side === 2) { x = Math.random()*W;  y = H+30;    vx = (Math.random()-0.5)*0.3; vy = -speed; }
+                else                 { x = -30;   y = Math.random()*H;    vx = speed;  vy = (Math.random()-0.5)*0.3; }
+
+                const text = rand(words);
+                const isQuality = !DAD_WORDS.has(text);
+                const fills  = isQuality ? QUALITY_FILLS  : FILLS;
+                const strks  = isQuality ? QUALITY_STROKES : STROKES;
+                const ci = Math.floor(Math.random() * fills.length);
+
+                return {
+                    x, y, vx, vy,
+                    text,
+                    fill: fills[ci],
+                    stroke: strks[ci],
+                    size: isQuality
+                        ? 14 + Math.floor(Math.random() * 10)
+                        : 18 + Math.floor(Math.random() * 14),
+                    alpha: 0,
+                    life: 0,
+                    maxLife: isQuality
+                        ? 220 + Math.floor(Math.random() * 140)
+                        : 300 + Math.floor(Math.random() * 200),
+                    angle: (Math.random() - 0.5) * 0.25
+                };
+            }
+
+            function isOff(p) {
+                return p.x < -200 || p.x > W+200 || p.y < -60 || p.y > H+60;
+            }
+
+            function animate() {
+                ctx.clearRect(0, 0, W, H);
+
+                if (fontReady && particles.length < 12 && Math.random() < 0.045) {
+                    particles.push(createParticle());
+                }
+
+                particles = particles.filter(p => {
+                    p.life++;
+                    p.x += p.vx;
+                    p.y += p.vy;
+
+                    const fz = 50;
+                    if (p.life < fz) {
+                        p.alpha = p.life / fz;
+                    } else if (p.life > p.maxLife - fz) {
+                        p.alpha = Math.max(0, (p.maxLife - p.life) / fz);
+                    } else {
+                        p.alpha = 1;
+                    }
+
+                    if (p.life >= p.maxLife || isOff(p)) return false;
+
+                    ctx.save();
+                    ctx.globalAlpha = p.alpha * 0.92;
+                    ctx.translate(p.x, p.y);
+                    ctx.rotate(p.angle);
+                    ctx.font = `900 ${p.size}px "Fredoka One", cursive`;
+                    ctx.textBaseline = 'middle';
+
+                    ctx.strokeStyle = p.stroke;
+                    ctx.lineWidth = p.size * 0.22;
+                    ctx.lineJoin = 'round';
+                    ctx.strokeText(p.text, 0, 0);
+
+                    ctx.fillStyle = p.fill;
+                    ctx.fillText(p.text, 0, 0);
+
+                    ctx.restore();
+                    return true;
+                });
+
+                requestAnimationFrame(animate);
+            }
+
+            resize();
+            window.addEventListener('resize', resize);
+
+            setTimeout(() => {
+                for (let i = 0; i < 6; i++) {
+                    const p = createParticle();
+                    p.x = 30 + Math.random() * (W - 60);
+                    p.y = 30 + Math.random() * (H - 60);
+                    p.life = Math.floor(Math.random() * 120);
+                    particles.push(p);
+                }
+                animate();
+            }, 400);
+        })();
+    </script>
+
+    <script>
+    (function() {
+        const cv = document.getElementById('mundialCanvas');
+        const cx = cv.getContext('2d');
+        let W, H, t = 0;
+
+        const STARS = Array.from({length: 70}, () => ({
+            x: Math.random(), y: Math.random(),
+            r: 0.6 + Math.random() * 1.6,
+            phase: Math.random() * Math.PI * 2,
+            speed: 0.012 + Math.random() * 0.028
+        }));
+
+        const ECU = ['#FFD100','#FFD100','#003893','#CC0000','#FFD100','#003893'];
+        const SHAPES = ['rect','circle','ribbon'];
+        const CONF = Array.from({length: 90}, () => ({
+            x: Math.random(),
+            y: Math.random() * 1.1 - 0.05,
+            vy: 0.0005 + Math.random() * 0.001,
+            vx: (Math.random() - 0.5) * 0.0004,
+            w: 5 + Math.random() * 9,
+            h: 3 + Math.random() * 5,
+            angle: Math.random() * Math.PI * 2,
+            spin: (Math.random() - 0.5) * 0.06,
+            color: ECU[Math.floor(Math.random() * ECU.length)],
+            alpha: 0.65 + Math.random() * 0.35,
+            shape: SHAPES[Math.floor(Math.random() * SHAPES.length)]
+        }));
+
+        function resize() {
+            W = cv.width  = window.innerWidth;
+            H = cv.height = window.innerHeight;
+        }
+
+        // ── Ecuador shield (simplified, canvas) ──────────────────────────────
+        function drawShield(cx, x, y, size) {
+            cx.save();
+            cx.translate(x, y);
+
+            // shield outline
+            cx.beginPath();
+            cx.moveTo(-size, -size * 0.7);
+            cx.lineTo( size, -size * 0.7);
+            cx.lineTo( size,  size * 0.2);
+            cx.quadraticCurveTo(size, size * 0.8, 0, size);
+            cx.quadraticCurveTo(-size, size * 0.8, -size, size * 0.2);
+            cx.closePath();
+            cx.fillStyle = '#003893';
+            cx.fill();
+            cx.strokeStyle = '#FFD100';
+            cx.lineWidth = size * 0.1;
+            cx.stroke();
+
+            // yellow top stripe
+            cx.beginPath();
+            cx.moveTo(-size * 0.95, -size * 0.7);
+            cx.lineTo( size * 0.95, -size * 0.7);
+            cx.lineTo( size * 0.95, -size * 0.18);
+            cx.lineTo(-size * 0.95, -size * 0.18);
+            cx.closePath();
+            cx.fillStyle = '#FFD100';
+            cx.fill();
+
+            // red bottom stripe
+            cx.beginPath();
+            cx.moveTo(-size * 0.95,  size * 0.25);
+            cx.lineTo( size * 0.95,  size * 0.25);
+            cx.lineTo( size * 0.8,   size * 0.75);
+            cx.quadraticCurveTo(0, size * 1.0, -size * 0.8, size * 0.75);
+            cx.closePath();
+            cx.fillStyle = '#CC0000';
+            cx.fill();
+
+            // condor silhouette (simple wings)
+            cx.fillStyle = '#1a1200';
+            cx.beginPath();
+            cx.ellipse(0, -size * 0.35, size * 0.18, size * 0.1, 0, 0, Math.PI * 2);
+            cx.fill();
+            cx.beginPath();
+            cx.moveTo(-size * 0.18, -size * 0.35);
+            cx.quadraticCurveTo(-size * 0.55, -size * 0.62, -size * 0.7, -size * 0.3);
+            cx.quadraticCurveTo(-size * 0.45, -size * 0.28, -size * 0.18, -size * 0.25);
+            cx.closePath();
+            cx.fill();
+            cx.beginPath();
+            cx.moveTo(size * 0.18, -size * 0.35);
+            cx.quadraticCurveTo(size * 0.55, -size * 0.62, size * 0.7, -size * 0.3);
+            cx.quadraticCurveTo(size * 0.45, -size * 0.28, size * 0.18, -size * 0.25);
+            cx.closePath();
+            cx.fill();
+
+            // small sun
+            cx.fillStyle = '#FFD100';
+            cx.beginPath();
+            cx.arc(0, -size * 0.48, size * 0.08, 0, Math.PI * 2);
+            cx.fill();
+
+            cx.restore();
+        }
+
+
+            const dir = flipX ? -1 : 1;
+            for (const s of stripes) {
+                for (let i = 0; i < segs; i++) {
+                    const ii = flipX ? (segs - 1 - i) : i;
+                    const px = x + ii * sw * dir;
+                    const wave = Math.sin(i * 0.5 + t * 1.8) * h * 0.1;
+                    const waveN = Math.sin((i+1) * 0.5 + t * 1.8) * h * 0.1;
+                    const top1 = y + h * s.from + wave;
+                    const top2 = y + h * s.from + waveN;
+                    const bot1 = y + h * s.to   + wave;
+                    const bot2 = y + h * s.to   + waveN;
+                    cx.beginPath();
+                    cx.moveTo(px, top1);
+                    cx.lineTo(px + sw * dir, top2);
+                    cx.lineTo(px + sw * dir, bot2);
+                    cx.lineTo(px, bot1);
+                    cx.closePath();
+                    cx.fillStyle = s.color;
+                    cx.fill();
+                }
+            }
+
+        // ── Trophy ────────────────────────────────────────────────────────────
+        function drawTrophy(cx, tx, ty, size, t) {
+            const pulse = 1 + Math.sin(t * 1.2) * 0.03;
+            const s = size * pulse;
+            cx.save();
+            cx.translate(tx, ty);
+            cx.globalAlpha = 0.28 + Math.sin(t * 0.8) * 0.05;
+
+            const grd = cx.createRadialGradient(0, 0, s*0.05, 0, 0, s*1.1);
+            grd.addColorStop(0, 'rgba(255,209,0,0.4)');
+            grd.addColorStop(1, 'rgba(255,209,0,0)');
+            cx.fillStyle = grd;
+            cx.beginPath(); cx.arc(0, 0, s*1.1, 0, Math.PI*2); cx.fill();
+
+            cx.strokeStyle = '#FFD100';
+            cx.lineWidth = s * 0.07;
+            cx.lineJoin = 'round'; cx.lineCap = 'round';
+
+            cx.beginPath();
+            cx.moveTo(-s*0.38, -s*0.5);
+            cx.lineTo(-s*0.42, -s*0.1);
+            cx.quadraticCurveTo(-s*0.42, s*0.22, 0, s*0.28);
+            cx.quadraticCurveTo(s*0.42, s*0.22, s*0.42, -s*0.1);
+            cx.lineTo(s*0.38, -s*0.5);
+            cx.closePath();
+            cx.fillStyle = '#c9a84c'; cx.fill(); cx.stroke();
+
+            cx.beginPath();
+            cx.moveTo(-s*0.38,-s*0.28); cx.quadraticCurveTo(-s*0.65,-s*0.1,-s*0.38,s*0.08); cx.stroke();
+            cx.beginPath();
+            cx.moveTo(s*0.38,-s*0.28);  cx.quadraticCurveTo(s*0.65,-s*0.1,s*0.38,s*0.08);   cx.stroke();
+
+            cx.beginPath();
+            cx.moveTo(-s*0.12,s*0.28); cx.lineTo(-s*0.12,s*0.44);
+            cx.moveTo(s*0.12,s*0.28);  cx.lineTo(s*0.12,s*0.44);
+            cx.stroke();
+            cx.lineWidth = s*0.1;
+            cx.beginPath();
+            cx.moveTo(-s*0.32,s*0.44); cx.lineTo(s*0.32,s*0.44);
+            cx.stroke();
+
+            cx.restore();
+        }
+
+        // ── Render loop ───────────────────────────────────────────────────────
+        function draw() {
+            cx.clearRect(0, 0, W, H);
+            t += 0.016;
+
+            // stars
+            for (const s of STARS) {
+                s.phase += s.speed;
+                cx.globalAlpha = 0.1 + Math.abs(Math.sin(s.phase)) * 0.15;
+                cx.fillStyle = '#FFD100';
+                cx.beginPath();
+                cx.arc(s.x * W, s.y * H, s.r, 0, Math.PI * 2);
+                cx.fill();
+            }
+
+            // confetti
+            for (const c of CONF) {
+                c.x += c.vx; c.y += c.vy; c.angle += c.spin;
+                if (c.y > 1.08) { c.y = -0.04; c.x = Math.random(); }
+                cx.save();
+                cx.globalAlpha = c.alpha * 0.82;
+                cx.translate(c.x * W, c.y * H);
+                cx.rotate(c.angle);
+                cx.fillStyle = c.color;
+                if (c.shape === 'circle') {
+                    cx.beginPath(); cx.arc(0, 0, c.w * 0.5, 0, Math.PI*2); cx.fill();
+                } else if (c.shape === 'ribbon') {
+                    cx.fillRect(-c.w, -c.h * 0.25, c.w * 2, c.h * 0.5);
+                } else {
+                    cx.fillRect(-c.w/2, -c.h/2, c.w, c.h);
+                }
+                cx.restore();
+            }
+
+        resize();
+        window.addEventListener('resize', resize);
+        draw();
+    })();
     </script>
 </body>
 </html>
