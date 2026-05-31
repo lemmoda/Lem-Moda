@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>LEM Admin | Tienda Quito</title>
+    <title>LEM Admin | Día del Padre 2026</title>
     
     <link rel="manifest" href="manifest-admin.json">
-    <meta name="theme-color" content="#784311">
+    <meta name="theme-color" content="#1a2e4a">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
@@ -16,16 +16,18 @@
 
     <style>
         :root { 
-            --lem-gold: #d4a373; 
+            --lem-gold: #c9a84c; 
             --lem-verde: #38b000; 
-            --silver-admin: #bdc3c7;
-            --gold-admin: #d4af37;
+            --silver-admin: #7a9fc2;
+            --gold-admin: #c9a84c;
+            --navy: #1a2e4a;
+            --navy-light: #243d5e;
         }
-        body { background: #000; color: #fff; font-family: 'Inter', sans-serif; margin: 0; padding: 20px; text-align: center; }
-        .header { margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid #222; }
+        body { background: #0a1628; color: #fff; font-family: 'Inter', sans-serif; margin: 0; padding: 20px; text-align: center; }
+        .header { margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid #1a2e4a; }
         #reader { width: 100%; max-width: 400px; margin: 0 auto; border: 2px solid var(--lem-gold); border-radius: 25px; overflow: hidden; }
         
-        .admin-card { background: #0a0a0a; border: 1px solid var(--lem-gold); border-radius: 30px; padding: 25px; margin-top: 20px; display: none; }
+        .admin-card { background: #0d1e33; border: 1px solid var(--lem-gold); border-radius: 30px; padding: 25px; margin-top: 20px; display: none; }
         .btn-action { background: var(--lem-gold); color: #000; border: none; padding: 18px 25px; border-radius: 15px; font-weight: bold; text-transform: uppercase; margin: 8px; width: 45%; }
         .btn-scan-again { background: transparent; color: var(--lem-gold); border: 1px solid var(--lem-gold); margin-top: 20px; width: 100%; padding: 15px; border-radius: 15px; font-weight: bold; text-transform: uppercase; }
         .status-msg { color: var(--lem-verde); font-weight: bold; margin-top: 15px; }
@@ -57,7 +59,8 @@
 
     <div class="header">
         <h2 style="color: var(--lem-gold); letter-spacing: 3px; margin: 0;">LEM MODA</h2>
-        <p style="font-size: 0.65rem; color: #555; margin: 5px 0;">PANEL DE CONTROL ADMIN</p>
+        <p style="font-size: 0.75rem; color: var(--lem-gold); margin: 4px 0; letter-spacing: 2px; opacity: 0.8;">👔 EDICIÓN DÍA DEL PADRE 2026</p>
+        <p style="font-size: 0.6rem; color: #3a5a8a; margin: 2px 0;">PANEL DE CONTROL ADMIN</p>
     </div>
 
     <div id="reader-container">
@@ -77,7 +80,7 @@
 
         <div style="display: flex; justify-content: center; margin-top: 20px;">
             <button class="btn-action" onclick="adjustPoints(1)">+ SELLO</button>
-            <button class="btn-action" style="background: #222; color: #fff;" onclick="adjustPoints(-1)">- QUITAR</button>
+            <button class="btn-action" style="background: #1a2e4a; color: #fff;" onclick="adjustPoints(-1)">- QUITAR</button>
         </div>
 
         <button id="resetBtn" class="btn-reset" style="display:none;" onclick="resetCard()">REINICIAR TARJETA (PREMIO ENTREGADO)</button>
@@ -161,12 +164,12 @@
             if (puntos === 4) {
                 alertBox.style.display = 'block';
                 alertBox.classList.add('alert-silver');
-                alertText.innerHTML = "🥈 ENTREGAR BENEFICIO:<br>50% DESCUENTO";
+                alertText.innerHTML = "👔 BENEFICIO PAPÁ:<br>50% DESCUENTO";
                 resetBtn.style.display = 'none';
             } else if (puntos >= 8) {
                 alertBox.style.display = 'block';
                 alertBox.classList.add('alert-gold');
-                alertText.innerHTML = "🏆 ENTREGAR BENEFICIO:<br>PRENDA DE REGALO";
+                alertText.innerHTML = "👨‍👦 BENEFICIO ESPECIAL:<br>PRENDA DE REGALO";
                 resetBtn.style.display = 'block'; 
             } else {
                 alertBox.style.display = 'none';
