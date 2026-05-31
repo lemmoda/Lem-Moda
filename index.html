@@ -396,29 +396,31 @@
             const ctx = canvas.getContext('2d');
 
             const words = [
-                'Papá',       // Español
-                'Dad',        // Inglés
-                'Père',       // Francés
-                'Padre',      // Italiano / Español formal
-                'Vater',      // Alemán
-                'Pai',        // Portugués
-                'Baba',       // Turco / Árabe
-                'Otosan',     // Japonés rom.
-                'Appa',       // Coreano rom.
-                'Baba',       // Swahili
-                'Tata',       // Polaco / Rumano
-                'Táta',       // Checo
-                'Bapa',       // Malayo
-                'Babbo',      // Italiano coloquial
-                'Papá',       // repetir el fav
-                'Père',
-                'Dad',
-                'Pai',
-                'Padre',
+                'Papá',       'Dad',          'Père',        'Padre',
+                'Vater',      'Pai',          'Baba',        'Otosan',
+                'Appa',       'Tata',         'Táta',        'Bapa',
+                'Babbo',      'Pappa',        'Tatay',       'Bapak',
+                'Papà',       'Päpa',         'Dada',
+                'Sabio',      'Fuerte',       'Mi Héroe',    'Valiente',
+                'Confiable',  'Brillante',    'Maestro',     'Amado',
+                'Talentoso',  'Comprensivo',  'Inteligente', 'Alegre',
+                'Divertido',  'Trabajador',   'Único',       'El Rey',
+                'Mi Apoyo',   'Invencible',   'Coach',       'Chef',
+                'Inspiración','Simpático',    'Jefe',        'Cool',
+                'Mi mejor amigo', 'Apasionado', 'Perseverante'
             ];
+
+            const DAD_WORDS = new Set([
+                'Papá','Dad','Père','Padre','Vater','Pai','Baba','Otosan',
+                'Appa','Tata','Táta','Bapa','Babbo','Pappa','Tatay','Bapak',
+                'Papà','Päpa','Dada'
+            ]);
 
             const FILLS   = ['#c9a84c', '#f0d080', '#ffffff', '#b8d8f0', '#e8c87a'];
             const STROKES = ['#0a1628', '#0a1628', '#0a1628', '#0a1628', '#0a1628'];
+
+            const QUALITY_FILLS   = ['#c9a84c', '#f0d080', '#ffb347', '#ffd700'];
+            const QUALITY_STROKES = ['#0a1628', '#0a1628', '#0a1628', '#0a1628'];
 
             let particles = [];
             let W, H;
@@ -442,16 +444,25 @@
                 else if (side === 2) { x = Math.random()*W;  y = H+30;    vx = (Math.random()-0.5)*0.3; vy = -speed; }
                 else                 { x = -30;   y = Math.random()*H;    vx = speed;  vy = (Math.random()-0.5)*0.3; }
 
-                const ci = Math.floor(Math.random() * FILLS.length);
+                const text = rand(words);
+                const isQuality = !DAD_WORDS.has(text);
+                const fills  = isQuality ? QUALITY_FILLS  : FILLS;
+                const strks  = isQuality ? QUALITY_STROKES : STROKES;
+                const ci = Math.floor(Math.random() * fills.length);
+
                 return {
                     x, y, vx, vy,
-                    text: rand(words),
-                    fill: FILLS[ci],
-                    stroke: STROKES[ci],
-                    size: 18 + Math.floor(Math.random() * 14),
+                    text,
+                    fill: fills[ci],
+                    stroke: strks[ci],
+                    size: isQuality
+                        ? 14 + Math.floor(Math.random() * 10)
+                        : 18 + Math.floor(Math.random() * 14),
                     alpha: 0,
                     life: 0,
-                    maxLife: 300 + Math.floor(Math.random() * 200),
+                    maxLife: isQuality
+                        ? 220 + Math.floor(Math.random() * 140)
+                        : 300 + Math.floor(Math.random() * 200),
                     angle: (Math.random() - 0.5) * 0.25
                 };
             }
