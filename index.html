@@ -206,7 +206,7 @@
     <div class="container">
         <div id="authPanel">
             <div class="brand-circle"><img src="1.png.png" class="circle-logo"></div>
-            <p style="font-size: 0.65rem; letter-spacing: 3px; color: var(--lem-gold); margin: -20px 0 8px; text-transform: uppercase; opacity: 0.85;">Feliz Mes del Padre 2026</p>
+            <p style="font-size: 0.65rem; letter-spacing: 3px; color: var(--lem-gold); margin: -20px 0 8px; text-transform: uppercase; opacity: 0.85;">👔 Edición Día del Padre 2026</p>
             <h3 style="letter-spacing: 5px; color: var(--lem-gold); font-weight: 300;">BIENVENIDO</h3>
             
             <input type="text" id="userName" class="input-box" placeholder="Nombre Completo">
@@ -539,27 +539,52 @@
         const cx = cv.getContext('2d');
         let W, H, t = 0;
 
-        const STARS = Array.from({length: 70}, () => ({
+        // Stars
+        const STARS = Array.from({length: 55}, () => ({
             x: Math.random(), y: Math.random(),
-            r: 0.6 + Math.random() * 1.6,
+            r: 0.5 + Math.random() * 1.5,
             phase: Math.random() * Math.PI * 2,
-            speed: 0.012 + Math.random() * 0.028
+            speed: 0.01 + Math.random() * 0.025
         }));
 
-        const ECU = ['#FFD100','#FFD100','#003893','#CC0000','#FFD100','#003893'];
-        const SHAPES = ['rect','circle','ribbon'];
-        const CONF = Array.from({length: 90}, () => ({
+        // Colors: ECU + gold
+        const COLORS = [
+            '#FFD100','#FFD100','#FFD100',   // amarillo dominante
+            '#003893','#003893',              // azul
+            '#CC0000','#CC0000',              // rojo
+            '#c9a84c','#e8c87a','#f0d080'    // dorado papá
+        ];
+
+        // Confetti pieces — squares and small rectangles
+        const PIECES = Array.from({length: 110}, () => ({
             x: Math.random(),
-            y: Math.random() * 1.1 - 0.05,
-            vy: 0.0005 + Math.random() * 0.001,
-            vx: (Math.random() - 0.5) * 0.0004,
-            w: 5 + Math.random() * 9,
-            h: 3 + Math.random() * 5,
+            y: Math.random() * 1.1 - 0.08,
+            vy: 0.0006 + Math.random() * 0.0012,
+            vx: (Math.random() - 0.5) * 0.0005,
+            w: 5 + Math.random() * 10,
+            h: 4 + Math.random() * 6,
             angle: Math.random() * Math.PI * 2,
-            spin: (Math.random() - 0.5) * 0.06,
-            color: ECU[Math.floor(Math.random() * ECU.length)],
-            alpha: 0.65 + Math.random() * 0.35,
-            shape: SHAPES[Math.floor(Math.random() * SHAPES.length)]
+            spin: (Math.random() - 0.5) * 0.08,
+            color: COLORS[Math.floor(Math.random() * COLORS.length)],
+            alpha: 0.75 + Math.random() * 0.25,
+            type: Math.random() < 0.4 ? 'square' : 'rect'
+        }));
+
+        // Serpentine ribbons — sinusoidal curves falling
+        const RIBBONS = Array.from({length: 18}, () => ({
+            x: Math.random(),
+            y: Math.random() * 1.1 - 0.1,
+            vy: 0.0003 + Math.random() * 0.0006,
+            vx: (Math.random() - 0.5) * 0.0002,
+            len: 80 + Math.random() * 120,
+            amp: 6 + Math.random() * 10,
+            freq: 0.06 + Math.random() * 0.06,
+            phase: Math.random() * Math.PI * 2,
+            phaseSpeed: 0.04 + Math.random() * 0.04,
+            width: 2.5 + Math.random() * 2.5,
+            color: COLORS[Math.floor(Math.random() * COLORS.length)],
+            alpha: 0.8 + Math.random() * 0.2,
+            curl: (Math.random() - 0.5) * 0.015
         }));
 
         function resize() {
@@ -567,172 +592,98 @@
             H = cv.height = window.innerHeight;
         }
 
-        // ── Ecuador shield (simplified, canvas) ──────────────────────────────
-        function drawShield(cx, x, y, size) {
-            cx.save();
-            cx.translate(x, y);
-
-            // shield outline
-            cx.beginPath();
-            cx.moveTo(-size, -size * 0.7);
-            cx.lineTo( size, -size * 0.7);
-            cx.lineTo( size,  size * 0.2);
-            cx.quadraticCurveTo(size, size * 0.8, 0, size);
-            cx.quadraticCurveTo(-size, size * 0.8, -size, size * 0.2);
-            cx.closePath();
-            cx.fillStyle = '#003893';
-            cx.fill();
-            cx.strokeStyle = '#FFD100';
-            cx.lineWidth = size * 0.1;
-            cx.stroke();
-
-            // yellow top stripe
-            cx.beginPath();
-            cx.moveTo(-size * 0.95, -size * 0.7);
-            cx.lineTo( size * 0.95, -size * 0.7);
-            cx.lineTo( size * 0.95, -size * 0.18);
-            cx.lineTo(-size * 0.95, -size * 0.18);
-            cx.closePath();
-            cx.fillStyle = '#FFD100';
-            cx.fill();
-
-            // red bottom stripe
-            cx.beginPath();
-            cx.moveTo(-size * 0.95,  size * 0.25);
-            cx.lineTo( size * 0.95,  size * 0.25);
-            cx.lineTo( size * 0.8,   size * 0.75);
-            cx.quadraticCurveTo(0, size * 1.0, -size * 0.8, size * 0.75);
-            cx.closePath();
-            cx.fillStyle = '#CC0000';
-            cx.fill();
-
-            // condor silhouette (simple wings)
-            cx.fillStyle = '#1a1200';
-            cx.beginPath();
-            cx.ellipse(0, -size * 0.35, size * 0.18, size * 0.1, 0, 0, Math.PI * 2);
-            cx.fill();
-            cx.beginPath();
-            cx.moveTo(-size * 0.18, -size * 0.35);
-            cx.quadraticCurveTo(-size * 0.55, -size * 0.62, -size * 0.7, -size * 0.3);
-            cx.quadraticCurveTo(-size * 0.45, -size * 0.28, -size * 0.18, -size * 0.25);
-            cx.closePath();
-            cx.fill();
-            cx.beginPath();
-            cx.moveTo(size * 0.18, -size * 0.35);
-            cx.quadraticCurveTo(size * 0.55, -size * 0.62, size * 0.7, -size * 0.3);
-            cx.quadraticCurveTo(size * 0.45, -size * 0.28, size * 0.18, -size * 0.25);
-            cx.closePath();
-            cx.fill();
-
-            // small sun
-            cx.fillStyle = '#FFD100';
-            cx.beginPath();
-            cx.arc(0, -size * 0.48, size * 0.08, 0, Math.PI * 2);
-            cx.fill();
-
-            cx.restore();
-        }
-
-
-            const dir = flipX ? -1 : 1;
-            for (const s of stripes) {
-                for (let i = 0; i < segs; i++) {
-                    const ii = flipX ? (segs - 1 - i) : i;
-                    const px = x + ii * sw * dir;
-                    const wave = Math.sin(i * 0.5 + t * 1.8) * h * 0.1;
-                    const waveN = Math.sin((i+1) * 0.5 + t * 1.8) * h * 0.1;
-                    const top1 = y + h * s.from + wave;
-                    const top2 = y + h * s.from + waveN;
-                    const bot1 = y + h * s.to   + wave;
-                    const bot2 = y + h * s.to   + waveN;
-                    cx.beginPath();
-                    cx.moveTo(px, top1);
-                    cx.lineTo(px + sw * dir, top2);
-                    cx.lineTo(px + sw * dir, bot2);
-                    cx.lineTo(px, bot1);
-                    cx.closePath();
-                    cx.fillStyle = s.color;
-                    cx.fill();
-                }
-            }
-
-        // ── Trophy ────────────────────────────────────────────────────────────
-        function drawTrophy(cx, tx, ty, size, t) {
+        // Trophy — subtle center glow
+        function drawTrophy(t) {
             const pulse = 1 + Math.sin(t * 1.2) * 0.03;
-            const s = size * pulse;
+            const s = Math.min(W * 0.06, 48) * pulse;
+            const tx = W * 0.5, ty = H * 0.5;
             cx.save();
             cx.translate(tx, ty);
-            cx.globalAlpha = 0.28 + Math.sin(t * 0.8) * 0.05;
+            cx.globalAlpha = 0.2 + Math.sin(t * 0.8) * 0.04;
 
-            const grd = cx.createRadialGradient(0, 0, s*0.05, 0, 0, s*1.1);
-            grd.addColorStop(0, 'rgba(255,209,0,0.4)');
-            grd.addColorStop(1, 'rgba(255,209,0,0)');
+            const grd = cx.createRadialGradient(0,0,s*0.05,0,0,s*1.2);
+            grd.addColorStop(0,'rgba(255,209,0,0.45)');
+            grd.addColorStop(1,'rgba(255,209,0,0)');
             cx.fillStyle = grd;
-            cx.beginPath(); cx.arc(0, 0, s*1.1, 0, Math.PI*2); cx.fill();
+            cx.beginPath(); cx.arc(0,0,s*1.2,0,Math.PI*2); cx.fill();
 
-            cx.strokeStyle = '#FFD100';
-            cx.lineWidth = s * 0.07;
-            cx.lineJoin = 'round'; cx.lineCap = 'round';
-
-            cx.beginPath();
-            cx.moveTo(-s*0.38, -s*0.5);
-            cx.lineTo(-s*0.42, -s*0.1);
-            cx.quadraticCurveTo(-s*0.42, s*0.22, 0, s*0.28);
-            cx.quadraticCurveTo(s*0.42, s*0.22, s*0.42, -s*0.1);
-            cx.lineTo(s*0.38, -s*0.5);
-            cx.closePath();
-            cx.fillStyle = '#c9a84c'; cx.fill(); cx.stroke();
+            cx.strokeStyle='#FFD100'; cx.lineWidth=s*0.07;
+            cx.lineJoin='round'; cx.lineCap='round';
 
             cx.beginPath();
-            cx.moveTo(-s*0.38,-s*0.28); cx.quadraticCurveTo(-s*0.65,-s*0.1,-s*0.38,s*0.08); cx.stroke();
-            cx.beginPath();
-            cx.moveTo(s*0.38,-s*0.28);  cx.quadraticCurveTo(s*0.65,-s*0.1,s*0.38,s*0.08);   cx.stroke();
+            cx.moveTo(-s*.38,-s*.5); cx.lineTo(-s*.42,-s*.1);
+            cx.quadraticCurveTo(-s*.42,s*.22,0,s*.28);
+            cx.quadraticCurveTo(s*.42,s*.22,s*.42,-s*.1);
+            cx.lineTo(s*.38,-s*.5); cx.closePath();
+            cx.fillStyle='#c9a84c'; cx.fill(); cx.stroke();
+
+            cx.beginPath(); cx.moveTo(-s*.38,-s*.28);
+            cx.quadraticCurveTo(-s*.65,-s*.1,-s*.38,s*.08); cx.stroke();
+            cx.beginPath(); cx.moveTo(s*.38,-s*.28);
+            cx.quadraticCurveTo(s*.65,-s*.1,s*.38,s*.08); cx.stroke();
 
             cx.beginPath();
-            cx.moveTo(-s*0.12,s*0.28); cx.lineTo(-s*0.12,s*0.44);
-            cx.moveTo(s*0.12,s*0.28);  cx.lineTo(s*0.12,s*0.44);
-            cx.stroke();
-            cx.lineWidth = s*0.1;
-            cx.beginPath();
-            cx.moveTo(-s*0.32,s*0.44); cx.lineTo(s*0.32,s*0.44);
-            cx.stroke();
-
+            cx.moveTo(-s*.12,s*.28); cx.lineTo(-s*.12,s*.44);
+            cx.moveTo(s*.12,s*.28);  cx.lineTo(s*.12,s*.44); cx.stroke();
+            cx.lineWidth=s*.1;
+            cx.beginPath(); cx.moveTo(-s*.32,s*.44); cx.lineTo(s*.32,s*.44); cx.stroke();
             cx.restore();
         }
 
-        // ── Render loop ───────────────────────────────────────────────────────
         function draw() {
             cx.clearRect(0, 0, W, H);
             t += 0.016;
 
-            // stars
+            // twinkling stars
             for (const s of STARS) {
                 s.phase += s.speed;
-                cx.globalAlpha = 0.1 + Math.abs(Math.sin(s.phase)) * 0.15;
+                cx.globalAlpha = 0.08 + Math.abs(Math.sin(s.phase)) * 0.12;
                 cx.fillStyle = '#FFD100';
-                cx.beginPath();
-                cx.arc(s.x * W, s.y * H, s.r, 0, Math.PI * 2);
-                cx.fill();
+                cx.beginPath(); cx.arc(s.x*W, s.y*H, s.r, 0, Math.PI*2); cx.fill();
             }
 
-            // confetti
-            for (const c of CONF) {
-                c.x += c.vx; c.y += c.vy; c.angle += c.spin;
-                if (c.y > 1.08) { c.y = -0.04; c.x = Math.random(); }
+            // confetti pieces
+            for (const p of PIECES) {
+                p.x += p.vx; p.y += p.vy; p.angle += p.spin;
+                if (p.y > 1.1) { p.y = -0.06; p.x = Math.random(); }
                 cx.save();
-                cx.globalAlpha = c.alpha * 0.82;
-                cx.translate(c.x * W, c.y * H);
-                cx.rotate(c.angle);
-                cx.fillStyle = c.color;
-                if (c.shape === 'circle') {
-                    cx.beginPath(); cx.arc(0, 0, c.w * 0.5, 0, Math.PI*2); cx.fill();
-                } else if (c.shape === 'ribbon') {
-                    cx.fillRect(-c.w, -c.h * 0.25, c.w * 2, c.h * 0.5);
-                } else {
-                    cx.fillRect(-c.w/2, -c.h/2, c.w, c.h);
-                }
+                cx.globalAlpha = p.alpha;
+                cx.translate(p.x * W, p.y * H);
+                cx.rotate(p.angle);
+                cx.fillStyle = p.color;
+                const sz = p.type === 'square' ? Math.min(p.w, p.h) : p.w;
+                const sh = p.type === 'square' ? sz : p.h;
+                cx.fillRect(-sz/2, -sh/2, sz, sh);
                 cx.restore();
             }
+
+            // serpentine ribbons
+            for (const r of RIBBONS) {
+                r.x += r.vx; r.y += r.vy; r.phase += r.phaseSpeed;
+                if (r.y * H > H + r.len + 20) { r.y = -( r.len + 20) / H; r.x = Math.random(); }
+                cx.save();
+                cx.globalAlpha = r.alpha;
+                cx.strokeStyle = r.color;
+                cx.lineWidth = r.width;
+                cx.lineCap = 'round';
+                cx.lineJoin = 'round';
+                cx.beginPath();
+                const steps = 28;
+                for (let i = 0; i <= steps; i++) {
+                    const progress = i / steps;
+                    const segY = r.y * H + progress * r.len;
+                    const segX = r.x * W + Math.sin(r.phase + progress * r.freq * r.len) * r.amp;
+                    i === 0 ? cx.moveTo(segX, segY) : cx.lineTo(segX, segY);
+                }
+                cx.stroke();
+                cx.restore();
+            }
+
+            // trophy center
+            drawTrophy(t);
+
+            requestAnimationFrame(draw);
+        }
 
         resize();
         window.addEventListener('resize', resize);
