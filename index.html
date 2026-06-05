@@ -108,6 +108,17 @@
             background: #000; border: 1px solid rgba(212, 163, 115, 0.2); 
             color: #fff; padding: 16px; border-radius: 15px; width: 100%; 
             margin-bottom: 12px; box-sizing: border-box; text-align: center; outline: none;
+            font-size: 16px;
+        }
+        .input-box:-webkit-autofill,
+        .input-box:-webkit-autofill:hover,
+        .input-box:-webkit-autofill:focus,
+        .input-box:-webkit-autofill:active {
+            -webkit-box-shadow: 0 0 0px 1000px #000 inset !important;
+            -webkit-text-fill-color: #fff !important;
+            caret-color: #fff;
+            border: 1px solid rgba(212, 163, 115, 0.2) !important;
+            transition: background-color 5000s ease-in-out 0s;
         }
 
         .btn-main { 
@@ -206,7 +217,7 @@
     <div class="container">
         <div id="authPanel">
             <div class="brand-circle"><img src="1.png.png" class="circle-logo"></div>
-            <p style="font-size: 0.65rem; letter-spacing: 3px; color: var(--lem-gold); margin: -20px 0 8px; text-transform: uppercase; opacity: 0.85;">Este Mes es para Papá</p>
+            <p style="font-size: 0.65rem; letter-spacing: 3px; color: var(--lem-gold); margin: -20px 0 8px; text-transform: uppercase; opacity: 0.85;">👔 Edición Día del Padre 2026</p>
             <h3 style="letter-spacing: 5px; color: var(--lem-gold); font-weight: 300;">BIENVENIDO</h3>
             
             <input type="text" id="userName" class="input-box" placeholder="Nombre Completo">
@@ -247,6 +258,16 @@
         const db = firebase.database();
 
         let nombreClienteActivo = "Cliente VIP";
+
+        // Enter key en cualquier campo del login dispara accessSystem
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                const authPanel = document.getElementById('authPanel');
+                if (authPanel && authPanel.style.display !== 'none') {
+                    accessSystem();
+                }
+            }
+        });
 
         function toggleModal(show) {
             document.getElementById('modalBeneficios').style.display = show ? 'flex' : 'none';
@@ -547,46 +568,6 @@
             speed: 0.01 + Math.random() * 0.025
         }));
 
-        // Colors: ECU + gold
-        const COLORS = [
-            '#FFD100','#FFD100','#FFD100',   // amarillo dominante
-            '#003893','#003893',              // azul
-            '#CC0000','#CC0000',              // rojo
-            '#c9a84c','#e8c87a','#f0d080'    // dorado papá
-        ];
-
-        // Confetti pieces — squares and small rectangles
-        const PIECES = Array.from({length: 110}, () => ({
-            x: Math.random(),
-            y: Math.random() * 1.1 - 0.08,
-            vy: 0.0006 + Math.random() * 0.0012,
-            vx: (Math.random() - 0.5) * 0.0005,
-            w: 5 + Math.random() * 10,
-            h: 4 + Math.random() * 6,
-            angle: Math.random() * Math.PI * 2,
-            spin: (Math.random() - 0.5) * 0.08,
-            color: COLORS[Math.floor(Math.random() * COLORS.length)],
-            alpha: 0.75 + Math.random() * 0.25,
-            type: Math.random() < 0.4 ? 'square' : 'rect'
-        }));
-
-        // Serpentine ribbons — sinusoidal curves falling
-        const RIBBONS = Array.from({length: 18}, () => ({
-            x: Math.random(),
-            y: Math.random() * 1.1 - 0.1,
-            vy: 0.0003 + Math.random() * 0.0006,
-            vx: (Math.random() - 0.5) * 0.0002,
-            len: 80 + Math.random() * 120,
-            amp: 6 + Math.random() * 10,
-            freq: 0.06 + Math.random() * 0.06,
-            phase: Math.random() * Math.PI * 2,
-            phaseSpeed: 0.04 + Math.random() * 0.04,
-            width: 2.5 + Math.random() * 2.5,
-            color: COLORS[Math.floor(Math.random() * COLORS.length)],
-            alpha: 0.8 + Math.random() * 0.2,
-            curl: (Math.random() - 0.5) * 0.015
-        }));
-
         function resize() {
             W = cv.width  = window.innerWidth;
             H = cv.height = window.innerHeight;
@@ -640,43 +621,6 @@
                 cx.globalAlpha = 0.08 + Math.abs(Math.sin(s.phase)) * 0.12;
                 cx.fillStyle = '#FFD100';
                 cx.beginPath(); cx.arc(s.x*W, s.y*H, s.r, 0, Math.PI*2); cx.fill();
-            }
-
-            // confetti pieces
-            for (const p of PIECES) {
-                p.x += p.vx; p.y += p.vy; p.angle += p.spin;
-                if (p.y > 1.1) { p.y = -0.06; p.x = Math.random(); }
-                cx.save();
-                cx.globalAlpha = p.alpha;
-                cx.translate(p.x * W, p.y * H);
-                cx.rotate(p.angle);
-                cx.fillStyle = p.color;
-                const sz = p.type === 'square' ? Math.min(p.w, p.h) : p.w;
-                const sh = p.type === 'square' ? sz : p.h;
-                cx.fillRect(-sz/2, -sh/2, sz, sh);
-                cx.restore();
-            }
-
-            // serpentine ribbons
-            for (const r of RIBBONS) {
-                r.x += r.vx; r.y += r.vy; r.phase += r.phaseSpeed;
-                if (r.y * H > H + r.len + 20) { r.y = -( r.len + 20) / H; r.x = Math.random(); }
-                cx.save();
-                cx.globalAlpha = r.alpha;
-                cx.strokeStyle = r.color;
-                cx.lineWidth = r.width;
-                cx.lineCap = 'round';
-                cx.lineJoin = 'round';
-                cx.beginPath();
-                const steps = 28;
-                for (let i = 0; i <= steps; i++) {
-                    const progress = i / steps;
-                    const segY = r.y * H + progress * r.len;
-                    const segX = r.x * W + Math.sin(r.phase + progress * r.freq * r.len) * r.amp;
-                    i === 0 ? cx.moveTo(segX, segY) : cx.lineTo(segX, segY);
-                }
-                cx.stroke();
-                cx.restore();
             }
 
             // trophy center
