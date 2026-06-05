@@ -265,7 +265,7 @@
     // 2. Feedback visual (cambiamos el texto del botón)
     const btn = document.querySelector('button[onclick="accessSystem()"]');
     const textOriginal = btn.innerText;
-    btn.innerText = "Sincronizando...";
+    btn.innerText = "Preparando tu acceso VIP...";
     btn.disabled = true;
 
     const userRef = db.ref('lem_users/' + phone);
@@ -284,18 +284,28 @@
                 return;
             }
             nombreClienteActivo = name;
+
+            // ---> AQUÍ SE CREA LA CARPETA POR FECHA <---
+            const fechaHoy = timestampActual.split('T')[0];
+
             userRef.set({
                 nombre: name,
                 pin: pin, 
                 puntos: 0, 
                 fecha_registro: timestampActual, 
                 ultima_actividad: timestampActual
-            }).then(() => login(phone))
-              .catch(err => {
-                  alert("Error al guardar: " + err.message);
-                  btn.innerText = textOriginal;
-                  btn.disabled = false;
-              });
+            }).then(() => {
+                // Guardamos la copia en la carpeta diaria
+                db.ref('registros_diarios/' + fechaHoy + '/' + phone).set({
+                    nombre: name,
+                    hora_ingreso: timestampActual
+                });
+                login(phone);
+            }).catch(err => {
+                alert("Error al guardar: " + err.message);
+                btn.innerText = textOriginal;
+                btn.disabled = false;
+            });
 
         } else if(data.pin === pin) {
             // SI YA EXISTÍA
@@ -320,7 +330,6 @@
             btn.disabled = false;
         }
     }).catch((error) => {
-        // AQUÍ ESTÁ EL DIAGNÓSTICO: Si Firebase bloquea la conexión, lo sabrás
         console.error("Error de Firebase:", error);
         alert("Error de conexión con la base de datos. Revisa la consola (F12).");
         btn.innerText = textOriginal;
