@@ -252,52 +252,81 @@
         }
 
         function accessSystem() {
-            const name = document.getElementById('userName').value.trim();
-            const phone = document.getElementById('userPhone').value.trim();
-            const pin = document.getElementById('userPin').value.trim();
-            if(!phone || !pin) return;
+    const name = document.getElementById('userName').value.trim();
+    const phone = document.getElementById('userPhone').value.trim();
+    const pin = document.getElementById('userPin').value.trim();
 
-            const userRef = db.ref('lem_users/' + phone);
-            const timestampActual = new Date().toISOString();
+    // 1. Validación visible para el usuario
+    if(!phone || !pin) {
+        alert("Por favor, ingresa tu número de WhatsApp y tu PIN de 4 dígitos.");
+        return;
+    }
 
-            userRef.once('value', (snap) => {
-                const data = snap.val();
-                if(!data) {
-                    // SI ES NUEVO: Obligatorio rellenar el campo nombre
-                    if(!name) {
-                        alert("¡Bienvenido a LEM MODA! Al ser tu primera vez ingresando, por favor escribe tu Nombre Completo para registrarte.");
-                        return;
-                    }
-                    nombreClienteActivo = name;
-                    userRef.set({
-                        nombre: name,
-                        pin: pin, 
-                        puntos: 0, 
-                        fecha_registro: timestampActual, 
-                        ultima_actividad: timestampActual
-                    }).then(() => login(phone));
-                } else if(data.pin === pin) {
-                    // SI YA EXISTÍA: Lógica inteligente para usuarios antiguos sin nombre
-                    if(!data.nombre) {
-                        if(!name) {
-                            alert("Para actualizar tu perfil de fidelidad, por favor escribe tu Nombre Completo en el primer recuadro.");
-                            return;
-                        }
-                        nombreClienteActivo = name;
-                        userRef.update({
-                            nombre: name,
-                            ultima_actividad: timestampActual
-                        }).then(() => login(phone));
-                    } else {
-                        nombreClienteActivo = data.nombre;
-                        userRef.update({ultima_actividad: timestampActual}).then(() => login(phone));
-                    }
-                } else {
-                    alert("PIN incorrecto");
+    // 2. Feedback visual (cambiamos el texto del botón)
+    const btn = document.querySelector('button[onclick="accessSystem()"]');
+    const textOriginal = btn.innerText;
+    btn.innerText = "Sincronizando...";
+    btn.disabled = true;
+
+    const userRef = db.ref('lem_users/' + phone);
+    const timestampActual = new Date().toISOString();
+
+    // 3. Consulta a Firebase con captura de errores (.catch)
+    userRef.once('value', (snap) => {
+        const data = snap.val();
+
+        if(!data) {
+            // SI ES NUEVO
+            if(!name) {
+                alert("¡Bienvenido a LEM MODA! Al ser tu primera vez, por favor escribe tu Nombre Completo en el primer recuadro.");
+                btn.innerText = textOriginal;
+                btn.disabled = false;
+                return;
+            }
+            nombreClienteActivo = name;
+            userRef.set({
+                nombre: name,
+                pin: pin, 
+                puntos: 0, 
+                fecha_registro: timestampActual, 
+                ultima_actividad: timestampActual
+            }).then(() => login(phone))
+              .catch(err => {
+                  alert("Error al guardar: " + err.message);
+                  btn.innerText = textOriginal;
+                  btn.disabled = false;
+              });
+
+        } else if(data.pin === pin) {
+            // SI YA EXISTÍA
+            if(!data.nombre) {
+                if(!name) {
+                    alert("Para actualizar tu perfil, por favor escribe tu Nombre Completo en el primer recuadro.");
+                    btn.innerText = textOriginal;
+                    btn.disabled = false;
+                    return;
                 }
-            });
+                nombreClienteActivo = name;
+                userRef.update({ nombre: name, ultima_actividad: timestampActual })
+                    .then(() => login(phone));
+            } else {
+                nombreClienteActivo = data.nombre;
+                userRef.update({ ultima_actividad: timestampActual })
+                    .then(() => login(phone));
+            }
+        } else {
+            alert("El PIN ingresado es incorrecto. Inténtalo de nuevo.");
+            btn.innerText = textOriginal;
+            btn.disabled = false;
         }
-
+    }).catch((error) => {
+        // AQUÍ ESTÁ EL DIAGNÓSTICO: Si Firebase bloquea la conexión, lo sabrás
+        console.error("Error de Firebase:", error);
+        alert("Error de conexión con la base de datos. Revisa la consola (F12).");
+        btn.innerText = textOriginal;
+        btn.disabled = false;
+    });
+}
         function login(phone) {
             document.getElementById('authPanel').style.display = 'none';
             document.getElementById('cardPanel').style.display = 'block';
