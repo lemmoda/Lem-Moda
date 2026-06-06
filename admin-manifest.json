@@ -1,7 +1,7 @@
 {
   "name": "LEM Admin | Panel de Control",
   "short_name": "LEM Admin",
-  "id": "/lem-moda-admin-app",
+  "id": "/lem-moda-admin-v2",
   "start_url": "./admin.html",
   "scope": "./",
   "display": "standalone",
