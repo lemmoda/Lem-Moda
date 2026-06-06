@@ -1,7 +1,7 @@
 {
   "name": "LEM MODA | Tarjeta Elite",
   "short_name": "LEM Cliente",
-  "id": "/lem-moda-cliente-app",
+  "id": "/lem-moda-cliente-v2",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
