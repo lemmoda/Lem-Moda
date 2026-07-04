@@ -96,7 +96,10 @@
             box-shadow: 0 25px 60px rgba(0,0,0,0.9); 
         }
 
-        .card-logo-box { background: #fff; border-radius: 12px; padding: 8px; display: inline-block; margin-bottom: 20px; }
+        .card-logo-box { 
+            background: #fff; border-radius: 12px; padding: 8px; display: inline-block; margin-bottom: 20px; 
+            box-shadow: 0 0 0 1px rgba(201,168,76,0.4), 0 0 20px rgba(212, 163, 115, 0.2);
+        }
         .card-logo { width: 110px; }
 
         .stamp-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 20px 0; }
@@ -168,10 +171,20 @@
         }
 
         .btn-beneficios {
-            background: transparent; color: var(--lem-gold); border: 1px solid var(--lem-gold);
-            padding: 10px 20px; border-radius: 20px; margin-bottom: 15px;
+            background: rgba(201, 168, 76, 0.05); color: var(--lem-gold); border: 1px solid rgba(201, 168, 76, 0.4);
+            padding: 10px 22px; border-radius: 50px; margin-bottom: 15px;
             cursor: pointer; font-size: 0.7rem; letter-spacing: 1px; text-transform: uppercase;
+            backdrop-filter: blur(10px); transition: 0.3s;
         }
+        .btn-beneficios:hover { background: rgba(201, 168, 76, 0.15); }
+
+        .btn-pill-outline {
+            background: rgba(255,255,255,0.02); color: var(--lem-gold); 
+            border: 1px solid rgba(201, 168, 76, 0.3); border-radius: 50px;
+            padding: 14px; width: 100%; font-weight: 600; font-size: 0.85rem;
+            letter-spacing: 0.5px; cursor: pointer; transition: 0.3s;
+        }
+        .btn-pill-outline:hover { background: rgba(201, 168, 76, 0.08); border-color: var(--lem-gold); }
 
         .btn-web-store {
             background: rgba(212, 163, 115, 0.05);
@@ -184,11 +197,12 @@
             margin-top: 20px;
             text-decoration: none;
             padding: 15px;
-            border-radius: 15px;
+            border-radius: 50px;
             font-size: 0.75rem;
             letter-spacing: 2px;
             text-transform: uppercase;
             font-weight: 700;
+            backdrop-filter: blur(10px);
             transition: 0.3s;
         }
         .btn-web-store:hover {
@@ -198,12 +212,14 @@
 
         .modal {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.95); z-index: 1000; align-items: center; justify-content: center;
+            background: rgba(0,0,0,0.75); backdrop-filter: blur(6px); z-index: 1000; align-items: center; justify-content: center;
         }
 
         .modal-content {
-            background: #0a0a0a; border: 1px solid var(--lem-gold); padding: 30px;
-            border-radius: 25px; width: 85%; max-width: 350px; text-align: center;
+            background: rgba(20, 18, 15, 0.55); border: 1px solid rgba(201, 168, 76, 0.25); padding: 32px;
+            border-radius: 28px; width: 85%; max-width: 350px; text-align: center;
+            backdrop-filter: blur(22px); -webkit-backdrop-filter: blur(22px);
+            box-shadow: 0 25px 60px rgba(0,0,0,0.6);
         }
 
         .premio-box {
@@ -216,12 +232,14 @@
 
         #success-overlay { 
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: rgba(0,0,0,0.98); z-index: 100; align-items: center; justify-content: center; 
+            background: rgba(0,0,0,0.85); backdrop-filter: blur(6px); z-index: 100; align-items: center; justify-content: center; 
         }
 
         .success-card { 
-            background: #0a0a0a; border: 1px solid var(--lem-gold); 
-            border-radius: 35px; padding: 30px; width: 80%; text-align: center; 
+            background: rgba(20, 18, 15, 0.55); border: 1px solid rgba(201, 168, 76, 0.25); 
+            border-radius: 28px; padding: 34px 28px; width: 80%; text-align: center; 
+            backdrop-filter: blur(22px); -webkit-backdrop-filter: blur(22px);
+            box-shadow: 0 25px 60px rgba(0,0,0,0.6);
         }
 
         body::-webkit-scrollbar { display: none; }
@@ -238,7 +256,7 @@
                 <li>• <strong>4 ESTAMPAS:</strong> 50% de descuento en una prenda de tu compra actual.</li>
                 <li>• <strong>8 ESTAMPAS:</strong> 1 Prenda seleccionada de regalo.</li>
             </ul>
-            <button class="btn-main" style="padding: 10px; margin-top: 20px;" onclick="toggleModal(false)">Cerrar</button>
+            <button class="btn-pill-outline" style="margin-top: 20px;" onclick="toggleModal(false)">Cerrar</button>
         </div>
     </div>
 
@@ -248,7 +266,7 @@
             <h2 id="successTitle" style="color: var(--lem-gold); font-weight: 300; letter-spacing: 2px;">¡Felicidades!</h2>
             <p id="successMsg" style="font-size: 0.85rem; color: #aaa; line-height: 1.5;"></p>
             <div id="waAction"></div>
-            <button class="btn-main" style="margin-top: 15px; background: transparent; color: #555; border: 1px solid #222;" onclick="document.getElementById('success-overlay').style.display='none'">Volver</button>
+            <button class="btn-pill-outline" style="margin-top: 15px;" onclick="document.getElementById('success-overlay').style.display='none'">Volver</button>
         </div>
     </div>
 
@@ -305,7 +323,7 @@
                 <i class="fa-solid fa-bag-shopping"></i> Muy Pronto Tienda Online
             </a>
 
-            <button class="btn-main" style="margin-top:20px; background:transparent; color:#555; border:1px solid #222;" onclick="location.reload()">Cerrar Sesión</button>
+            <button class="btn-pill-outline" style="margin-top:20px;" onclick="location.reload()">Cerrar Sesión</button>
         </div>
         <p style="font-size: 10px; color: #444; margin-top: 20px;">ORCA Studios &copy; 2026</p>
     </div>
@@ -464,7 +482,7 @@
                 overlay.style.display = 'flex';
                 title.innerText = "¡Recompensa Alcanzada!";
                 msg.innerText = `¡Felicidades ${nombreClienteActivo}! Por tus 4 estampas tienes el 50% de descuento en una prenda.`;
-                waAction.innerHTML = `<button class="btn-main" style="background:#25d366; color:white;" onclick="enviarWA('${phone}', 4)">Reclamar por WhatsApp</button>`;
+                waAction.innerHTML = `<button class="btn-main" style="background:#25d366; color:white; border-radius:50px;" onclick="enviarWA('${phone}', 4)">Reclamar por WhatsApp</button>`;
                 notifBox.style.display = 'block';
                 notifBox.innerHTML = `<small style="color:var(--lem-verde)">✓ Tienes un 50% OFF disponible</small>`;
             } else if (p >= 8) {
@@ -472,7 +490,7 @@
                 overlay.style.display = 'flex';
                 title.innerText = "¡Nivel Completado!";
                 msg.innerText = `¡Increíble ${nombreClienteActivo}! Has completado las 8 estampas. ¡Tu prenda de regalo te espera!`;
-                waAction.innerHTML = `<button class="btn-main" style="background:#25d366; color:white;" onclick="enviarWA('${phone}', 8)">Reclamar Regalo</button>`;
+                waAction.innerHTML = `<button class="btn-main" style="background:#25d366; color:white; border-radius:50px;" onclick="enviarWA('${phone}', 8)">Reclamar Regalo</button>`;
                 notifBox.style.display = 'block';
                 notifBox.innerHTML = `<small style="color:var(--lem-verde)">✓ ¡Prenda de regalo lista!</small>`;
             } else {
