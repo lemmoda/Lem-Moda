@@ -69,8 +69,22 @@
             background: #fff; border-radius: 50%; 
             display: flex; align-items: center; justify-content: center;
             margin: 0 auto 30px; border: 2px solid var(--lem-gold); 
-            box-shadow: 0 0 20px rgba(212, 163, 115, 0.2); 
+            box-shadow: 0 0 0 4px rgba(0,0,0,0.4), 0 0 0 5px rgba(201,168,76,0.35), 0 0 25px rgba(212, 163, 115, 0.25); 
+            animation: crest-glow 4s ease-in-out infinite;
+            position: relative;
         }
+        @keyframes crest-glow {
+            0%, 100% { box-shadow: 0 0 0 4px rgba(0,0,0,0.4), 0 0 0 5px rgba(201,168,76,0.35), 0 0 25px rgba(212, 163, 115, 0.25); }
+            50% { box-shadow: 0 0 0 4px rgba(0,0,0,0.4), 0 0 0 5px rgba(201,168,76,0.6), 0 0 38px rgba(212, 163, 115, 0.5); }
+        }
+
+        .shimmer-text {
+            background: linear-gradient(90deg, var(--lem-gold) 0%, #f4e1a8 50%, var(--lem-gold) 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text; background-clip: text; color: transparent;
+            animation: shimmer-move 3.5s linear infinite;
+        }
+        @keyframes shimmer-move { to { background-position: -200% center; } }
 
         .circle-logo { width: 70%; height: auto; }
 
@@ -107,11 +121,44 @@
         .premio-text.silver { color: #bdc3c7; }
         .premio-text.gold { color: #d4af37; }
 
-        .input-box { 
-            background: #000; border: 1px solid rgba(212, 163, 115, 0.2); 
-            color: #fff; padding: 16px; border-radius: 15px; width: 100%; 
-            margin-bottom: 12px; box-sizing: border-box; text-align: center; outline: none;
+        .login-card {
+            background: rgba(20, 18, 15, 0.35);
+            border: 1px solid rgba(201, 168, 76, 0.18);
+            border-radius: 28px;
+            padding: 42px 32px 34px;
+            backdrop-filter: blur(22px);
+            -webkit-backdrop-filter: blur(22px);
+            box-shadow: 0 25px 60px rgba(0,0,0,0.55);
         }
+
+        .field-group { text-align: left; margin-bottom: 26px; }
+        .field-label {
+            display: block; font-size: 0.78rem; color: #b9b9b9;
+            letter-spacing: 1px; margin-bottom: 8px; font-weight: 400;
+        }
+        .field-input-wrap {
+            display: flex; align-items: center; justify-content: space-between;
+            border-bottom: 1px solid rgba(255,255,255,0.22);
+            padding-bottom: 9px; transition: border-color 0.25s;
+        }
+        .field-input-wrap:focus-within { border-color: var(--lem-gold); }
+        .field-input {
+            background: transparent; border: none; outline: none; color: #fff;
+            font-size: 1rem; width: 100%; font-family: 'Inter', sans-serif;
+            text-align: left; padding: 0;
+        }
+        .field-input::placeholder { color: rgba(255,255,255,0.28); }
+        .field-icon { color: var(--lem-gold); opacity: 0.85; font-size: 0.95rem; margin-left: 10px; }
+
+        .btn-pill {
+            background: linear-gradient(135deg, #d4a373 0%, #b08968 100%);
+            color: #000; border: none; padding: 16px; border-radius: 50px;
+            width: 100%; font-weight: 600; font-size: 1rem; letter-spacing: 0.5px;
+            cursor: pointer; margin-top: 8px; transition: transform 0.15s ease, box-shadow 0.25s ease;
+            box-shadow: 0 10px 25px rgba(212, 163, 115, 0.25);
+        }
+        .btn-pill:active { transform: scale(0.98); }
+        .btn-pill:hover { box-shadow: 0 12px 30px rgba(212, 163, 115, 0.4); }
 
         .btn-main { 
             background: linear-gradient(135deg, #d4a373 0%, #b08968 100%); 
@@ -208,13 +255,36 @@
     <div class="container">
         <div id="authPanel">
             <div class="brand-circle"><img src="1.png.png" class="circle-logo"></div>
-            <p style="font-size: 0.6rem; letter-spacing: 4px; color: var(--lem-gold); margin: -20px 0 8px; text-transform: uppercase; opacity: 0.7;">TARJETA ELITE · QUITO</p>
-            <h3 style="letter-spacing: 5px; color: var(--lem-gold); font-weight: 300;">BIENVENIDO</h3>
+            <p style="font-size: 0.6rem; letter-spacing: 4px; color: var(--lem-gold); margin: -20px 0 8px; text-transform: uppercase; opacity: 0.7;">TARJETA DE FIDELIDAD ELITE · QUITO</p>
+            <h3 class="shimmer-text" style="letter-spacing: 5px; font-weight: 300; margin-bottom: 30px;">BIENVENIDO</h3>
 
-            <input type="text" id="userName" class="input-box" placeholder="Nombre Completo">
-            <input type="tel" id="userPhone" class="input-box" placeholder="WhatsApp">
-            <input type="password" id="userPin" class="input-box" placeholder="PIN de 4 dígitos" maxlength="4">
-            <button class="btn-main" onclick="accessSystem()">Ingresar</button>
+            <div class="login-card">
+                <div class="field-group">
+                    <label class="field-label">Nombre y Apellido</label>
+                    <div class="field-input-wrap">
+                        <input type="text" id="userName" class="field-input" placeholder="Tu nombre completo">
+                        <i class="fa-solid fa-user field-icon"></i>
+                    </div>
+                </div>
+
+                <div class="field-group">
+                    <label class="field-label">Número Celular o WhatsApp</label>
+                    <div class="field-input-wrap">
+                        <input type="tel" id="userPhone" class="field-input" placeholder="09XXXXXXXX">
+                        <i class="fa-brands fa-whatsapp field-icon"></i>
+                    </div>
+                </div>
+
+                <div class="field-group" style="margin-bottom: 10px;">
+                    <label class="field-label">PIN de 4 dígitos</label>
+                    <div class="field-input-wrap">
+                        <input type="password" id="userPin" class="field-input" placeholder="••••" maxlength="4">
+                        <i class="fa-solid fa-lock field-icon"></i>
+                    </div>
+                </div>
+
+                <button class="btn-pill" onclick="accessSystem()">Ingresar</button>
+            </div>
         </div>
 
         <div id="cardPanel" style="display:none">
@@ -249,6 +319,15 @@
         const db = firebase.database();
 
         let nombreClienteActivo = "Cliente VIP";
+
+        document.querySelectorAll('#userName, #userPhone, #userPin').forEach(input => {
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    accessSystem();
+                }
+            });
+        });
 
         function toggleModal(show) {
             document.getElementById('modalBeneficios').style.display = show ? 'flex' : 'none';
