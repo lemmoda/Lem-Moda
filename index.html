@@ -3,22 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>LEM MODA | Mundialista 2026</title>
+    <title>LEM MODA | Elite</title>
 
     <meta name="description" content="Programa de Lealtad Elite de LEM MODA. Colecciona estampas y obtén beneficios exclusivos.">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://lemmoda.vercel.app/"> 
+    <meta property="og:url" content="https://lemmoda.vercel.app/">
     <meta property="og:title" content="LEM MODA | Elite">
-    <meta property="og:description" content="¡Colecciona tus estampas y canjea premios exclusivos en LEM MODA!">
-    <meta property="og:image" content="https://lemmoda.vercel.app/logo-lem-elite.png"> 
-    <meta property="og:image:secure_url" content="https://lemmoda.vercel.app/logo-lem-elite.png">
+    <meta property="og:description" content="Colecciona tus estampas y canjea premios exclusivos en LEM MODA.">
+    <meta property="og:image" content="https://lemmoda.vercel.app/og-preview.png">
+    <meta property="og:image:secure_url" content="https://lemmoda.vercel.app/og-preview.png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     <meta property="og:image:type" content="image/png">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="LEM MODA | Elite">
-    <meta name="twitter:description" content="¡Colecciona tus estampas y canjea premios exclusivos en LEM MODA!">
-    <meta name="twitter:image" content="https://lemmoda.vercel.app/logo-lem-elite.png">
+    <meta name="twitter:description" content="Colecciona tus estampas y canjea premios exclusivos en LEM MODA.">
+    <meta name="twitter:image" content="https://lemmoda.vercel.app/og-preview.png">
 
     <link rel="icon" type="image/png" href="1.png.png">
     <link rel="manifest" href="manifest.json?v=2">
@@ -37,14 +37,14 @@
     <style>
         :root { 
             --lem-cafe: #784311; 
-            --lem-gold: #d4a373; 
-            --lem-verde: #38b000;
+            --lem-gold: #c9a84c; 
+            --lem-verde: #6DAE5A;
             --silver-fine: #bdc3c7;
-            --gold-fine: #d4af37;
+            --gold-fine: #c9a84c;
         }
 
         body { 
-            background: radial-gradient(circle at top, #0d1e33 0%, #000000 70%); 
+            background: radial-gradient(ellipse at top, #111111 0%, #000000 100%); 
             color: #fff; 
             font-family: 'Inter', sans-serif; 
             margin: 0; 
@@ -75,11 +75,11 @@
         .circle-logo { width: 70%; height: auto; }
 
         .card { 
-            background: rgba(10, 20, 40, 0.7); 
-            border: 1px solid rgba(212, 163, 115, 0.2); 
+            background: rgba(255, 255, 255, 0.03); 
+            border: 1px solid rgba(201, 168, 76, 0.25); 
             border-radius: 35px; padding: 25px; 
-            backdrop-filter: blur(15px);
-            box-shadow: 0 25px 50px rgba(0,0,0,0.8); 
+            backdrop-filter: blur(20px);
+            box-shadow: 0 25px 60px rgba(0,0,0,0.9); 
         }
 
         .card-logo-box { background: #fff; border-radius: 12px; padding: 8px; display: inline-block; margin-bottom: 20px; }
@@ -155,7 +155,7 @@
         }
 
         .modal-content {
-            background: #060e1a; border: 1px solid var(--lem-gold); padding: 30px;
+            background: #0a0a0a; border: 1px solid var(--lem-gold); padding: 30px;
             border-radius: 25px; width: 85%; max-width: 350px; text-align: center;
         }
 
@@ -173,7 +173,7 @@
         }
 
         .success-card { 
-            background: #060e1a; border: 1px solid var(--lem-gold); 
+            background: #0a0a0a; border: 1px solid var(--lem-gold); 
             border-radius: 35px; padding: 30px; width: 80%; text-align: center; 
         }
 
@@ -182,7 +182,7 @@
     </style>
 </head>
 <body>
-    <canvas id="padreCanvas" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1;opacity:0.55;"></canvas>
+    <canvas id="lemCanvas" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1;opacity:0.6;"></canvas>
 
     <div id="modalBeneficios" class="modal">
         <div class="modal-content">
@@ -208,7 +208,7 @@
     <div class="container">
         <div id="authPanel">
             <div class="brand-circle"><img src="1.png.png" class="circle-logo"></div>
-            <p style="font-size: 0.65rem; letter-spacing: 3px; color: var(--lem-gold); margin: -20px 0 8px; text-transform: uppercase; opacity: 0.85;">FELIZ DÍA DEL PADRE</p>
+            <p style="font-size: 0.6rem; letter-spacing: 4px; color: var(--lem-gold); margin: -20px 0 8px; text-transform: uppercase; opacity: 0.7;">TARJETA ELITE · QUITO</p>
             <h3 style="letter-spacing: 5px; color: var(--lem-gold); font-weight: 300;">BIENVENIDO</h3>
 
             <input type="text" id="userName" class="input-box" placeholder="Nombre Completo">
@@ -402,7 +402,7 @@
         }
 
         function lanzarConfeti() {
-            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#d4a373', '#1a2e4a', '#c9a84c', '#ffffff'] });
+            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#c9a84c', '#6DAE5A', '#ffffff', '#e8c87a'] });
         }
 
         function enviarWA(phone, hito) {
@@ -410,166 +410,181 @@
             let texto = "";
 
             if (hito === 4) {
-                texto = `👔 *¡BENEFICIO MUNDIALISTA - LEM MODA!* 👔\n\n` +
+                texto = `⭐ *¡BENEFICIO ELITE - LEM MODA!* ⭐\n\n` +
                         `Hola, equipo de LEM. 👋\n\n` +
-                        `¡Ya completé mis primeras *4 ESTAMPAS* 🎫 y quiero solicitar mi beneficio especial del Mundial:\n` +
-                        `🎁 *50% DE DESCUENTO* en mi prenda.\n\n` +
+                        `He completado mis primeras *4 ESTAMPAS* en mi Tarjeta Elite y quiero reclamar mi beneficio:\n` +
+                        `🎁 *50% DE DESCUENTO* en una prenda de mi elección.\n\n` +
                         `📌 *Cliente:* ${nombreClienteActivo}\n` +
                         `📌 *WhatsApp registrado:* ${phone}\n\n` +
-                        `¿Me ayudan para hacerlo efectivo en mi compra? ¡Muchas gracias! 🥂`;
+                        `¿Me ayudan para hacerlo efectivo? ¡Muchas gracias! 🙌`;
             } else {
-                texto = `👨‍👦 *¡TARJETA COMPLETA - EDICIÓN MUNDIALISTA LEM MODA!* 👨‍👦\n\n` +
-                        `¡Hola! 👋 ¡Lo logré!\n\n` +
-                        `He completado mis *8 ESTAMPAS* 🏆 en la edición Mundialista.\n` +
+                texto = `🏆 *¡TARJETA ELITE COMPLETA - LEM MODA!* 🏆\n\n` +
+                        `¡Hola equipo LEM! 👋\n\n` +
+                        `He completado mis *8 ESTAMPAS* en la Tarjeta Elite.\n` +
                         `🛍️ ¡Vengo por mi *PRENDA DE REGALO*!\n\n` +
                         `📌 *Cliente:* ${nombreClienteActivo}\n` +
                         `📌 *WhatsApp registrado:* ${phone}\n\n` +
-                        `Estoy muy emocionado/a por elegir mi regalo. ¡Gracias! ✨`;
+                        `Quedo atento/a para coordinar. ¡Gracias! ✨`;
             }
             window.open(`https://wa.me/${waNumber}?text=${encodeURIComponent(texto)}`, '_blank');
         }
     </script>
 
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
     <script>
         (function() {
-            const canvas = document.getElementById('padreCanvas');
+            const canvas = document.getElementById('lemCanvas');
             const ctx = canvas.getContext('2d');
+            let W, H, t = 0;
 
-            const words = [
-                'Papá',       'Dad',          'Père',        'Padre',
-                'Vater',      'Pai',          'Baba',        'Otosan',
-                'Appa',       'Tata',         'Táta',        'Bapa',
-                'Babbo',      'Pappa',        'Tatay',       'Bapak',
-                'Papà',       'Päpa',         'Dada',
-                'Sabio',      'Fuerte',       'Mi Héroe',    'Valiente',
-                'Confiable',  'Brillante',    'Maestro',     'Amado',
-                'Talentoso',  'Comprensivo',  'Inteligente', 'Alegre',
-                'Divertido',  'Trabajador',   'Único',       'El Rey',
-                'Mi Apoyo',   'Invencible',   'Coach',       'Chef',
-                'Inspiración','Simpático',    'Jefe',        'Cool',
-                'Mi mejor amigo', 'Apasionado', 'Perseverante'
+            // ── Partículas de puntos dorados ──────────────────────────────
+            const DOTS = Array.from({length: 80}, () => ({
+                x: Math.random(),
+                y: Math.random(),
+                r: 0.5 + Math.random() * 1.8,
+                phase: Math.random() * Math.PI * 2,
+                speed: 0.008 + Math.random() * 0.018,
+                vy: -(0.00008 + Math.random() * 0.00015),
+                vx: (Math.random() - 0.5) * 0.00006
+            }));
+
+            // ── Líneas de conexión sutiles ────────────────────────────────
+            const NODES = Array.from({length: 18}, () => ({
+                x: Math.random(),
+                y: Math.random(),
+                vx: (Math.random() - 0.5) * 0.0003,
+                vy: (Math.random() - 0.5) * 0.0003,
+            }));
+
+            // ── Palabras de marca flotantes ───────────────────────────────
+            const BRAND_WORDS = [
+                'LEM MODA', 'ELITE', 'ATHLEISURE',
+                'QUITO', 'ESTILO', 'URBAN',
+                'LEM MODA', 'PREMIUM', 'COLECCIÓN',
+                'LEM', 'MODA', 'ELITE'
             ];
 
-            const DAD_WORDS = new Set([
-                'Papá','Dad','Père','Padre','Vater','Pai','Baba','Otosan',
-                'Appa','Tata','Táta','Bapa','Babbo','Pappa','Tatay','Bapak',
-                'Papà','Päpa','Dada'
-            ]);
+            const GOLD_FILLS = ['#c9a84c', '#e8c87a', '#f0d080', '#b8965a'];
+            const GREEN_FILLS = ['#6DAE5A', '#5a9e4a', '#7dc46a'];
 
-            const FILLS   = ['#c9a84c', '#f0d080', '#ffffff', '#b8d8f0', '#e8c87a'];
-            const STROKES = ['#0a1628', '#0a1628', '#0a1628', '#0a1628', '#0a1628'];
-
-            const QUALITY_FILLS   = ['#c9a84c', '#f0d080', '#ffb347', '#ffd700'];
-            const QUALITY_STROKES = ['#0a1628', '#0a1628', '#0a1628', '#0a1628'];
-
-            let particles = [];
-            let W, H;
+            let words = [];
             let fontReady = false;
-
-            document.fonts.load('900 20px "Fredoka One"').then(() => { fontReady = true; });
+            document.fonts.ready.then(() => { fontReady = true; });
 
             function resize() {
-                W = canvas.width = window.innerWidth;
+                W = canvas.width  = window.innerWidth;
                 H = canvas.height = window.innerHeight;
             }
 
             function rand(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
 
-            function createParticle() {
+            function createWord() {
                 const side = Math.floor(Math.random() * 4);
                 let x, y, vx, vy;
-                const speed = 0.22 + Math.random() * 0.35;
-                if (side === 0)      { x = Math.random() * W; y = -30;    vx = (Math.random()-0.5)*0.3; vy = speed; }
-                else if (side === 1) { x = W+30;  y = Math.random()*H;    vx = -speed; vy = (Math.random()-0.5)*0.3; }
-                else if (side === 2) { x = Math.random()*W;  y = H+30;    vx = (Math.random()-0.5)*0.3; vy = -speed; }
-                else                 { x = -30;   y = Math.random()*H;    vx = speed;  vy = (Math.random()-0.5)*0.3; }
+                const speed = 0.15 + Math.random() * 0.2;
+                if (side === 0)      { x = Math.random() * W; y = -20;   vx = (Math.random()-0.5)*0.15; vy = speed; }
+                else if (side === 1) { x = W+20;  y = Math.random()*H;   vx = -speed; vy = (Math.random()-0.5)*0.15; }
+                else if (side === 2) { x = Math.random()*W; y = H+20;    vx = (Math.random()-0.5)*0.15; vy = -speed; }
+                else                 { x = -20;   y = Math.random()*H;   vx = speed;  vy = (Math.random()-0.5)*0.15; }
 
-                const text = rand(words);
-                const isQuality = !DAD_WORDS.has(text);
-                const fills  = isQuality ? QUALITY_FILLS  : FILLS;
-                const strks  = isQuality ? QUALITY_STROKES : STROKES;
-                const ci = Math.floor(Math.random() * fills.length);
-
+                const isGold = Math.random() > 0.3;
                 return {
                     x, y, vx, vy,
-                    text,
-                    fill: fills[ci],
-                    stroke: strks[ci],
-                    size: isQuality
-                        ? 14 + Math.floor(Math.random() * 10)
-                        : 18 + Math.floor(Math.random() * 14),
+                    text: rand(BRAND_WORDS),
+                    fill: isGold ? rand(GOLD_FILLS) : rand(GREEN_FILLS),
+                    size: 9 + Math.floor(Math.random() * 8),
                     alpha: 0,
                     life: 0,
-                    maxLife: isQuality
-                        ? 220 + Math.floor(Math.random() * 140)
-                        : 300 + Math.floor(Math.random() * 200),
-                    angle: (Math.random() - 0.5) * 0.25
+                    maxLife: 350 + Math.floor(Math.random() * 250),
+                    angle: (Math.random() - 0.5) * 0.15
                 };
             }
 
-            function isOff(p) {
-                return p.x < -200 || p.x > W+200 || p.y < -60 || p.y > H+60;
-            }
-
-            function animate() {
+            function draw() {
                 ctx.clearRect(0, 0, W, H);
+                t += 0.012;
 
-                if (fontReady && particles.length < 12 && Math.random() < 0.045) {
-                    particles.push(createParticle());
+                // Dots parpadeantes
+                for (const d of DOTS) {
+                    d.x += d.vx; d.y += d.vy;
+                    d.phase += d.speed;
+                    if (d.y < -0.02) d.y = 1.02;
+                    if (d.x < -0.01 || d.x > 1.01) d.vx *= -1;
+                    const alpha = 0.08 + Math.abs(Math.sin(d.phase)) * 0.18;
+                    ctx.globalAlpha = alpha;
+                    ctx.fillStyle = '#c9a84c';
+                    ctx.beginPath();
+                    ctx.arc(d.x * W, d.y * H, d.r, 0, Math.PI * 2);
+                    ctx.fill();
                 }
 
-                particles = particles.filter(p => {
-                    p.life++;
-                    p.x += p.vx;
-                    p.y += p.vy;
-
-                    const fz = 50;
-                    if (p.life < fz) {
-                        p.alpha = p.life / fz;
-                    } else if (p.life > p.maxLife - fz) {
-                        p.alpha = Math.max(0, (p.maxLife - p.life) / fz);
-                    } else {
-                        p.alpha = 1;
+                // Nodos conectados con líneas
+                for (const n of NODES) {
+                    n.x += n.vx; n.y += n.vy;
+                    if (n.x < 0 || n.x > 1) n.vx *= -1;
+                    if (n.y < 0 || n.y > 1) n.vy *= -1;
+                }
+                for (let i = 0; i < NODES.length; i++) {
+                    for (let j = i + 1; j < NODES.length; j++) {
+                        const dx = (NODES[i].x - NODES[j].x) * W;
+                        const dy = (NODES[i].y - NODES[j].y) * H;
+                        const dist = Math.sqrt(dx*dx + dy*dy);
+                        if (dist < 180) {
+                            ctx.globalAlpha = (1 - dist/180) * 0.06;
+                            ctx.strokeStyle = '#c9a84c';
+                            ctx.lineWidth = 0.5;
+                            ctx.beginPath();
+                            ctx.moveTo(NODES[i].x * W, NODES[i].y * H);
+                            ctx.lineTo(NODES[j].x * W, NODES[j].y * H);
+                            ctx.stroke();
+                        }
                     }
+                }
 
-                    if (p.life >= p.maxLife || isOff(p)) return false;
+                // Palabras de marca flotantes
+                if (fontReady && words.length < 8 && Math.random() < 0.025) {
+                    words.push(createWord());
+                }
+
+                words = words.filter(w => {
+                    w.life++;
+                    w.x += w.vx; w.y += w.vy;
+                    const fz = 60;
+                    if (w.life < fz) w.alpha = w.life / fz;
+                    else if (w.life > w.maxLife - fz) w.alpha = Math.max(0, (w.maxLife - w.life) / fz);
+                    else w.alpha = 1;
+                    if (w.life >= w.maxLife) return false;
+                    if (w.x < -150 || w.x > W+150 || w.y < -40 || w.y > H+40) return false;
 
                     ctx.save();
-                    ctx.globalAlpha = p.alpha * 0.92;
-                    ctx.translate(p.x, p.y);
-                    ctx.rotate(p.angle);
-                    ctx.font = `900 ${p.size}px "Fredoka One", cursive`;
+                    ctx.globalAlpha = w.alpha * 0.55;
+                    ctx.translate(w.x, w.y);
+                    ctx.rotate(w.angle);
+                    ctx.font = `700 ${w.size}px 'Inter', sans-serif`;
+                    ctx.letterSpacing = '3px';
                     ctx.textBaseline = 'middle';
-
-                    ctx.strokeStyle = p.stroke;
-                    ctx.lineWidth = p.size * 0.22;
-                    ctx.lineJoin = 'round';
-                    ctx.strokeText(p.text, 0, 0);
-
-                    ctx.fillStyle = p.fill;
-                    ctx.fillText(p.text, 0, 0);
-
+                    ctx.fillStyle = w.fill;
+                    ctx.fillText(w.text, 0, 0);
                     ctx.restore();
                     return true;
                 });
 
-                requestAnimationFrame(animate);
+                requestAnimationFrame(draw);
             }
 
             resize();
             window.addEventListener('resize', resize);
 
+            // Sembrar palabras iniciales
             setTimeout(() => {
-                for (let i = 0; i < 6; i++) {
-                    const p = createParticle();
-                    p.x = 30 + Math.random() * (W - 60);
-                    p.y = 30 + Math.random() * (H - 60);
-                    p.life = Math.floor(Math.random() * 120);
-                    particles.push(p);
+                for (let i = 0; i < 5; i++) {
+                    const w = createWord();
+                    w.x = 30 + Math.random() * (W - 60);
+                    w.y = 30 + Math.random() * (H - 60);
+                    w.life = Math.floor(Math.random() * 150);
+                    words.push(w);
                 }
-                animate();
-            }, 400);
+                draw();
+            }, 300);
         })();
     </script>
 </body>
