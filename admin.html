@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>LEM Admin</title>
+    <title>LEM Admin | Panel Elite</title>
     
     <link rel="manifest" href="manifest-admin.json?v=2">
     <meta name="theme-color" content="#1a2e4a">
@@ -54,26 +54,50 @@
             background: rgba(255,255,255,0.03); border: 1px solid rgba(201, 168, 76, 0.3); 
             border-radius: 30px; padding: 28px; margin-top: 20px; display: none; 
             backdrop-filter: blur(20px); box-shadow: 0 25px 60px rgba(0,0,0,0.9);
+            position: relative; overflow: hidden;
         }
-        .admin-card h2#clientName { letter-spacing: 0.5px; }
-        .admin-card h3#clientPhone { letter-spacing: 1px; font-size: 0.9rem; }
+        .admin-card::before {
+            content: ''; position: absolute; top: -60%; left: -60%; width: 220%; height: 220%;
+            background: conic-gradient(from 0deg, transparent 0%, rgba(201,168,76,0.08) 8%, transparent 16%, transparent 100%);
+            animation: card-rotate 9s linear infinite; pointer-events: none;
+        }
+        @keyframes card-rotate { to { transform: rotate(360deg); } }
+        .admin-card::after {
+            content: ''; position: absolute; inset: 9px; border-radius: 24px;
+            border: 1px solid rgba(201,168,76,0.12); pointer-events: none;
+        }
+        .admin-card > * { position: relative; z-index: 2; }
+
+        .admin-chip {
+            width: 32px; height: 22px; margin: 0 auto 14px; border-radius: 5px;
+            background: linear-gradient(135deg, #e8c87a 0%, #b08968 50%, #e8c87a 100%);
+            position: relative;
+        }
+        .admin-chip::before {
+            content: ''; position: absolute; top: 4px; left: 4px; right: 4px; bottom: 4px;
+            border: 1px solid rgba(0,0,0,0.25); border-radius: 3px;
+        }
+
+        .admin-card h2#clientName { letter-spacing: 0.5px; font-weight: 700; }
+        .admin-card h3#clientPhone { letter-spacing: 1px; font-size: 0.85rem; opacity: 0.85; }
 
         .btn-action { 
             background: linear-gradient(135deg, #d4a373 0%, #b08968 100%); 
-            color: #000; border: none; padding: 18px 25px; border-radius: 15px; 
+            color: #000; border: none; padding: 18px 25px; border-radius: 50px; 
             font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin: 8px; width: 45%; 
             cursor: pointer; transition: transform 0.15s ease, box-shadow 0.15s ease;
+            box-shadow: 0 10px 25px rgba(212, 163, 115, 0.2);
         }
         .btn-action:active { transform: scale(0.97); }
         .btn-action[style*="1a2e4a"] { 
             background: rgba(255,255,255,0.06) !important; 
             border: 1px solid rgba(201, 168, 76, 0.3) !important; 
-            color: #fff !important;
+            color: #fff !important; box-shadow: none;
         }
 
         .btn-scan-again { 
             background: transparent; color: var(--lem-gold); border: 1px solid rgba(201, 168, 76, 0.5); 
-            margin-top: 20px; width: 100%; padding: 15px; border-radius: 15px; 
+            margin-top: 20px; width: 100%; padding: 15px; border-radius: 50px; 
             font-weight: bold; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; 
             transition: 0.25s;
         }
@@ -111,6 +135,19 @@
             margin-top: 10px; width: 100%; cursor: pointer; transition: 0.25s;
         }
         .btn-reset:hover { background: rgba(102, 0, 0, 0.75); }
+
+        .btn-welcome-wa {
+            background: rgba(37, 211, 102, 0.12); border: 1px solid rgba(37, 211, 102, 0.5);
+            color: #25d366; padding: 13px; border-radius: 50px; width: 100%;
+            font-weight: 700; font-size: 0.78rem; letter-spacing: 0.5px; text-transform: uppercase;
+            cursor: pointer; margin: 14px 0 4px; transition: 0.25s;
+            animation: welcome-glow 2s ease-in-out infinite;
+        }
+        .btn-welcome-wa:hover { background: rgba(37, 211, 102, 0.22); }
+        @keyframes welcome-glow {
+            0%, 100% { box-shadow: 0 0 0 rgba(37, 211, 102, 0); }
+            50% { box-shadow: 0 0 18px rgba(37, 211, 102, 0.35); }
+        }
     </style>
 </head>
 <body>
@@ -120,8 +157,7 @@
     <div class="header">
         <div class="admin-crest"><img src="1.png.png" alt="LEM"></div>
         <h2 style="color: var(--lem-gold); letter-spacing: 3px; margin: 0;">LEM MODA</h2>
-        <p style="font-size: 0.75rem; color: var(--lem-gold); margin: 4px 0; letter-spacing: 2px; opacity: 0.8;"> TARJETA DE FIDELIDAD</p>
-        <p style="font-size: 0.6rem; color: #3a5a8a; margin: 2px 0; letter-spacing: 1px;">PANEL DE CONTROL · ACCESO ELITE</p>
+        <p style="font-size: 0.6rem; color: #3a5a8a; margin: 6px 0 2px; letter-spacing: 2px;">PANEL DE CONTROL · ACCESO ELITE</p>
     </div>
 
     <div id="reader-container">
@@ -129,12 +165,17 @@
     </div>
 
     <div id="adminPanel" class="admin-card">
+        <div class="admin-chip"></div>
         <h2 id="clientName" style="color: #fff; margin: 0 0 5px 0; font-weight: 700; font-size: 1.4rem;">Cargando...</h2>
         <h3 id="clientPhone" style="color: var(--lem-gold); font-weight: 300; margin-top: 0;">WhatsApp: ---</h3>
         
         <p style="margin: 5px 0; font-size: 0.8rem; color: #666;">Puntos Actuales:</p>
         <span id="currentPoints" style="font-size: 3rem; color: #fff; font-weight: bold;">0</span>
-        
+
+        <button id="welcomeBtn" class="btn-welcome-wa" style="display:none;" onclick="enviarBienvenidaWA()">
+            📲 Enviar Bienvenida por WhatsApp
+        </button>
+
         <div id="adminRewardAlert" class="reward-alert">
             <span id="rewardText" style="font-size: 1rem; font-weight: bold; letter-spacing: 1px;"></span>
         </div>
@@ -214,25 +255,72 @@
                 document.getElementById('clientPhone').innerText = "WhatsApp: " + phone;
                 document.getElementById('currentPoints').innerText = puntos;
                 updateAdminAlerts(puntos);
+
+                const yaSaludado = data && data.bienvenida_enviada;
+                document.getElementById('welcomeBtn').style.display = yaSaludado ? 'none' : 'block';
             });
+        }
+
+        const WEBAPP_URL = "https://lemmoda.vercel.app/";
+
+        function enviarBienvenidaWA() {
+            const phone = telefonoOriginalEscaneado;
+            if (!phone) return;
+
+            const texto = `Hola, ${nombreClienteMemoria}, es un gusto saludarte. ✨\n` +
+                `En LEM MODA, nuestra prioridad es que vivas una experiencia excepcional y cercana. Por ello, te invitamos a conocer tu nueva tarjeta de fidelidad digital, diseñada para que gestiones tus beneficios y descubras novedades exclusivas desde tu perfil personal:\n` +
+                `🗝️ Acceso privado: ${WEBAPP_URL}\n` +
+                `Gracias por ser parte de nuestra comunidad. ❤️`;
+
+            window.open(`https://wa.me/${phone}?text=${encodeURIComponent(texto)}`, '_blank');
+
+            db.ref('lem_users/' + phone).update({ bienvenida_enviada: true });
+            document.getElementById('welcomeBtn').style.display = 'none';
+        }
+
+        function detectarGenero(nombreCompleto) {
+            const NOMBRES_MASCULINOS = ['jose','luis','carlos','juan','andres','andrés','jesus','jesús','tomas','tomás',
+                'nicolas','nicolás','ismael','isaac','angel','ángel','gabriel','rafael','miguel','manuel','david',
+                'daniel','diego','fernando','francisco','javier','jorge','marcos','martin','martín','oscar','óscar',
+                'pablo','pedro','ricardo','roberto','ruben','rubén','sergio','victor','víctor','alexis','ariel',
+                'axel','bryan','brayan','cristian','cristhian','edison','edwin','efrain','efraín','elias','elías',
+                'esteban','ezequiel','gael','gonzalo','henry','ivan','iván','joel','jonathan','josue','josué',
+                'kevin','leonardo','mateo','mathias','matias','matías','maximiliano','moises','moisés','nelson',
+                'noe','noé','samuel','santiago','sebastian','sebastián','simon','simón','wilson','xavier'];
+            const NOMBRES_FEMENINOS = ['maria','maría','ana','sofia','sofía','isabel','mercedes','carmen','rosa',
+                'laura','andrea','valentina','camila','daniela','fernanda','gabriela','patricia','sandra','monica',
+                'mónica','veronica','verónica','paola','johanna','yolanda','martha','marta','alejandra','lucia',
+                'lucía','ximena','ines','inés','pilar','beatriz','elizabeth','katherine','catherine','estefania',
+                'estefanía','jessica','jessenia','yesenia','tatiana','vanessa','carolina','cristina','diana',
+                'evelyn','gladys','ivonne','jacqueline','karina','leslie','liliana','melany','melanie','michelle',
+                'nathaly','pamela','priscila','priscilla','samantha','stefania','stefanía','viviana','wendy','zoila','zoe'];
+
+            const primer = (nombreCompleto || '').trim().split(/\s+/)[0].toLowerCase().normalize('NFC');
+            if (NOMBRES_MASCULINOS.includes(primer)) return 'm';
+            if (NOMBRES_FEMENINOS.includes(primer)) return 'f';
+            const sinTilde = primer.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+            if (sinTilde.endsWith('a')) return 'f';
+            if (sinTilde.endsWith('o') || sinTilde.endsWith('or') || sinTilde.endsWith('el') || sinTilde.endsWith('is')) return 'm';
+            return 'f';
         }
 
         function updateAdminAlerts(puntos) {
             const alertBox = document.getElementById('adminRewardAlert');
             const alertText = document.getElementById('rewardText');
             const resetBtn = document.getElementById('resetBtn');
+            const genero = detectarGenero(nombreClienteMemoria);
 
             alertBox.classList.remove('alert-silver', 'alert-gold');
 
             if (puntos === 4) {
                 alertBox.style.display = 'block';
                 alertBox.classList.add('alert-silver');
-                alertText.innerHTML = "👔 BENEFICIO PAPÁ:<br>50% DESCUENTO";
+                alertText.innerHTML = (genero === 'm' ? "💎 SOCIO PLATA:" : "💎 SOCIA PLATA:") + "<br>50% DESCUENTO";
                 resetBtn.style.display = 'none';
             } else if (puntos >= 8) {
                 alertBox.style.display = 'block';
                 alertBox.classList.add('alert-gold');
-                alertText.innerHTML = "👨‍👦 BENEFICIO ESPECIAL:<br>PRENDA DE REGALO";
+                alertText.innerHTML = (genero === 'm' ? "👑 SOCIO ORO VIP:" : "👑 SOCIA ORO VIP:") + "<br>PRENDA DE REGALO";
                 resetBtn.style.display = 'block'; 
             } else {
                 alertBox.style.display = 'none';
