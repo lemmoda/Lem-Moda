@@ -94,6 +94,58 @@
             border-radius: 35px; padding: 25px; 
             backdrop-filter: blur(20px);
             box-shadow: 0 25px 60px rgba(0,0,0,0.9); 
+            position: relative; overflow: hidden;
+        }
+        .card::before {
+            content: '';
+            position: absolute; top: -60%; left: -60%; width: 220%; height: 220%;
+            background: conic-gradient(from 0deg, transparent 0%, rgba(201,168,76,0.08) 8%, transparent 16%, transparent 100%);
+            animation: card-rotate 9s linear infinite; pointer-events: none;
+        }
+        @keyframes card-rotate { to { transform: rotate(360deg); } }
+
+        .card::after {
+            content: ''; position: absolute; inset: 10px; border-radius: 26px;
+            border: 1px solid rgba(201,168,76,0.12); pointer-events: none;
+        }
+
+        .card-chip {
+            width: 34px; height: 24px; margin: 0 0 14px 4px; border-radius: 5px;
+            background: linear-gradient(135deg, #e8c87a 0%, #b08968 50%, #e8c87a 100%);
+            position: relative; z-index: 2;
+        }
+        .card-chip::before {
+            content: ''; position: absolute; top: 4px; left: 4px; right: 4px; bottom: 4px;
+            border: 1px solid rgba(0,0,0,0.25); border-radius: 3px;
+        }
+
+        .member-header { margin-bottom: 16px; }
+        .member-greeting { font-size: 0.65rem; letter-spacing: 2px; color: #888; margin: 0 0 2px; text-transform: uppercase; }
+        #memberName { margin: 0 0 8px; font-weight: 700; letter-spacing: 0.5px; font-size: 1.3rem; }
+        .tier-badge {
+            display: inline-block; font-size: 0.62rem; letter-spacing: 1.5px; font-weight: 700;
+            padding: 5px 14px; border-radius: 20px; text-transform: uppercase;
+            background: rgba(201,168,76,0.12); border: 1px solid rgba(201,168,76,0.35); color: var(--lem-gold);
+        }
+
+        .progress-track {
+            width: 100%; height: 4px; border-radius: 4px; background: rgba(255,255,255,0.08);
+            margin: 16px 0 8px; overflow: hidden; position: relative; z-index: 2;
+        }
+        .progress-fill {
+            height: 100%; width: 0%; border-radius: 4px;
+            background: linear-gradient(90deg, #7a9fc2, var(--lem-gold));
+            transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .qr-wrap {
+            background: #fff; padding: 10px; border-radius: 14px; display: inline-block;
+            margin-top: 14px; position: relative; z-index: 2;
+            box-shadow: 0 0 0 1px rgba(201,168,76,0.4), 0 10px 25px rgba(0,0,0,0.4);
+        }
+        .card-footer-text {
+            font-size: 0.55rem; letter-spacing: 2px; color: #555; margin-top: 14px;
+            text-transform: uppercase; position: relative; z-index: 2;
         }
 
         .card-logo-box { 
@@ -102,7 +154,7 @@
         }
         .card-logo { width: 110px; }
 
-        .stamp-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 20px 0; }
+        .stamp-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 20px 0; position: relative; z-index: 2; }
 
         .slot { 
             aspect-ratio: 1; background: rgba(0,0,0,0.8); 
@@ -111,7 +163,8 @@
             flex-direction: column; text-align: center; overflow: hidden;
         }
 
-        .slot.active { background: #fff; border: 2px solid var(--lem-verde); }
+        .slot.active { background: #fff; border: 2px solid var(--lem-verde); animation: stamp-pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) backwards; }
+        @keyframes stamp-pop { 0% { transform: scale(0.4); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
         .slot img { width: 60%; display: none; }
         .slot.active img { display: block; filter: none; width: 65%; }
 
@@ -231,10 +284,35 @@
 
         .modal-content {
             background: rgba(20, 18, 15, 0.55); border: 1px solid rgba(201, 168, 76, 0.25); padding: 32px;
-            border-radius: 28px; width: 85%; max-width: 350px; text-align: center;
+            border-radius: 28px; width: 88%; max-width: 380px; text-align: center;
             backdrop-filter: blur(22px); -webkit-backdrop-filter: blur(22px);
             box-shadow: 0 25px 60px rgba(0,0,0,0.6);
         }
+
+        .benefit-tier {
+            border-radius: 20px; padding: 18px 20px; margin-bottom: 14px; text-align: left;
+            position: relative; overflow: hidden; background: rgba(255,255,255,0.02);
+        }
+        .benefit-tier-silver { border: 1px solid rgba(122,159,194,0.35); box-shadow: 0 0 20px rgba(122,159,194,0.08); }
+        .benefit-tier-gold { border: 1px solid rgba(201,168,76,0.4); box-shadow: 0 0 25px rgba(201,168,76,0.15); }
+        .benefit-tier-gold::before {
+            content: ''; position: absolute; top: 0; left: -100%; width: 55%; height: 100%;
+            background: linear-gradient(120deg, transparent, rgba(255,255,255,0.14), transparent);
+            animation: shine-sweep 3.5s ease-in-out infinite;
+        }
+        @keyframes shine-sweep { 0% { left: -100%; } 55% { left: 130%; } 100% { left: 130%; } }
+
+        .benefit-tier-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+        .benefit-icon { font-size: 1.25rem; }
+        .benefit-tier-silver .benefit-icon { color: #9fb8d4; }
+        .benefit-tier-gold .benefit-icon { color: var(--lem-gold); }
+        .benefit-badge {
+            font-size: 0.6rem; letter-spacing: 1px; padding: 4px 11px; border-radius: 20px;
+            background: rgba(122,159,194,0.15); color: #9fb8d4; font-weight: 700;
+        }
+        .benefit-badge-gold { background: rgba(201,168,76,0.18); color: var(--lem-gold); }
+        .benefit-tier-title { margin: 0 0 4px; font-size: 1rem; color: #fff; letter-spacing: 0.5px; font-weight: 600; }
+        .benefit-tier-desc { margin: 0; font-size: 0.8rem; color: #bbb; line-height: 1.45; position: relative; z-index: 2; }
 
         .premio-box {
             background: rgba(56, 176, 0, 0.1); border: 1px dashed var(--lem-verde);
@@ -265,11 +343,30 @@
 
     <div id="modalBeneficios" class="modal">
         <div class="modal-content">
-            <h3 style="color: var(--lem-gold); letter-spacing: 2px;">BENEFICIOS LEM</h3>
-            <ul style="text-align: left; font-size: 0.85rem; line-height: 1.8; color: #ccc;">
-                <li>• <strong>4 ESTAMPAS:</strong> 50% de descuento en una prenda de tu compra actual.</li>
-                <li>• <strong>8 ESTAMPAS:</strong> 1 Prenda seleccionada de regalo.</li>
-            </ul>
+            <i class="fa-solid fa-crown" style="color: var(--lem-gold); font-size: 1.7rem; display: block; margin-bottom: 10px;"></i>
+            <h3 style="color: #fff; letter-spacing: 2px; font-weight: 300; margin: 0 0 2px;">BENEFICIOS <span class="shimmer-text" style="font-weight: 700;">EXCLUSIVOS</span></h3>
+            <p style="font-size: 0.65rem; color: #888; letter-spacing: 2px; margin-bottom: 24px;">TU LEALTAD, NUESTRA RECOMPENSA</p>
+
+            <div class="benefit-tier benefit-tier-silver">
+                <div class="benefit-tier-top">
+                    <i class="fa-solid fa-gem benefit-icon"></i>
+                    <span class="benefit-badge">4 SELLOS</span>
+                </div>
+                <h4 class="benefit-tier-title">Socia Plata</h4>
+                <p class="benefit-tier-desc">50% de descuento en una prenda de tu compra actual.</p>
+            </div>
+
+            <div class="benefit-tier benefit-tier-gold">
+                <div class="benefit-tier-top">
+                    <i class="fa-solid fa-crown benefit-icon"></i>
+                    <span class="benefit-badge benefit-badge-gold">8 SELLOS</span>
+                </div>
+                <h4 class="benefit-tier-title">Socia Oro VIP</h4>
+                <p class="benefit-tier-desc">Una prenda seleccionada, completamente de regalo.</p>
+            </div>
+
+            <p style="font-size: 0.7rem; color: #777; margin-top: 6px; font-style: italic;">Cada sello te acerca un paso más a tu próxima recompensa ✨</p>
+
             <button class="btn-pill-outline" style="margin-top: 20px;" onclick="toggleModal(false)">Cerrar</button>
         </div>
     </div>
@@ -320,17 +417,27 @@
         </div>
 
         <div id="cardPanel" style="display:none">
+            <div class="member-header">
+                <p class="member-greeting">Bienvenida</p>
+                <h3 id="memberName" class="shimmer-text">Cliente VIP</h3>
+                <span id="memberTier" class="tier-badge">MIEMBRO ELITE</span>
+            </div>
+
             <button class="btn-beneficios" onclick="toggleModal(true)">Ver Beneficios</button>
             <div class="card">
+                <div class="card-chip"></div>
                 <div class="card-logo-box"><img src="1.png.png" class="card-logo"></div>
                 <div class="stamp-grid" id="stampGrid"></div>
-                <p id="counterLabel" style="color: var(--lem-gold); font-size: 0.75rem; letter-spacing: 1px;">Sincronizando...</p>
+
+                <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+                <p id="counterLabel" style="color: var(--lem-gold); font-size: 0.75rem; letter-spacing: 1px; position: relative; z-index: 2;">Sincronizando...</p>
 
                 <div id="premioNotif" class="premio-box"></div>
 
-                <div style="background:#fff; padding:8px; border-radius:12px; display:inline-block; margin-top: 10px;">
+                <div class="qr-wrap">
                     <canvas id="qr-canvas"></canvas>
                 </div>
+                <p class="card-footer-text">Miembro LEM Moda · Quito, Ecuador</p>
             </div>
 
             <a href="aqui va la web" target="_blank" class="btn-web-store">
@@ -467,10 +574,19 @@
         function login(phone) {
             document.getElementById('authPanel').style.display = 'none';
             document.getElementById('cardPanel').style.display = 'block';
+            document.getElementById('memberName').innerText = nombreClienteActivo;
             QRCode.toCanvas(document.getElementById('qr-canvas'), phone, { width: 120, margin: 1 });
             db.ref('lem_users/' + phone + '/puntos').on('value', (snap) => {
                 const p = snap.val() || 0;
                 document.getElementById('counterLabel').innerText = `${p} DE 8 SELLOS`;
+
+                const tierBadge = document.getElementById('memberTier');
+                if (p >= 8) tierBadge.innerText = 'SOCIA ORO VIP';
+                else if (p >= 4) tierBadge.innerText = 'SOCIA PLATA';
+                else tierBadge.innerText = 'MIEMBRO ELITE';
+
+                document.getElementById('progressFill').style.width = Math.min((p / 8) * 100, 100) + '%';
+
                 const grid = document.getElementById('stampGrid');
                 grid.innerHTML = '';
 
@@ -481,6 +597,7 @@
 
                     s.className = 'slot' + (isActive ? ' active' : '');
                     s.setAttribute('data-index', index);
+                    if (isActive) s.style.animationDelay = (i * 0.07) + 's';
 
                     if(index === 4) s.classList.add('silver-frame');
                     if(index === 8) s.classList.add('gold-frame');
