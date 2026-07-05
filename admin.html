@@ -263,16 +263,26 @@
 
         const WEBAPP_URL = "https://lemmoda.vercel.app/";
 
+        // Convierte un número local de Ecuador (ej. 0979010077) al formato que exige WhatsApp: 593979010077
+        function formatearWhatsAppEC(numero) {
+            let limpio = (numero || '').replace(/\D/g, ''); // deja solo dígitos
+            if (limpio.startsWith('0')) limpio = limpio.substring(1); // quita el 0 inicial
+            if (!limpio.startsWith('593')) limpio = '593' + limpio;   // agrega código de país si falta
+            return limpio;
+        }
+
         function enviarBienvenidaWA() {
             const phone = telefonoOriginalEscaneado;
             if (!phone) return;
+
+            const phoneWA = formatearWhatsAppEC(phone);
 
             const texto = `Hola, ${nombreClienteMemoria}, es un gusto saludarte. ✨\n` +
                 `En LEM MODA, nuestra prioridad es que vivas una experiencia excepcional y cercana. Por ello, te invitamos a conocer tu nueva tarjeta de fidelidad digital, diseñada para que gestiones tus beneficios y descubras novedades exclusivas desde tu perfil personal:\n` +
                 `🗝️ Acceso privado: ${WEBAPP_URL}\n` +
                 `Gracias por ser parte de nuestra comunidad. ❤️`;
 
-            window.open(`https://wa.me/${phone}?text=${encodeURIComponent(texto)}`, '_blank');
+            window.open(`https://wa.me/${phoneWA}?text=${encodeURIComponent(texto)}`, '_blank');
 
             db.ref('lem_users/' + phone).update({ bienvenida_enviada: true });
             document.getElementById('welcomeBtn').style.display = 'none';
