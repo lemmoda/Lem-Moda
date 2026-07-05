@@ -178,6 +178,20 @@
         }
         .btn-beneficios:hover { background: rgba(201, 168, 76, 0.15); }
 
+        .social-row {
+            display: flex; justify-content: center; gap: 16px; margin-top: 26px;
+        }
+        .social-btn {
+            width: 44px; height: 44px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            background: rgba(255,255,255,0.03); border: 1px solid rgba(201, 168, 76, 0.3);
+            backdrop-filter: blur(10px); color: var(--lem-gold); font-size: 1.1rem;
+            text-decoration: none; transition: 0.3s;
+        }
+        .social-btn:hover {
+            background: rgba(201, 168, 76, 0.12); border-color: var(--lem-gold);
+            box-shadow: 0 0 18px rgba(201, 168, 76, 0.35); transform: translateY(-2px);
+        }
         .btn-pill-outline {
             background: rgba(255,255,255,0.02); color: var(--lem-gold); 
             border: 1px solid rgba(201, 168, 76, 0.3); border-radius: 50px;
@@ -324,6 +338,17 @@
             </a>
 
             <button class="btn-pill-outline" style="margin-top:20px;" onclick="location.reload()">Cerrar Sesión</button>
+        </div>
+        <div class="social-row">
+            <a href="https://www.instagram.com/lemmoda.ec/" target="_blank" rel="noopener" class="social-btn" aria-label="Instagram">
+                <i class="fa-brands fa-instagram"></i>
+            </a>
+            <a href="https://www.tiktok.com/@lemmoda?is_from_webapp=1&sender_device=pc" target="_blank" rel="noopener" class="social-btn" aria-label="TikTok">
+                <i class="fa-brands fa-tiktok"></i>
+            </a>
+            <a href="https://www.facebook.com/people/LEM-moda/61581406283301/" target="_blank" rel="noopener" class="social-btn" aria-label="Facebook">
+                <i class="fa-brands fa-facebook-f"></i>
+            </a>
         </div>
         <p style="font-size: 10px; color: #444; margin-top: 20px;">ORCA Studios &copy; 2026</p>
     </div>
