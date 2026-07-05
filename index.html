@@ -329,9 +329,36 @@
 
         .success-card { 
             background: rgba(20, 18, 15, 0.55); border: 1px solid rgba(201, 168, 76, 0.25); 
-            border-radius: 28px; padding: 34px 28px; width: 80%; text-align: center; 
+            border-radius: 28px; padding: 38px 28px 30px; width: 80%; max-width: 340px; text-align: center; 
             backdrop-filter: blur(22px); -webkit-backdrop-filter: blur(22px);
             box-shadow: 0 25px 60px rgba(0,0,0,0.6);
+            position: relative; overflow: hidden;
+            animation: overlay-pop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        @keyframes overlay-pop { from { transform: scale(0.85); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+        .success-card::before {
+            content: ''; position: absolute; top: -60%; left: -60%; width: 220%; height: 220%;
+            background: conic-gradient(from 0deg, transparent 0%, rgba(201,168,76,0.10) 8%, transparent 16%, transparent 100%);
+            animation: card-rotate 9s linear infinite; pointer-events: none;
+        }
+
+        .success-icon-badge {
+            width: 74px; height: 74px; border-radius: 50%; margin: 0 auto 16px;
+            display: flex; align-items: center; justify-content: center; font-size: 1.9rem;
+            position: relative; z-index: 2;
+        }
+        .success-icon-badge.tier-silver {
+            background: rgba(122,159,194,0.12); border: 1px solid rgba(122,159,194,0.4); color: #9fb8d4;
+            box-shadow: 0 0 28px rgba(122,159,194,0.3);
+        }
+        .success-icon-badge.tier-gold {
+            background: rgba(201,168,76,0.12); border: 1px solid rgba(201,168,76,0.45); color: var(--lem-gold);
+            box-shadow: 0 0 32px rgba(201,168,76,0.4);
+        }
+
+        .success-card h2, .success-card p, .success-card #waAction, .success-card button {
+            position: relative; z-index: 2;
         }
 
         body::-webkit-scrollbar { display: none; }
@@ -373,7 +400,7 @@
 
     <div id="success-overlay">
         <div class="success-card">
-            <div class="card-logo-box"><img src="1.png.png" style="width: 100px;"></div>
+            <div id="successIconBadge" class="success-icon-badge tier-gold"><i class="fa-solid fa-crown"></i></div>
             <h2 id="successTitle" style="color: var(--lem-gold); font-weight: 300; letter-spacing: 2px;">¡Felicidades!</h2>
             <p id="successMsg" style="font-size: 0.85rem; color: #aaa; line-height: 1.5;"></p>
             <div id="waAction"></div>
@@ -418,7 +445,7 @@
 
         <div id="cardPanel" style="display:none">
             <div class="member-header">
-                <p class="member-greeting">Bienvenida</p>
+                <p class="member-greeting" id="memberGreeting">Bienvenida</p>
                 <h3 id="memberName" class="shimmer-text">Cliente VIP</h3>
                 <span id="memberTier" class="tier-badge">MIEMBRO ELITE</span>
             </div>
@@ -472,6 +499,74 @@
         const db = firebase.database();
 
         let nombreClienteActivo = "Cliente VIP";
+        let audioCtx = null;
+        let previousPoints = null;
+
+        function getAudioCtx() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            return audioCtx;
+        }
+
+        function reproducirSonidoSello() {
+            try {
+                const ctx = getAudioCtx();
+                const now = ctx.currentTime;
+
+                const o1 = ctx.createOscillator();
+                const g1 = ctx.createGain();
+                o1.type = 'sine';
+                o1.frequency.setValueAtTime(880, now);
+                o1.frequency.exponentialRampToValueAtTime(1318.5, now + 0.14);
+                g1.gain.setValueAtTime(0.0001, now);
+                g1.gain.exponentialRampToValueAtTime(0.22, now + 0.02);
+                g1.gain.exponentialRampToValueAtTime(0.0001, now + 0.55);
+                o1.connect(g1); g1.connect(ctx.destination);
+                o1.start(now); o1.stop(now + 0.6);
+
+                const o2 = ctx.createOscillator();
+                const g2 = ctx.createGain();
+                o2.type = 'sine';
+                o2.frequency.setValueAtTime(1318.5, now + 0.05);
+                g2.gain.setValueAtTime(0.0001, now + 0.05);
+                g2.gain.exponentialRampToValueAtTime(0.15, now + 0.08);
+                g2.gain.exponentialRampToValueAtTime(0.0001, now + 0.7);
+                o2.connect(g2); g2.connect(ctx.destination);
+                o2.start(now + 0.05); o2.stop(now + 0.75);
+            } catch (e) { /* silencioso si el navegador bloquea audio */ }
+        }
+
+        // Detección de género por nombre (heurística + excepciones comunes en Ecuador)
+        const NOMBRES_MASCULINOS = ['jose','luis','carlos','juan','andres','andrés','jesus','jesús','tomas','tomás',
+            'nicolas','nicolás','ismael','isaac','angel','ángel','gabriel','rafael','miguel','manuel','david',
+            'daniel','diego','fernando','francisco','javier','jorge','marcos','martin','martín','oscar','óscar',
+            'pablo','pedro','ricardo','roberto','ruben','rubén','sergio','victor','víctor','alexis','ariel',
+            'axel','bryan','brayan','cristian','cristhian','edison','edwin','efrain','efraín','elias','elías',
+            'esteban','ezequiel','gael','gonzalo','henry','ivan','iván','joel','jonathan','josue','josué',
+            'kevin','leonardo','mateo','mathias','matias','matías','maximiliano','moises','moisés','nelson',
+            'noe','noé','samuel','santiago','sebastian','sebastián','simon','simón','wilson','xavier'];
+
+        const NOMBRES_FEMENINOS = ['maria','maría','ana','sofia','sofía','isabel','mercedes','carmen','rosa',
+            'laura','andrea','valentina','camila','daniela','fernanda','gabriela','patricia','sandra','monica',
+            'mónica','veronica','verónica','paola','johanna','yolanda','martha','marta','alejandra','lucia',
+            'lucía','ximena','ines','inés','pilar','beatriz','elizabeth','katherine','catherine','estefania',
+            'estefanía','jessica','jessenia','yesenia','tatiana','vanessa','carolina','cristina','diana',
+            'evelyn','gladys','ivonne','jacqueline','karina','leslie','liliana','melany','melanie','michelle',
+            'nathaly','pamela','priscila','priscilla','samantha','stefania','stefanía','viviana','wendy',
+            'ximena','zoila','zoe'];
+
+        function detectarGenero(nombreCompleto) {
+            const primer = (nombreCompleto || '').trim().split(/\s+/)[0]
+                .toLowerCase().normalize('NFC');
+            if (NOMBRES_MASCULINOS.includes(primer)) return 'm';
+            if (NOMBRES_FEMENINOS.includes(primer)) return 'f';
+            const sinTilde = primer.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+            if (sinTilde.endsWith('a')) return 'f';
+            if (sinTilde.endsWith('o') || sinTilde.endsWith('or') || sinTilde.endsWith('el') || sinTilde.endsWith('is')) return 'm';
+            return 'f';
+        }
 
         document.querySelectorAll('#userName, #userPhone, #userPin').forEach(input => {
             input.addEventListener('keydown', (e) => {
@@ -487,6 +582,7 @@
         }
 
         function accessSystem() {
+    getAudioCtx();
     const name = document.getElementById('userName').value.trim();
     const phone = document.getElementById('userPhone').value.trim();
     const pin = document.getElementById('userPin').value.trim();
@@ -575,14 +671,24 @@
             document.getElementById('authPanel').style.display = 'none';
             document.getElementById('cardPanel').style.display = 'block';
             document.getElementById('memberName').innerText = nombreClienteActivo;
+
+            const genero = detectarGenero(nombreClienteActivo);
+            document.getElementById('memberGreeting').innerText = (genero === 'm') ? 'Bienvenido' : 'Bienvenida';
+
             QRCode.toCanvas(document.getElementById('qr-canvas'), phone, { width: 120, margin: 1 });
             db.ref('lem_users/' + phone + '/puntos').on('value', (snap) => {
                 const p = snap.val() || 0;
+
+                if (previousPoints !== null && p > previousPoints) {
+                    reproducirSonidoSello();
+                }
+                previousPoints = p;
+
                 document.getElementById('counterLabel').innerText = `${p} DE 8 SELLOS`;
 
                 const tierBadge = document.getElementById('memberTier');
-                if (p >= 8) tierBadge.innerText = 'SOCIA ORO VIP';
-                else if (p >= 4) tierBadge.innerText = 'SOCIA PLATA';
+                if (p >= 8) tierBadge.innerText = (genero === 'm') ? 'SOCIO ORO VIP' : 'SOCIA ORO VIP';
+                else if (p >= 4) tierBadge.innerText = (genero === 'm') ? 'SOCIO PLATA' : 'SOCIA PLATA';
                 else tierBadge.innerText = 'MIEMBRO ELITE';
 
                 document.getElementById('progressFill').style.width = Math.min((p / 8) * 100, 100) + '%';
@@ -621,10 +727,13 @@
             const msg = document.getElementById('successMsg');
             const waAction = document.getElementById('waAction');
             const notifBox = document.getElementById('premioNotif');
+            const badge = document.getElementById('successIconBadge');
 
             if (p === 4) {
                 lanzarConfeti();
                 overlay.style.display = 'flex';
+                badge.className = 'success-icon-badge tier-silver';
+                badge.innerHTML = '<i class="fa-solid fa-gem"></i>';
                 title.innerText = "¡Recompensa Alcanzada!";
                 msg.innerText = `¡Felicidades ${nombreClienteActivo}! Por tus 4 estampas tienes el 50% de descuento en una prenda.`;
                 waAction.innerHTML = `<button class="btn-main" style="background:#25d366; color:white; border-radius:50px;" onclick="enviarWA('${phone}', 4)">Reclamar por WhatsApp</button>`;
@@ -633,6 +742,8 @@
             } else if (p >= 8) {
                 lanzarConfeti();
                 overlay.style.display = 'flex';
+                badge.className = 'success-icon-badge tier-gold';
+                badge.innerHTML = '<i class="fa-solid fa-crown"></i>';
                 title.innerText = "¡Nivel Completado!";
                 msg.innerText = `¡Increíble ${nombreClienteActivo}! Has completado las 8 estampas. ¡Tu prenda de regalo te espera!`;
                 waAction.innerHTML = `<button class="btn-main" style="background:#25d366; color:white; border-radius:50px;" onclick="enviarWA('${phone}', 8)">Reclamar Regalo</button>`;
