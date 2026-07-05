@@ -379,8 +379,8 @@
                     <i class="fa-solid fa-gem benefit-icon"></i>
                     <span class="benefit-badge">4 SELLOS</span>
                 </div>
-                <h4 class="benefit-tier-title">Socio Plata</h4>
-                <p class="benefit-tier-desc">50% de descuento en una prenda de tu siguiente compra.</p>
+                <h4 class="benefit-tier-title">Socia Plata</h4>
+                <p class="benefit-tier-desc">50% de descuento en una prenda de tu compra actual.</p>
             </div>
 
             <div class="benefit-tier benefit-tier-gold">
@@ -388,8 +388,8 @@
                     <i class="fa-solid fa-crown benefit-icon"></i>
                     <span class="benefit-badge benefit-badge-gold">8 SELLOS</span>
                 </div>
-                <h4 class="benefit-tier-title">Socio Oro VIP</h4>
-                <p class="benefit-tier-desc">Una prenda de tu elección de regalo.</p>
+                <h4 class="benefit-tier-title">Socia Oro VIP</h4>
+                <p class="benefit-tier-desc">Una prenda seleccionada, completamente de regalo.</p>
             </div>
 
             <p style="font-size: 0.7rem; color: #777; margin-top: 6px; font-style: italic;">Cada sello te acerca un paso más a tu próxima recompensa ✨</p>
@@ -679,7 +679,7 @@
             db.ref('lem_users/' + phone + '/puntos').on('value', (snap) => {
                 const p = snap.val() || 0;
 
-                if (previousPoints !== null && p > previousPoints) {
+                if (previousPoints !== null && p > previousPoints && p !== 4 && p < 8) {
                     reproducirSonidoSello();
                 }
                 previousPoints = p;
@@ -731,6 +731,7 @@
 
             if (p === 4) {
                 lanzarConfeti();
+                reproducirSonidoFestejo();
                 overlay.style.display = 'flex';
                 badge.className = 'success-icon-badge tier-silver';
                 badge.innerHTML = '<i class="fa-solid fa-gem"></i>';
@@ -741,6 +742,7 @@
                 notifBox.innerHTML = `<small style="color:var(--lem-verde)">✓ Tienes un 50% OFF disponible</small>`;
             } else if (p >= 8) {
                 lanzarConfeti();
+                reproducirSonidoFestejo();
                 overlay.style.display = 'flex';
                 badge.className = 'success-icon-badge tier-gold';
                 badge.innerHTML = '<i class="fa-solid fa-crown"></i>';
@@ -756,6 +758,27 @@
 
         function lanzarConfeti() {
             confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#c9a84c', '#6DAE5A', '#ffffff', '#e8c87a'] });
+        }
+
+        function reproducirSonidoFestejo() {
+            try {
+                const ctx = getAudioCtx();
+                const now = ctx.currentTime;
+                const notas = [523.25, 659.25, 783.99, 1046.5]; // Do - Mi - Sol - Do (arpegio triunfal)
+
+                notas.forEach((freq, i) => {
+                    const t0 = now + i * 0.11;
+                    const o = ctx.createOscillator();
+                    const g = ctx.createGain();
+                    o.type = 'triangle';
+                    o.frequency.setValueAtTime(freq, t0);
+                    g.gain.setValueAtTime(0.0001, t0);
+                    g.gain.exponentialRampToValueAtTime(0.28, t0 + 0.02);
+                    g.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.5);
+                    o.connect(g); g.connect(ctx.destination);
+                    o.start(t0); o.stop(t0 + 0.55);
+                });
+            } catch (e) { /* silencioso si el navegador bloquea audio */ }
         }
 
         function enviarWA(phone, hito) {
