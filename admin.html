@@ -271,6 +271,22 @@
             return limpio;
         }
 
+        // Abre el chat directamente en WhatsApp Business si el dispositivo es Android.
+        // En iPhone/desktop no existe forma de forzar una app específica, así que cae a wa.me normal.
+        function abrirWhatsAppBusiness(phoneWA, texto) {
+            const esAndroid = /Android/i.test(navigator.userAgent);
+            const encoded = encodeURIComponent(texto);
+            const linkNormal = `https://wa.me/${phoneWA}?text=${encoded}`;
+
+            if (esAndroid) {
+                const fallback = encodeURIComponent(linkNormal);
+                const intentUrl = `intent://send?phone=${phoneWA}&text=${encoded}#Intent;scheme=whatsapp;package=com.whatsapp.w4b;S.browser_fallback_url=${fallback};end`;
+                window.location.href = intentUrl;
+            } else {
+                window.open(linkNormal, '_blank');
+            }
+        }
+
         function enviarBienvenidaWA() {
             const phone = telefonoOriginalEscaneado;
             if (!phone) return;
@@ -282,7 +298,7 @@
                 `🗝️ Acceso privado: ${WEBAPP_URL}\n` +
                 `Gracias por ser parte de nuestra comunidad. ❤️`;
 
-            window.open(`https://wa.me/${phoneWA}?text=${encodeURIComponent(texto)}`, '_blank');
+            abrirWhatsAppBusiness(phoneWA, texto);
 
             db.ref('lem_users/' + phone).update({ bienvenida_enviada: true });
             document.getElementById('welcomeBtn').style.display = 'none';
