@@ -3,315 +3,738 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>LEM Admin | Panel Elite</title>
-    
-    <link rel="manifest" href="manifest-admin.json?v=2">
-    <meta name="theme-color" content="#1a2e4a">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <meta name="apple-mobile-web-app-title" content="LEM Admin">
+    <title>LEM MODA | Elite</title>
 
-    <script src="https://unpkg.com/html5-qrcode"></script>
+    <meta name="description" content="Programa de Lealtad Elite de LEM MODA. Colecciona estampas y obtén beneficios exclusivos.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://lemmoda.vercel.app/">
+    <meta property="og:title" content="LEM MODA | Elite">
+    <meta property="og:description" content="Colecciona tus estampas y canjea premios exclusivos en LEM MODA.">
+    <meta property="og:image" content="https://lemmoda.vercel.app/og-preview.png">
+    <meta property="og:image:secure_url" content="https://lemmoda.vercel.app/og-preview.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:type" content="image/png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="LEM MODA | Elite">
+    <meta name="twitter:description" content="Colecciona tus estampas y canjea premios exclusivos en LEM MODA.">
+    <meta name="twitter:image" content="https://lemmoda.vercel.app/og-preview.png">
+
+    <link class="favicon" rel="icon" type="image/png" href="1.png.png">
+    <link rel="manifest" href="manifest.json?v=2">
+    <meta name="theme-color" content="#0a1628">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="LEM Cliente">
+
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-database-compat.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
     <style>
         :root { 
+            --lem-cafe: #784311; 
             --lem-gold: #c9a84c; 
-            --lem-verde: #38b000; 
-            --silver-admin: #7a9fc2;
-            --gold-admin: #c9a84c;
+            --lem-verde: #6DAE5A;
+            --silver-fine: #bdc3c7;
+            --gold-fine: #c9a84c;
             --vip-gold: #FFE082;
-            --navy: #1a2e4a;
+            --vip-gold-deep: #c9a84c;
+            --vip-gold-gradient: linear-gradient(135deg, #FFE082 0%, #c9a84c 50%, #8D6E63 100%);
+            --vip-bg-1: #0c0a06;
+            --vip-bg-2: #16120b;
         }
-        * { box-sizing: border-box; }
+
         body { 
-            background: radial-gradient(ellipse at top, #0e1f38 0%, #030a16 100%); 
-            color: #fff; font-family: 'Inter', sans-serif; margin: 0; padding: 20px; 
-            text-align: center; min-height: 100vh; overflow-x: hidden;
-            transition: background 1s ease;
+            background: radial-gradient(ellipse at top, #111111 0%, #000000 100%); 
+            color: #fff; 
+            font-family: 'Inter', sans-serif; 
+            margin: 0; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            min-height: 100vh; 
+            overflow-y: auto; 
+            transition: background 1.8s ease;
         }
-        body.admin-vip-mode {
-            background: radial-gradient(ellipse at top, #1c150b 0%, #050402 100%); 
-        }
-        body::-webkit-scrollbar { display: none; }
-        body { -ms-overflow-style: none; scrollbar-width: none; }
 
-        .page-wrap { position: relative; z-index: 10; }
+        body.vip-mode {
+            background: radial-gradient(ellipse at top, var(--vip-bg-2) 0%, var(--vip-bg-1) 100%) !important;
+        }
 
-        .header { margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid rgba(201, 168, 76, 0.25); transition: 0.5s; }
-        body.admin-vip-mode .header { border-bottom-color: rgba(255,224,130,0.3); }
-        
-        .admin-crest {
-            width: 56px; height: 56px; margin: 0 auto 12px; border-radius: 50%;
-            background: #fff; display: flex; align-items: center; justify-content: center;
-            border: 2px solid var(--lem-gold); box-shadow: 0 0 20px rgba(201, 168, 76, 0.25);
-            transition: 0.5s;
+        .container { 
+            width: 90%; 
+            max-width: 380px; 
+            text-align: center; 
+            position: relative; 
+            z-index: 10; 
+            padding: 40px 0;
         }
-        body.admin-vip-mode .admin-crest { border-color: var(--vip-gold); box-shadow: 0 0 30px rgba(255,224,130,0.4); }
-        .admin-crest img { width: 68%; height: auto; }
 
-        #reader-container { position: relative; }
-        #reader { 
-            width: 100%; max-width: 400px; margin: 0 auto; 
-            border: 1px solid rgba(201, 168, 76, 0.4); border-radius: 25px; overflow: hidden; 
-            box-shadow: 0 25px 60px rgba(0,0,0,0.85); 
+        .brand-circle {
+            width: 120px; height: 120px;
+            background: #fff; border-radius: 50%; 
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 30px; border: 2px solid var(--lem-gold); 
+            box-shadow: 0 0 0 4px rgba(0,0,0,0.4), 0 0 0 5px rgba(201,168,76,0.35), 0 0 25px rgba(212, 163, 115, 0.25); 
+            animation: crest-glow 4s ease-in-out infinite;
+            position: relative;
         }
-        
-        .admin-card { 
-            background: rgba(255,255,255,0.03); border: 1px solid rgba(201, 168, 76, 0.3); 
-            border-radius: 30px; padding: 28px; margin-top: 20px; display: none; 
-            backdrop-filter: blur(20px); box-shadow: 0 25px 60px rgba(0,0,0,0.9);
-            position: relative; overflow: hidden; transition: all 0.5s ease;
+        @keyframes crest-glow {
+            0%, 100% { box-shadow: 0 0 0 4px rgba(0,0,0,0.4), 0 0 0 5px rgba(201,168,76,0.35), 0 0 25px rgba(212, 163, 115, 0.25); }
+            50% { box-shadow: 0 0 0 4px rgba(0,0,0,0.4), 0 0 0 5px rgba(201,168,76,0.6), 0 0 38px rgba(212, 163, 115, 0.5); }
         }
-        .admin-card.is-vip {
-            border-color: var(--vip-gold);
-            background: rgba(255,224,130,0.05);
-            box-shadow: 0 25px 60px rgba(0,0,0,0.9), 0 0 30px rgba(255,224,130,0.15) inset;
+
+        .shimmer-text {
+            background: linear-gradient(90deg, var(--lem-gold) 0%, #f4e1a8 50%, var(--lem-gold) 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text; background-clip: text; color: transparent;
+            animation: shimmer-move 3.5s linear infinite;
         }
-        .admin-card::before {
-            content: ''; position: absolute; top: -60%; left: -60%; width: 220%; height: 220%;
+        @keyframes shimmer-move { to { background-position: -200% center; } }
+
+        .circle-logo { width: 70%; height: auto; }
+
+        .card { 
+            background: rgba(255, 255, 255, 0.03); 
+            border: 1px solid rgba(201, 168, 76, 0.25); 
+            border-radius: 35px; padding: 25px; 
+            backdrop-filter: blur(20px);
+            box-shadow: 0 25px 60px rgba(0,0,0,0.9); 
+            position: relative; overflow: hidden;
+        }
+        .card::before {
+            content: '';
+            position: absolute; top: -60%; left: -60%; width: 220%; height: 220%;
             background: conic-gradient(from 0deg, transparent 0%, rgba(201,168,76,0.08) 8%, transparent 16%, transparent 100%);
             animation: card-rotate 9s linear infinite; pointer-events: none;
         }
-        .admin-card.is-vip::before {
-            background: conic-gradient(from 0deg, transparent 0%, rgba(255,224,130,0.15) 8%, transparent 16%, transparent 100%);
-        }
         @keyframes card-rotate { to { transform: rotate(360deg); } }
-        .admin-card::after {
-            content: ''; position: absolute; inset: 9px; border-radius: 24px;
-            border: 1px solid rgba(201,168,76,0.12); pointer-events: none; transition: 0.5s;
-        }
-        .admin-card.is-vip::after { border-color: rgba(255,224,130,0.25); }
-        .admin-card > * { position: relative; z-index: 2; }
 
-        .admin-chip {
-            width: 32px; height: 22px; margin: 0 auto 14px; border-radius: 5px;
-            background: linear-gradient(135deg, #e8c87a 0%, #b08968 50%, #e8c87a 100%);
-            position: relative;
+        .card::after {
+            content: ''; position: absolute; inset: 10px; border-radius: 26px;
+            border: 1px solid rgba(201,168,76,0.12); pointer-events: none;
         }
-        .admin-chip::before {
+
+        .card-chip {
+            width: 34px; height: 24px; margin: 0 0 14px 4px; border-radius: 5px;
+            background: linear-gradient(135deg, #e8c87a 0%, #b08968 50%, #e8c87a 100%);
+            position: relative; z-index: 2;
+        }
+        .card-chip::before {
             content: ''; position: absolute; top: 4px; left: 4px; right: 4px; bottom: 4px;
             border: 1px solid rgba(0,0,0,0.25); border-radius: 3px;
         }
 
-        .vip-status-badge {
-            display: none; background: linear-gradient(135deg, #FFE082 0%, #c9a84c 100%);
-            color: #000; padding: 5px 15px; border-radius: 20px; font-weight: 800;
-            font-size: 0.75rem; letter-spacing: 2px; margin-bottom: 10px;
-            box-shadow: 0 0 15px rgba(255,224,130,0.5); font-family: 'Playfair Display', serif;
+        .member-header { margin-bottom: 16px; }
+        .member-greeting { font-size: 0.65rem; letter-spacing: 2px; color: #888; margin: 0 0 2px; text-transform: uppercase; }
+        #memberName { margin: 0 0 8px; font-weight: 700; letter-spacing: 0.5px; font-size: 1.3rem; }
+        .tier-badge {
+            display: inline-block; font-size: 0.62rem; letter-spacing: 1.5px; font-weight: 700;
+            padding: 5px 14px; border-radius: 20px; text-transform: uppercase;
+            background: rgba(201,168,76,0.12); border: 1px solid rgba(201,168,76,0.35); color: var(--lem-gold);
         }
 
-        .info-grid {
-            background: rgba(0,0,0,0.35);
-            border: 1px solid rgba(201,168,76,0.2);
-            border-radius: 16px;
-            padding: 14px 16px;
-            margin: 14px 0;
-            text-align: left;
+        .progress-track {
+            width: 100%; height: 4px; border-radius: 4px; background: rgba(255,255,255,0.08);
+            margin: 16px 0 8px; overflow: hidden; position: relative; z-index: 2;
         }
-        .admin-card.is-vip .info-grid {
-            border-color: rgba(255,224,130,0.25);
-            background: rgba(0,0,0,0.45);
-        }
-        .info-row {
-            display: flex;
-            justify-content: space-between;
-            gap: 10px;
-            padding: 7px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.06);
-            font-size: 0.78rem;
-        }
-        .info-row:last-child { border-bottom: none; }
-        .info-label { color: #888; letter-spacing: 0.5px; }
-        .info-value { color: #fff; font-weight: 600; text-align: right; word-break: break-word; }
-        .admin-card.is-vip .info-value.highlight { color: #FFE082; }
-
-        .bday-alert-banner {
-            display: none; background: rgba(255, 60, 100, 0.15); border: 2px solid #ff3c64;
-            border-radius: 15px; padding: 15px; margin-bottom: 20px;
-            box-shadow: 0 0 25px rgba(255, 60, 100, 0.4); animation: bday-pulse 1.5s infinite;
-        }
-        @keyframes bday-pulse {
-            0%, 100% { transform: scale(1); box-shadow: 0 0 20px rgba(255, 60, 100, 0.4); }
-            50% { transform: scale(1.02); box-shadow: 0 0 35px rgba(255, 60, 100, 0.7); }
-        }
-        .btn-bday-wa {
-            background: linear-gradient(135deg, #ff3c64 0%, #d41e45 100%); color: #fff;
-            border: none; padding: 12px; border-radius: 50px; font-weight: bold; width: 100%;
-            margin-top: 10px; cursor: pointer; text-transform: uppercase; font-size: 0.75rem;
-            letter-spacing: 1px; box-shadow: 0 5px 15px rgba(255, 60, 100, 0.4);
+        .progress-fill {
+            height: 100%; width: 0%; border-radius: 4px;
+            background: linear-gradient(90deg, #7a9fc2, var(--lem-gold));
+            transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .btn-action { 
+        .qr-wrap {
+            background: #fff; padding: 10px; border-radius: 14px; display: inline-block;
+            margin-top: 14px; position: relative; z-index: 2;
+            box-shadow: 0 0 0 1px rgba(201,168,76,0.4), 0 10px 25px rgba(0,0,0,0.4);
+        }
+        .card-footer-text {
+            font-size: 0.55rem; letter-spacing: 2px; color: #555; margin-top: 14px;
+            text-transform: uppercase; position: relative; z-index: 2;
+        }
+
+        .card-logo-box { 
+            background: #fff; border-radius: 12px; padding: 8px; display: inline-block; margin-bottom: 20px; 
+            box-shadow: 0 0 0 1px rgba(201,168,76,0.4), 0 0 20px rgba(212, 163, 115, 0.2);
+        }
+        .card-logo { width: 110px; }
+
+        .stamp-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 20px 0; position: relative; z-index: 2; }
+
+        .slot { 
+            aspect-ratio: 1; background: rgba(0,0,0,0.8); 
+            border-radius: 50%; display: flex; align-items: center; justify-content: center; 
+            border: 1px solid rgba(212, 163, 115, 0.1); position: relative;
+            flex-direction: column; text-align: center; overflow: hidden;
+        }
+
+        .slot.active { background: #fff; border: 2px solid var(--lem-verde); animation: stamp-pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) backwards; }
+        @keyframes stamp-pop { 0% { transform: scale(0.4); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+        .slot img { width: 60%; display: none; }
+        .slot.active img { display: block; filter: none; width: 65%; }
+
+        .slot::before { content: attr(data-index); color: #444; font-weight: bold; position: absolute; font-size: 0.7rem; }
+        .slot.active::before { display: none; }
+
+        .silver-frame { border: 1.5px solid var(--silver-fine) !important; }
+        .gold-frame { border: 1.5px solid var(--gold-fine) !important; }
+        .premio-text { font-size: 0.55rem; line-height: 1.1; font-weight: bold; padding: 2px; text-transform: uppercase; }
+        .premio-text.silver { color: #bdc3c7; }
+        .premio-text.gold { color: #d4af37; }
+
+        .login-card {
+            background: rgba(20, 18, 15, 0.35);
+            border: 1px solid rgba(201, 168, 76, 0.18);
+            border-radius: 28px;
+            padding: 42px 32px 34px;
+            backdrop-filter: blur(22px);
+            -webkit-backdrop-filter: blur(22px);
+            box-shadow: 0 25px 60px rgba(0,0,0,0.55);
+        }
+
+        .field-group { text-align: left; margin-bottom: 26px; }
+        .field-label {
+            display: block; font-size: 0.78rem; color: #b9b9b9;
+            letter-spacing: 1px; margin-bottom: 8px; font-weight: 400;
+        }
+        .field-input-wrap {
+            display: flex; align-items: center; justify-content: space-between;
+            border-bottom: 1px solid rgba(255,255,255,0.22);
+            padding-bottom: 9px; transition: border-color 0.25s;
+        }
+        .field-input-wrap:focus-within { border-color: var(--lem-gold); }
+        .field-input {
+            background: transparent; border: none; outline: none; color: #fff;
+            font-size: 1rem; width: 100%; font-family: 'Inter', sans-serif;
+            text-align: left; padding: 0;
+        }
+        .field-input::placeholder { color: rgba(255,255,255,0.28); }
+        .field-icon { color: var(--lem-gold); opacity: 0.85; font-size: 0.95rem; margin-left: 10px; }
+
+        select.field-input { appearance: none; -webkit-appearance: none; cursor: pointer; }
+        select.field-input option { background: #111; color: #fff; }
+
+        .btn-pill {
+            background: linear-gradient(135deg, #d4a373 0%, #b08968 100%);
+            color: #000; border: none; padding: 16px; border-radius: 50px;
+            width: 100%; font-weight: 600; font-size: 1rem; letter-spacing: 0.5px;
+            cursor: pointer; margin-top: 8px; transition: transform 0.15s ease, box-shadow 0.25s ease;
+            box-shadow: 0 10px 25px rgba(212, 163, 115, 0.25);
+        }
+        .btn-pill:active { transform: scale(0.98); }
+        .btn-pill:hover { box-shadow: 0 12px 30px rgba(212, 163, 115, 0.4); }
+
+        .btn-main { 
             background: linear-gradient(135deg, #d4a373 0%, #b08968 100%); 
-            color: #000; border: none; padding: 18px 25px; border-radius: 50px; 
-            font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin: 8px; width: 45%; 
-            cursor: pointer; transition: transform 0.15s ease, box-shadow 0.15s ease;
-            box-shadow: 0 10px 25px rgba(212, 163, 115, 0.2);
-        }
-        .admin-card.is-vip .btn-action {
-            background: linear-gradient(135deg, #FFE082 0%, #c9a84c 100%);
-            box-shadow: 0 10px 25px rgba(255, 224, 130, 0.25);
-        }
-        .btn-action:active { transform: scale(0.97); }
-        .btn-action-minus { 
-            background: rgba(255,255,255,0.06) !important; 
-            border: 1px solid rgba(201, 168, 76, 0.3) !important; 
-            color: #fff !important; box-shadow: none !important;
+            color: #000; border: none; padding: 16px; border-radius: 15px; 
+            width: 100%; font-weight: 700; text-transform: uppercase; letter-spacing: 2px;
+            cursor: pointer;
         }
 
-        .btn-scan-again { 
-            background: transparent; color: var(--lem-gold); border: 1px solid rgba(201, 168, 76, 0.5); 
-            margin-top: 20px; width: 100%; padding: 15px; border-radius: 50px; 
-            font-weight: bold; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; 
-            transition: 0.25s;
+        .btn-beneficios {
+            background: rgba(201, 168, 76, 0.05); color: var(--lem-gold); border: 1px solid rgba(201, 168, 76, 0.4);
+            padding: 10px 22px; border-radius: 50px; margin-bottom: 15px;
+            cursor: pointer; font-size: 0.7rem; letter-spacing: 1px; text-transform: uppercase;
+            backdrop-filter: blur(10px); transition: 0.3s;
         }
-        .admin-card.is-vip .btn-scan-again { color: var(--vip-gold); border-color: var(--vip-gold); }
+        .btn-beneficios:hover { background: rgba(201, 168, 76, 0.15); }
 
-        .status-msg { color: var(--lem-verde); font-weight: bold; margin-top: 15px; letter-spacing: 0.5px; }
-        #currentPoints { text-shadow: 0 0 25px rgba(255,255,255,0.15); }
-        .admin-card.is-vip #currentPoints { text-shadow: 0 0 30px rgba(255,224,130,0.5); color: #FFE082; }
+        .social-row { display: flex; justify-content: center; gap: 16px; margin-top: 26px; }
+        .social-btn {
+            width: 44px; height: 44px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            background: rgba(255,255,255,0.03); border: 1px solid rgba(201, 168, 76, 0.3);
+            backdrop-filter: blur(10px); color: var(--lem-gold); font-size: 1.1rem;
+            text-decoration: none; transition: 0.3s;
+        }
+        .social-btn:hover {
+            background: rgba(201, 168, 76, 0.12); border-color: var(--lem-gold);
+            box-shadow: 0 0 18px rgba(201, 168, 76, 0.35); transform: translateY(-2px);
+        }
+        .btn-pill-outline {
+            background: rgba(255,255,255,0.02); color: var(--lem-gold); 
+            border: 1px solid rgba(201, 168, 76, 0.3); border-radius: 50px;
+            padding: 14px; width: 100%; font-weight: 600; font-size: 0.85rem;
+            letter-spacing: 0.5px; cursor: pointer; transition: 0.3s;
+        }
+        .btn-pill-outline:hover { background: rgba(201, 168, 76, 0.08); border-color: var(--lem-gold); }
 
-        .reward-alert { 
-            padding: 16px; border-radius: 15px; margin: 15px 0; display: none;
-            border-width: 1.5px; border-style: solid; letter-spacing: 0.5px;
-            animation: pulse-soft 2s infinite; backdrop-filter: blur(10px);
+        .btn-web-store {
+            background: rgba(212, 163, 115, 0.05); border: 1px solid rgba(212, 163, 115, 0.3);
+            color: var(--lem-gold); display: flex; align-items: center; justify-content: center; gap: 12px;
+            margin-top: 20px; text-decoration: none; padding: 15px; border-radius: 50px;
+            font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase;
+            font-weight: 700; backdrop-filter: blur(10px); transition: 0.3s;
         }
-        .alert-silver { 
-            background: rgba(189, 195, 199, 0.08); border-color: var(--silver-admin); color: var(--silver-admin);
-            box-shadow: 0 0 25px rgba(122, 159, 194, 0.15);
-        }
-        .alert-gold { 
-            background: rgba(212, 175, 55, 0.08); border-color: var(--gold-admin); color: var(--gold-admin);
-            box-shadow: 0 0 25px rgba(201, 168, 76, 0.2);
-        }
-        .alert-vip-reward {
-            background: rgba(255, 224, 130, 0.1); border-color: var(--vip-gold); color: var(--vip-gold);
-            box-shadow: 0 0 35px rgba(255, 224, 130, 0.3);
-        }
-        @keyframes pulse-soft {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.02); opacity: 0.85; }
-            100% { transform: scale(1); }
-        }
+        .btn-web-store:hover { background: rgba(212, 163, 115, 0.15); border-color: var(--lem-gold); }
 
-        .btn-reset { 
-            background: rgba(102, 0, 0, 0.5); border: 1px solid rgba(255,80,80,0.35); color: #fff; 
-            padding: 10px; border-radius: 10px; font-size: 0.7rem; letter-spacing: 0.5px;
-            margin-top: 10px; width: 100%; cursor: pointer; transition: 0.25s;
-        }
-        .btn-reset:hover { background: rgba(102, 0, 0, 0.75); }
-
-        .btn-welcome-wa {
-            background: rgba(37, 211, 102, 0.12); border: 1px solid rgba(37, 211, 102, 0.5);
-            color: #25d366; padding: 13px; border-radius: 50px; width: 100%;
-            font-weight: 700; font-size: 0.78rem; letter-spacing: 0.5px; text-transform: uppercase;
-            cursor: pointer; margin: 14px 0 4px; transition: 0.25s;
-            animation: welcome-glow 2s ease-in-out infinite;
-        }
-        .btn-welcome-wa:hover { background: rgba(37, 211, 102, 0.22); }
-        @keyframes welcome-glow {
-            0%, 100% { box-shadow: 0 0 0 rgba(37, 211, 102, 0); }
-            50% { box-shadow: 0 0 18px rgba(37, 211, 102, 0.35); }
+        .modal, .overlay-fullscreen {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); z-index: 1000; align-items: center; justify-content: center;
         }
 
-        .field-hint {
-            font-size: 0.65rem;
-            letter-spacing: 1px;
-            color: #666;
-            margin-top: 4px;
-            text-transform: uppercase;
+        .modal-content {
+            background: rgba(20, 18, 15, 0.55); border: 1px solid rgba(201, 168, 76, 0.25); padding: 32px;
+            border-radius: 28px; width: 88%; max-width: 380px; text-align: center;
+            backdrop-filter: blur(22px); -webkit-backdrop-filter: blur(22px);
+            box-shadow: 0 25px 60px rgba(0,0,0,0.6);
         }
-        .admin-card.is-vip .field-hint { color: rgba(255,224,130,0.55); }
+
+        .benefit-tier {
+            border-radius: 20px; padding: 18px 20px; margin-bottom: 14px; text-align: left;
+            position: relative; overflow: hidden; background: rgba(255,255,255,0.02);
+        }
+        .benefit-tier-silver { border: 1px solid rgba(122,159,194,0.35); box-shadow: 0 0 20px rgba(122,159,194,0.08); }
+        .benefit-tier-gold { border: 1px solid rgba(201,168,76,0.4); box-shadow: 0 0 25px rgba(201,168,76,0.15); }
+        .benefit-tier-gold::before {
+            content: ''; position: absolute; top: 0; left: -100%; width: 55%; height: 100%;
+            background: linear-gradient(120deg, transparent, rgba(255,255,255,0.14), transparent);
+            animation: shine-sweep 3.5s ease-in-out infinite;
+        }
+        @keyframes shine-sweep { 0% { left: -100%; } 55% { left: 130%; } 100% { left: 130%; } }
+
+        .benefit-tier-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+        .benefit-icon { font-size: 1.25rem; }
+        .benefit-tier-silver .benefit-icon { color: #9fb8d4; }
+        .benefit-tier-gold .benefit-icon { color: var(--lem-gold); }
+        .benefit-badge {
+            font-size: 0.6rem; letter-spacing: 1px; padding: 4px 11px; border-radius: 20px;
+            background: rgba(122,159,194,0.15); color: #9fb8d4; font-weight: 700;
+        }
+        .benefit-badge-gold { background: rgba(201,168,76,0.18); color: var(--lem-gold); }
+        .benefit-tier-title { margin: 0 0 4px; font-size: 1rem; color: #fff; letter-spacing: 0.5px; font-weight: 600; }
+        .benefit-tier-desc { margin: 0; font-size: 0.8rem; color: #bbb; line-height: 1.45; position: relative; z-index: 2; }
+
+        .premio-box {
+            background: rgba(56, 176, 0, 0.1); border: 1px dashed var(--lem-verde);
+            border-radius: 15px; padding: 15px; margin-top: 15px; display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .success-card { 
+            background: rgba(20, 18, 15, 0.65); border: 1px solid rgba(201, 168, 76, 0.25); 
+            border-radius: 28px; padding: 38px 28px 30px; width: 85%; max-width: 350px; text-align: center; 
+            backdrop-filter: blur(22px); -webkit-backdrop-filter: blur(22px);
+            box-shadow: 0 25px 60px rgba(0,0,0,0.8);
+            position: relative; overflow: hidden;
+            animation: overlay-pop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        @keyframes overlay-pop { from { transform: scale(0.85); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+        .success-card::before {
+            content: ''; position: absolute; top: -60%; left: -60%; width: 220%; height: 220%;
+            background: conic-gradient(from 0deg, transparent 0%, rgba(201,168,76,0.10) 8%, transparent 16%, transparent 100%);
+            animation: card-rotate 9s linear infinite; pointer-events: none;
+        }
+
+        .success-icon-badge {
+            width: 74px; height: 74px; border-radius: 50%; margin: 0 auto 16px;
+            display: flex; align-items: center; justify-content: center; font-size: 1.9rem;
+            position: relative; z-index: 2;
+        }
+        .success-icon-badge.tier-silver {
+            background: rgba(122,159,194,0.12); border: 1px solid rgba(122,159,194,0.4); color: #9fb8d4;
+            box-shadow: 0 0 28px rgba(122,159,194,0.3);
+        }
+        .success-icon-badge.tier-gold {
+            background: rgba(201,168,76,0.12); border: 1px solid rgba(201,168,76,0.45); color: var(--lem-gold);
+            box-shadow: 0 0 32px rgba(201,168,76,0.4);
+        }
+
+        .success-card h2, .success-card p, .success-card #waAction, .success-card button, .success-card div {
+            position: relative; z-index: 2;
+        }
+
+        body::-webkit-scrollbar { display: none; }
+        body { -ms-overflow-style: none; scrollbar-width: none; }
+
+
+        /* ════════════════════════════════════════════════════════════
+           👑 ZONA ORO VIP — DISEÑO ULTRA PREMIUM EXCLUSIVO
+           ════════════════════════════════════════════════════════════ */
+
+        .vip-header-crown {
+            font-size: 2.2rem;
+            margin-bottom: 5px;
+            animation: vip-crown-float 3s ease-in-out infinite;
+            display: inline-block;
+        }
+        @keyframes vip-crown-float {
+            0%, 100% { transform: translateY(0) scale(1); filter: drop-shadow(0 0 8px rgba(255,224,130,0.4)); }
+            50% { transform: translateY(-6px) scale(1.05); filter: drop-shadow(0 0 18px rgba(255,224,130,0.8)); }
+        }
+
+        .vip-title-main {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem; font-weight: 800; letter-spacing: 2px;
+            background: linear-gradient(135deg, #FFE082, #ffffff, #FFE082);
+            background-size: 300% auto;
+            -webkit-background-clip: text; background-clip: text; color: transparent;
+            animation: vip-title-shimmer 4s linear infinite; margin: 0;
+        }
+        @keyframes vip-title-shimmer { to { background-position: -300% center; } }
+
+        .vip-subtitle { font-size: 0.6rem; letter-spacing: 4px; color: #888; text-transform: uppercase; margin-top: 4px; }
+        .vip-divider { width: 60px; height: 1px; margin: 18px auto; background: linear-gradient(90deg, transparent, #FFE082, transparent); }
+
+        .vip-pass-container { perspective: 900px; margin: 25px 0; }
+        .vip-pass {
+            width: 100%; box-sizing: border-box;
+            background: linear-gradient(145deg, #141210 0%, #1c1914 40%, #0f0d0a 100%);
+            border: 1.5px solid rgba(255,224,130,0.35); border-radius: 22px; padding: 28px 22px;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.7), 0 0 40px rgba(255,224,130,0.08), inset 0 1px 0 rgba(255,255,255,0.05);
+            position: relative; transform-style: preserve-3d; transition: transform 0.15s ease; overflow: hidden;
+        }
+        .vip-pass::before {
+            content: ''; position: absolute; top: 0; left: -200%; width: 80%; height: 100%;
+            background: linear-gradient(105deg, transparent 40%, rgba(255,224,130,0.12) 50%, transparent 60%);
+            transform: skewX(-20deg); animation: vip-pass-shine 6s ease-in-out infinite; pointer-events: none;
+        }
+        @keyframes vip-pass-shine { 0% { left: -200%; } 40%, 100% { left: 200%; } }
+        .vip-pass::after {
+            content: ''; position: absolute; inset: 8px; border-radius: 15px;
+            border: 1px solid rgba(255,224,130,0.06); pointer-events: none;
+        }
+        .vip-pass-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; position: relative; z-index: 2; }
+        .vip-pass-label { font-size: 0.5rem; letter-spacing: 3px; color: #FFE082; text-transform: uppercase; opacity: 0.8; }
+        .vip-pass-type { font-family: 'Playfair Display', serif; font-size: 1.15rem; color: #fff; margin: 2px 0 0; font-weight: 700; letter-spacing: 1px; }
+        .vip-pass-logo { width: 42px; height: 42px; border-radius: 50%; border: 1.5px solid #FFE082; background: #fff; padding: 3px; }
+
+        .vip-code-display { text-align: center; margin: 22px 0; position: relative; z-index: 2; }
+        .vip-code-label { font-size: 0.55rem; letter-spacing: 2px; color: #777; text-transform: uppercase; }
+        .vip-code-value {
+            font-family: 'Playfair Display', monospace; font-size: 1.6rem; font-weight: 900; color: #FFE082;
+            letter-spacing: 5px; margin-top: 5px; text-shadow: 0 0 20px rgba(255,224,130,0.4);
+        }
+
+        .vip-pass-footer { display: flex; justify-content: space-between; align-items: flex-end; position: relative; z-index: 2; }
+        .vip-pass-holder-label { font-size: 0.45rem; letter-spacing: 1.5px; color: #666; text-transform: uppercase; }
+        .vip-pass-holder-name { font-size: 0.8rem; font-weight: 700; color: #fff; letter-spacing: 1px; margin-top: 2px; }
+        .vip-qr-box { background: #fff; padding: 5px; border-radius: 8px; box-shadow: 0 0 15px rgba(255,224,130,0.15); }
+
+        .vip-stamp-card {
+            background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255,224,130,0.18);
+            border-radius: 28px; padding: 25px; backdrop-filter: blur(20px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.6); position: relative; overflow: hidden; margin-top: 25px;
+        }
+        .vip-stamp-card::before {
+            content: ''; position: absolute; top: -60%; left: -60%; width: 220%; height: 220%;
+            background: conic-gradient(from 0deg, transparent 0%, rgba(255,224,130,0.06) 6%, transparent 12%, transparent 100%);
+            animation: card-rotate 12s linear infinite; pointer-events: none;
+        }
+
+        .vip-stamp-title {
+            font-family: 'Playfair Display', serif; font-size: 0.85rem; letter-spacing: 3px; color: #FFE082;
+            text-transform: uppercase; margin: 0 0 5px; position: relative; z-index: 2;
+        }
+        .vip-stamp-subtitle { font-size: 0.6rem; color: #777; letter-spacing: 1px; margin: 0 0 18px; position: relative; z-index: 2; }
+
+        .vip-stamp-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 15px 0; position: relative; z-index: 2; }
+
+        .vip-slot {
+            aspect-ratio: 1; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            position: relative; overflow: hidden; background: rgba(0,0,0,0.6);
+            border: 1.5px solid rgba(255,224,130,0.12); transition: all 0.4s ease;
+        }
+        .vip-slot::before {
+            content: attr(data-index); color: rgba(255,224,130,0.25);
+            font-weight: 700; position: absolute; font-size: 0.75rem; font-family: 'Playfair Display', serif;
+        }
+        .vip-slot.active {
+            background: linear-gradient(135deg, #FFE082, #c9a84c); border: 2px solid #FFE082;
+            box-shadow: 0 0 15px rgba(255,224,130,0.4); animation: vip-stamp-pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
+        }
+        .vip-slot.active::before { display: none; }
+        .vip-slot.active img { display: block; width: 60%; filter: brightness(0) saturate(0); }
+        .vip-slot img { display: none; }
+        @keyframes vip-stamp-pop { 0% { transform: scale(0.3) rotate(-15deg); opacity: 0; } 100% { transform: scale(1) rotate(0deg); opacity: 1; } }
+
+        .vip-slot.milestone { border-color: rgba(255,224,130,0.35) !important; }
+        .vip-slot.milestone .premio-text {
+            font-size: 0.5rem; line-height: 1.1; font-weight: 800; color: #FFE082; text-transform: uppercase; padding: 2px;
+        }
+
+        .vip-progress-track {
+            width: 100%; height: 5px; border-radius: 5px; background: rgba(255,224,130,0.08);
+            margin: 18px 0 10px; overflow: hidden; position: relative; z-index: 2;
+        }
+        .vip-progress-fill {
+            height: 100%; width: 0%; border-radius: 5px; background: linear-gradient(90deg, #8D6E63, #FFE082, #fff);
+            transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 0 8px rgba(255,224,130,0.5);
+        }
+        .vip-counter-label {
+            color: #FFE082; font-size: 0.7rem; letter-spacing: 2px; position: relative; z-index: 2; font-family: 'Playfair Display', serif;
+        }
+
+        .vip-benefits-title {
+            font-family: 'Playfair Display', serif; font-size: 0.9rem; letter-spacing: 3px; color: #FFE082;
+            text-transform: uppercase; margin: 30px 0 15px; font-weight: 400;
+        }
+        .vip-benefit-card {
+            background: rgba(255,224,130,0.03); border: 1px solid rgba(255,224,130,0.12);
+            border-radius: 18px; padding: 18px; margin-bottom: 12px; display: flex; align-items: center; gap: 15px; text-align: left;
+            position: relative; overflow: hidden; transition: 0.3s;
+        }
+        .vip-benefit-card:hover { border-color: rgba(255,224,130,0.3); background: rgba(255,224,130,0.06); }
+        .vip-benefit-card::before {
+            content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,224,130,0.06), transparent);
+            animation: shine-sweep 4s ease-in-out infinite; pointer-events: none;
+        }
+        .vip-benefit-icon {
+            width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            background: rgba(255,224,130,0.08); border: 1px solid rgba(255,224,130,0.2); font-size: 1.1rem; flex-shrink: 0;
+        }
+        .vip-benefit-icon i { background: var(--vip-gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .vip-benefit-info { flex: 1; }
+        .vip-benefit-info h4 { margin: 0; font-size: 0.85rem; color: #fff; font-weight: 600; letter-spacing: 0.5px; }
+        .vip-benefit-info p { margin: 3px 0 0; font-size: 0.7rem; color: #999; line-height: 1.4; }
+
+        .vip-btn-gold {
+            background: var(--vip-gold-gradient); color: #000 !important; font-weight: 800; border: none;
+            box-shadow: 0 0 18px rgba(201,168,76,0.4); letter-spacing: 1.5px; text-transform: uppercase;
+            cursor: pointer; transition: 0.3s;
+        }
+        .vip-btn-gold:hover { box-shadow: 0 0 28px rgba(201,168,76,0.7); transform: scale(1.02); }
+        .vip-btn-elegant {
+            background: rgba(255,224,130,0.04); border: 1px solid rgba(255,224,130,0.25);
+            color: #FFE082; border-radius: 50px; padding: 12px 20px; font-size: 0.75rem; font-weight: 600; letter-spacing: 1px;
+            cursor: pointer; transition: 0.3s; width: 100%;
+        }
+        .vip-btn-elegant:hover { background: rgba(255,224,130,0.1); border-color: #FFE082; }
+        .vip-footer-text { font-family: 'Playfair Display', serif; font-size: 0.5rem; letter-spacing: 3px; color: #555; text-transform: uppercase; margin-top: 16px; position: relative; z-index: 2; }
+        .vip-qr-section { margin-top: 18px; position: relative; z-index: 2; }
     </style>
 </head>
 <body>
     <canvas id="lemCanvas" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1;opacity:0.6;"></canvas>
 
-    <div class="page-wrap">
-    <div class="header">
-        <div class="admin-crest"><img src="1.png.png" alt="LEM"></div>
-        <h2 id="adminHeaderTitle" style="color: var(--lem-gold); letter-spacing: 3px; margin: 0; transition: 0.5s;">LEM MODA</h2>
-        <p style="font-size: 0.6rem; color: #3a5a8a; margin: 6px 0 2px; letter-spacing: 2px;">PANEL DE CONTROL · ACCESO ELITE</p>
+    <div id="modalBeneficios" class="modal">
+        <div class="modal-content">
+            <i class="fa-solid fa-crown" style="color: var(--lem-gold); font-size: 1.7rem; display: block; margin-bottom: 10px;"></i>
+            <h3 style="color: #fff; letter-spacing: 2px; font-weight: 300; margin: 0 0 2px;">BENEFICIOS <span class="shimmer-text" style="font-weight: 700;">EXCLUSIVOS</span></h3>
+            <p style="font-size: 0.65rem; color: #888; letter-spacing: 2px; margin-bottom: 24px;">TU LEALTAD, NUESTRA RECOMPENSA</p>
+            <div class="benefit-tier benefit-tier-silver">
+                <div class="benefit-tier-top"><i class="fa-solid fa-gem benefit-icon"></i><span class="benefit-badge">4 SELLOS</span></div>
+                <h4 class="benefit-tier-title">Socio Plata</h4>
+                <p class="benefit-tier-desc">50% de descuento en una prenda de tu próxima compra.</p>
+            </div>
+            <div class="benefit-tier benefit-tier-gold">
+                <div class="benefit-tier-top"><i class="fa-solid fa-crown benefit-icon"></i><span class="benefit-badge benefit-badge-gold">8 SELLOS</span></div>
+                <h4 class="benefit-tier-title">Socio Oro VIP</h4>
+                <p class="benefit-tier-desc">Prenda de regalo + Acceso permanente a la Zona Oro VIP con nuevo ciclo de recompensas.</p>
+            </div>
+            <p style="font-size: 0.7rem; color: #777; margin-top: 6px; font-style: italic;">Cada sello te acerca un paso más a tu próxima recompensa ✨</p>
+            <button class="btn-pill-outline" style="margin-top: 20px;" onclick="toggleModal(false)">Cerrar</button>
+        </div>
     </div>
 
-    <div id="reader-container">
-        <div id="reader"></div>
+    <div id="success-overlay" class="overlay-fullscreen">
+        <div class="success-card">
+            <div id="successIconBadge" class="success-icon-badge tier-gold"><i class="fa-solid fa-gem"></i></div>
+            <h2 id="successTitle" style="color: var(--lem-gold); font-weight: 300; letter-spacing: 2px;">¡Felicidades!</h2>
+            <p id="successMsg" style="font-size: 0.85rem; color: #aaa; line-height: 1.5;"></p>
+            <div id="waAction"></div>
+            <button class="btn-pill-outline" style="margin-top: 15px;" onclick="document.getElementById('success-overlay').style.display='none'">Volver</button>
+        </div>
     </div>
 
-    <div id="adminPanel" class="admin-card">
-        <!-- Banner Cumpleaños -->
-        <div id="bdayAlertBanner" class="bday-alert-banner">
-            <h3 style="margin:0 0 5px; color:#fff; font-size:1.1rem;">🎉 ¡HOY ES SU CUMPLEAÑOS! 🎉</h3>
-            <p style="margin:0 0 10px; font-size:0.75rem; color:#ffd0d8;">No olvides desearle lo mejor a nuestro cliente.</p>
-            <button class="btn-bday-wa" onclick="enviarFelicitacionWA()"><i class="fa-brands fa-whatsapp"></i> Enviar Felicitación</button>
+    <!-- 🎁 MODAL: ACTIVACIÓN VIP Y CUMPLEAÑOS -->
+    <div id="vip-upgrade-overlay" class="overlay-fullscreen">
+        <div class="success-card" style="border: 1px solid rgba(255,224,130,0.4); background: rgba(16, 14, 11, 0.85);">
+            <div class="vip-header-crown"><i class="fa-solid fa-crown" style="color: #FFE082;"></i></div>
+            <h2 style="color: #FFE082; font-family: 'Playfair Display', serif; font-weight: 800; font-size: 1.5rem; letter-spacing: 2px; margin: 10px 0;">¡BIENVENIDO A ORO VIP!</h2>
+            <p style="font-size: 0.8rem; color: #bbb; line-height: 1.4; margin-bottom: 20px;">Has completado tus 8 estampas. Para activar tu nuevo panel VIP y poder reclamar tu premio, por favor ingresa tu fecha de nacimiento.</p>
+            
+            <div style="display: flex; gap: 10px; margin-bottom: 25px; justify-content: center;">
+                <select id="bday-dia" class="field-input" style="border-bottom: 1px solid #FFE082; padding: 8px 5px; color: #fff; width: auto; font-size: 0.9rem;">
+                    <option value="" disabled selected>Día</option>
+                </select>
+                <select id="bday-mes" class="field-input" style="border-bottom: 1px solid #FFE082; padding: 8px 5px; color: #fff; width: auto; font-size: 0.9rem;">
+                    <option value="" disabled selected>Mes</option>
+                </select>
+                <select id="bday-anio" class="field-input" style="border-bottom: 1px solid #FFE082; padding: 8px 5px; color: #fff; width: auto; font-size: 0.9rem;">
+                    <option value="" disabled selected>Año</option>
+                </select>
+            </div>
+            <button id="btnActivarVip" class="btn-pill vip-btn-gold" style="border-radius: 50px;" onclick="guardarCumpleañosYEntrar()">Activar Mi Cuenta VIP</button>
         </div>
-
-        <div class="admin-chip"></div>
-        
-        <span id="vipStatusBadge" class="vip-status-badge"><i class="fa-solid fa-crown"></i> CLIENTE ORO VIP</span>
-
-        <h2 id="clientName" style="color: #fff; margin: 0 0 5px 0; font-weight: 700; font-size: 1.4rem;">Cargando...</h2>
-        <h3 id="clientPhone" style="color: var(--lem-gold); font-weight: 300; margin-top: 0;">WhatsApp: ---</h3>
-
-        <!-- Ficha completa del cliente -->
-        <div class="info-grid" id="clientInfoGrid">
-            <div class="info-row">
-                <span class="info-label">Tipo</span>
-                <span class="info-value" id="infoTipo">—</span>
-            </div>
-            <div class="info-row">
-                <span class="info-label">Código VIP</span>
-                <span class="info-value highlight" id="infoCodigoVip">—</span>
-            </div>
-            <div class="info-row">
-                <span class="info-label">Cumpleaños</span>
-                <span class="info-value" id="infoCumple">—</span>
-            </div>
-            <div class="info-row">
-                <span class="info-label">WhatsApp</span>
-                <span class="info-value" id="infoWhatsapp">—</span>
-            </div>
-            <div class="info-row">
-                <span class="info-label">Estampas normales</span>
-                <span class="info-value" id="infoPuntosNorm">—</span>
-            </div>
-            <div class="info-row">
-                <span class="info-label">Estampas Oro VIP</span>
-                <span class="info-value highlight" id="infoPuntosVip">—</span>
-            </div>
-            <div class="info-row">
-                <span class="info-label">Campo que se edita</span>
-                <span class="info-value highlight" id="infoCampoActivo">—</span>
-            </div>
-        </div>
-
-        <p id="pointsTitle" style="margin: 12px 0 0; font-size: 0.8rem; color: #666;">Puntos Actuales:</p>
-        <span id="currentPoints" style="font-size: 3rem; font-weight: bold;">0</span>
-        <p class="field-hint" id="pointsHint">Ciclo normal · campo "puntos"</p>
-
-        <button id="welcomeBtn" class="btn-welcome-wa" style="display:none;" onclick="enviarBienvenidaWA()">
-            📲 Enviar Bienvenida por WhatsApp
-        </button>
-
-        <div id="adminRewardAlert" class="reward-alert">
-            <span id="rewardText" style="font-size: 1rem; font-weight: bold; letter-spacing: 1px;"></span>
-        </div>
-
-        <div style="display: flex; justify-content: center; margin-top: 20px;">
-            <button class="btn-action" onclick="adjustPoints(1)">+ SELLO</button>
-            <button class="btn-action btn-action-minus" onclick="adjustPoints(-1)">- QUITAR</button>
-        </div>
-
-        <button id="resetBtn" class="btn-reset" style="display:none;" onclick="resetCard()">REINICIAR TARJETA (PREMIO ENTREGADO)</button>
-
-        <p id="logMsg" class="status-msg"></p>
-        <button class="btn-scan-again" onclick="restartScanner()">VOLVER A ESCANEAR</button>
     </div>
-    <p style="font-size: 10px; color: #444; margin-top: 20px;">ORCA Studios &copy; 2026</p>
+
+    <div class="container">
+        <!-- ═══ PORTAL DE ACCESO ═══ -->
+        <div id="authPanel">
+            <div class="brand-circle"><img src="1.png.png" class="circle-logo"></div>
+            <p style="font-size: 0.6rem; letter-spacing: 4px; color: var(--lem-gold); margin: -20px 0 8px; text-transform: uppercase; opacity: 0.7;">TARJETA DE FIDELIDAD ELITE · QUITO</p>
+            <h3 class="shimmer-text" style="letter-spacing: 5px; font-weight: 300; margin-bottom: 30px;">BIENVENIDO</h3>
+
+            <div class="login-card" id="standardLoginForm">
+                <div class="field-group">
+                    <label class="field-label">Nombre y Apellido</label>
+                    <div class="field-input-wrap">
+                        <input type="text" id="userName" class="field-input" placeholder="Tu nombre completo">
+                        <i class="fa-solid fa-user field-icon"></i>
+                    </div>
+                </div>
+                <div class="field-group">
+                    <label class="field-label">Número de WhatsApp</label>
+                    <div class="field-input-wrap">
+                        <input type="tel" id="userPhone" class="field-input" placeholder="09XXXXXXXX">
+                        <i class="fa-brands fa-whatsapp field-icon"></i>
+                    </div>
+                </div>
+                <div class="field-group" style="margin-bottom: 10px;">
+                    <label class="field-label">PIN de 4 dígitos</label>
+                    <div class="field-input-wrap">
+                        <input type="password" id="userPin" class="field-input" placeholder="••••" maxlength="4">
+                        <i class="fa-solid fa-lock field-icon"></i>
+                    </div>
+                </div>
+                <button class="btn-pill" onclick="accessSystem()">Ingresar</button>
+                <p onclick="toggleVipLogin(true)" style="font-size: 0.68rem; color: #666; cursor: pointer; margin: 22px 0 -5px; letter-spacing: 1.5px; text-transform: uppercase;">✨ Acceso Clientes Oro VIP ✨</p>
+            </div>
+
+            <!-- Login exclusivo VIP -->
+            <div class="login-card" id="vipLoginForm" style="display: none; border-color: rgba(255,224,130,0.3);">
+                <div style="margin-bottom: 22px;">
+                    <i class="fa-solid fa-crown" style="font-size: 1.8rem; color: #FFE082;"></i>
+                    <h4 style="margin: 5px 0 0; letter-spacing: 3px; color: #FFE082; font-family: 'Playfair Display', serif;">ZONA ORO VIP</h4>
+                    <p style="font-size: 0.65rem; color: #888; margin: 4px 0 0;">Ingresa tu código único emitido por la app</p>
+                </div>
+                <div class="field-group" style="margin-bottom: 25px;">
+                    <label class="field-label" style="color: #FFE082;">Código de Acceso VIP</label>
+                    <div class="field-input-wrap" style="border-color: rgba(255,224,130,0.4);">
+                        <input type="text" id="vipCodeField" class="field-input" placeholder="VIP-XXXX" style="letter-spacing: 4px; text-transform: uppercase; font-weight: bold; color: #FFE082;">
+                        <i class="fa-solid fa-key field-icon" style="color: #FFE082;"></i>
+                    </div>
+                </div>
+                <button class="btn-pill vip-btn-gold" id="btnIngresarVIP" onclick="accessSystemVIP()">Validar Acceso VIP</button>
+                <button class="btn-pill-outline" style="margin-top: 15px;" onclick="toggleVipLogin(false)">Volver al inicio</button>
+            </div>
+        </div>
+
+        <!-- ═══ TARJETA ESTÁNDAR ═══ -->
+        <div id="cardPanel" style="display:none">
+            <div class="member-header">
+                <p class="member-greeting" id="memberGreeting">Bienvenida</p>
+                <h3 id="memberName" class="shimmer-text">Cliente VIP</h3>
+                <span id="memberTier" class="tier-badge">MIEMBRO ELITE</span>
+            </div>
+            <button class="btn-beneficios" onclick="toggleModal(true)">Ver Beneficios</button>
+            <div class="card">
+                <div class="card-chip"></div>
+                <div class="card-logo-box"><img src="1.png.png" class="card-logo"></div>
+                <div class="stamp-grid" id="stampGrid"></div>
+                <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+                <p id="counterLabel" style="color: var(--lem-gold); font-size: 0.75rem; letter-spacing: 1px; position: relative; z-index: 2;">Sincronizando...</p>
+                <div id="premioNotif" class="premio-box"></div>
+                <div class="qr-wrap"><canvas id="qr-canvas"></canvas></div>
+                <p class="card-footer-text">Miembro LEM Moda · Quito, Ecuador</p>
+            </div>
+            <a href="aqui va la web" target="_blank" class="btn-web-store"><i class="fa-solid fa-bag-shopping"></i> Muy Pronto Tienda Online</a>
+            <button class="btn-pill-outline" style="margin-top:20px;" onclick="location.reload()">Cerrar Sesión</button>
+        </div>
+
+        <!-- ═══ 👑 ZONA ORO VIP — INTERFAZ ULTRA PREMIUM 👑 ═══ -->
+        <div id="vipPanel" style="display:none">
+            <div style="margin-bottom: 10px;">
+                <div class="vip-header-crown"><i class="fa-solid fa-crown" style="color: #FFE082;"></i></div>
+                <h1 class="vip-title-main">ORO VIP</h1>
+                <p class="vip-subtitle">Miembro de Élite · LEM Moda</p>
+            </div>
+            <div class="vip-divider"></div>
+            <!-- Pase Digital VIP 3D -->
+            <div class="vip-pass-container">
+                <div class="vip-pass" id="vipPass3D">
+                    <div class="vip-pass-header">
+                        <div><p class="vip-pass-label">Pase Digital Exclusivo</p><h4 class="vip-pass-type">VIP ELITE</h4></div>
+                        <img src="1.png.png" class="vip-pass-logo">
+                    </div>
+                    <div class="vip-code-display">
+                        <p class="vip-code-label">Código Único de Identificación</p>
+                        <div class="vip-code-value" id="vipCodeNumber">VIP-0000</div>
+                    </div>
+                    <div class="vip-pass-footer">
+                        <div><p class="vip-pass-holder-label">Titular</p><p class="vip-pass-holder-name" id="vipHolderName">CLIENTE PREMIUM</p></div>
+                        <div class="vip-qr-box"><canvas id="vip-qr-canvas" style="width: 65px; height: 65px; display: block;"></canvas></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tarjeta de Estampas VIP (Nuevo Ciclo) -->
+            <div class="vip-stamp-card">
+                <h4 class="vip-stamp-title">Estampas Oro</h4>
+                <p class="vip-stamp-subtitle">Tu nuevo ciclo de recompensas exclusivas</p>
+                <div class="vip-stamp-grid" id="vipStampGrid"></div>
+                <div class="vip-progress-track"><div class="vip-progress-fill" id="vipProgressFill"></div></div>
+                <p class="vip-counter-label" id="vipCounterLabel">Sincronizando...</p>
+                <div class="vip-qr-section">
+                    <div class="qr-wrap" style="box-shadow: 0 0 0 1px rgba(255,224,130,0.3), 0 10px 25px rgba(0,0,0,0.5);">
+                        <canvas id="vip-stamp-qr"></canvas>
+                    </div>
+                </div>
+                <p class="vip-footer-text">Socio Oro VIP · LEM Moda · Quito, Ecuador</p>
+            </div>
+
+            <!-- Beneficios Permanentes VIP -->
+            <h3 class="vip-benefits-title">Privilegios Activos</h3>
+            
+            <div class="vip-benefit-card">
+                <div class="vip-benefit-icon"><i class="fa-solid fa-gift"></i></div>
+                <div class="vip-benefit-info" style="flex:1">
+                    <h4>Prenda Gratis de Bienvenida</h4>
+                    <p>Has completado tu ciclo anterior. Reclama tu obsequio premium.</p>
+                    <button class="btn-pill vip-btn-gold" style="padding: 8px 15px; font-size: 0.7rem; margin-top: 10px; width: auto; border-radius: 50px;" onclick="enviarWAVIP('regalo')">Reclamar Ahora</button>
+                </div>
+            </div>
+
+            <!-- NUEVO: Beneficio Continuo (Igual a la normal) -->
+            <div class="vip-benefit-card">
+                <div class="vip-benefit-icon"><i class="fa-solid fa-gem"></i></div>
+                <div class="vip-benefit-info">
+                    <h4>Recompensas Continuas</h4>
+                    <p>Obtén 50% OFF a las 4 estampas Oro y una nueva Prenda Gratis a las 8.</p>
+                </div>
+            </div>
+
+            <div class="vip-benefit-card">
+                <div class="vip-benefit-icon"><i class="fa-solid fa-bolt"></i></div>
+                <div class="vip-benefit-info">
+                    <h4>Acceso Anticipado</h4>
+                    <p>Sé el primero en ver y comprar las nuevas colecciones antes que nadie.</p>
+                </div>
+            </div>
+            <div class="vip-benefit-card">
+                <div class="vip-benefit-icon"><i class="fa-solid fa-user-tie"></i></div>
+                <div class="vip-benefit-info" style="flex:1">
+                    <h4>Personal Shopper Prioritario</h4>
+                    <p>Asesor de imagen exclusivo disponible vía WhatsApp.</p>
+                    <button class="vip-btn-elegant" style="margin-top: 10px; width: auto; padding: 8px 18px; font-size: 0.7rem;" onclick="enviarWAVIP('personal')">Contactar Asesor</button>
+                </div>
+            </div>
+
+            <a href="aqui va la web" target="_blank" class="btn-web-store" style="border-color: rgba(255,224,130,0.2); color: #FFE082;">
+                <i class="fa-solid fa-bag-shopping"></i> Muy Pronto Tienda Online
+            </a>
+            <button class="vip-btn-elegant" style="margin-top: 25px;" onclick="logoutVIP()">Cerrar Sesión VIP</button>
+        </div>
+        <div class="social-row">
+            <a href="http://wa.me/593984909967" target="_blank" rel="noopener" class="social-btn" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+            <a href="https://www.instagram.com/lemmoda.ec/" target="_blank" rel="noopener" class="social-btn" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+            <a href="https://www.tiktok.com/@lemmoda?is_from_webapp=1&sender_device=pc" target="_blank" rel="noopener" class="social-btn" aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></a>
+            <a href="https://www.facebook.com/people/LEM-moda/61581406283301/" target="_blank" rel="noopener" class="social-btn" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+        </div>
+        <p style="font-size: 10px; color: #444; margin-top: 20px;">ORCA Studios &copy; 2026</p>
     </div>
 
     <script>
@@ -322,243 +745,60 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
-        let html5QrCode;
-        let nombreClienteMemoria = "Cliente";
-        let telefonoOriginalEscaneado = ""; 
-        let isClientVIP = false;
-        let clienteFechaNac = "";
-        let clienteCodigoVip = "";
-        let userListenerRef = null;
+        let nombreClienteActivo = "Cliente VIP";
+        let telefonoClienteActivo = "";
+        let audioCtx = null;
+        let previousPoints = null;
+        let previousVipPoints = null; // Para sonidos del ciclo VIP
+        let isVipMode = false;
+        let vipListenerAttached = false;
+        let pendingVipPhone = ""; 
 
-        const MESES = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
-
-        function esCumpleañosHoy(fechaString) {
-            if(!fechaString) return false;
-            const hoy = new Date();
-            const diaHoy = hoy.getDate().toString();
-            const mesHoy = MESES[hoy.getMonth()];
-            const partes = fechaString.toLowerCase().split(' de ');
-            if (partes.length >= 2) {
-                return partes[0].trim() === diaHoy && partes[1].trim() === mesHoy;
-            }
-            return false;
+        function getAudioCtx() {
+            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            return audioCtx;
         }
 
-        // Extrae el teléfono del QR (soporta teléfono puro o formatos VIP antiguos)
-        function extraerTelefonoDeQR(decodedText) {
-            let raw = (decodedText || '').trim();
-
-            // Formatos posibles:
-            // 1) "0979010077"
-            // 2) "LEM-VIP:0979010077"
-            // 3) "LEM-VIP:0979010077-VIP-XXXX"
-            // 4) "LEM-VIP-ID:0979010077-VIP-XXXX"
-            // 5) "LEM|INFO|0979010077" / "LEM|STAMP|0979010077"
-            if (raw.includes('|')) {
-                const parts = raw.split('|');
-                raw = parts[parts.length - 1];
-            }
-            if (raw.includes(':')) {
-                const after = raw.split(':').pop();
-                // after puede ser "0979...-VIP-XXXX" o solo el teléfono
-                raw = after.split('-')[0];
-            }
-
-            // Dejar solo dígitos por si acaso
-            const digits = raw.replace(/\D/g, '');
-            // Preferimos devolver tal cual estaba guardado en Firebase (con 0 inicial si aplica)
-            // Si el QR traía el número original con 0, raw ya lo tenía; si solo dígitos, usamos digits
-            if (raw.replace(/\D/g, '') === digits && raw.length >= 9) {
-                // Si raw tenía caracteres no numéricos ya los limpiamos arriba en branches
-            }
-            return digits.startsWith('0') || digits.startsWith('593') ? (raw.match(/\d+/) ? raw.replace(/[^\d]/g, '') : digits) : digits;
-        }
-
-        function actualizarRegistroDelDia(phone, puntosFinales) {
-            const ahora = new Date();
-            const carpetaFecha = ahora.getFullYear() + "-" + 
-                                String(ahora.getMonth() + 1).padStart(2, '0') + "-" + 
-                                String(ahora.getDate()).padStart(2, '0');
-            
-            document.getElementById('logMsg').innerText = "Guardando reporte...";
-            document.getElementById('logMsg').style.color = isClientVIP ? "#FFE082" : "#d4a373";
-
-            db.ref('reporte_diario/' + carpetaFecha + '/' + phone).set({
-                nombre: nombreClienteMemoria,
-                whatsapp: phone,
-                tipo_cliente: isClientVIP ? 'ORO VIP' : 'Normal',
-                puntos_al_cierre: puntosFinales,
-                campo_editado: isClientVIP ? 'puntos_vip' : 'puntos',
-                hora_ultima_accion: ahora.toLocaleTimeString()
-            }).then(() => {
-                document.getElementById('logMsg').innerText = "¡Reporte guardado con éxito!";
-                document.getElementById('logMsg').style.color = "var(--lem-verde)";
-            }).catch((err) => {
-                alert("ERROR EN REPORTE: " + err.message);
-            });
-        }
-
-        async function startScanner() {
-            html5QrCode = new Html5Qrcode("reader");
-            const config = { fps: 15, qrbox: { width: 250, height: 250 } };
+        function reproducirSonidoSello() {
             try {
-                await html5QrCode.start({ facingMode: "environment" }, config, (decodedText) => {
-                    html5QrCode.stop().then(() => {
-                        document.getElementById('reader-container').style.display = 'none';
-                        document.getElementById('adminPanel').style.display = 'block';
-                        const phoneToLoad = extraerTelefonoDeQR(decodedText);
-                        loadUserData(phoneToLoad);
-                    });
+                const ctx = getAudioCtx(); const now = ctx.currentTime;
+                const o1 = ctx.createOscillator(); const g1 = ctx.createGain();
+                o1.type = 'sine'; o1.frequency.setValueAtTime(880, now);
+                o1.frequency.exponentialRampToValueAtTime(1318.5, now + 0.14);
+                g1.gain.setValueAtTime(0.0001, now);
+                g1.gain.exponentialRampToValueAtTime(0.22, now + 0.02);
+                g1.gain.exponentialRampToValueAtTime(0.0001, now + 0.55);
+                o1.connect(g1); g1.connect(ctx.destination); o1.start(now); o1.stop(now + 0.6);
+                const o2 = ctx.createOscillator(); const g2 = ctx.createGain();
+                o2.type = 'sine'; o2.frequency.setValueAtTime(1318.5, now + 0.05);
+                g2.gain.setValueAtTime(0.0001, now + 0.05);
+                g2.gain.exponentialRampToValueAtTime(0.15, now + 0.08);
+                g2.gain.exponentialRampToValueAtTime(0.0001, now + 0.7);
+                o2.connect(g2); g2.connect(ctx.destination); o2.start(now + 0.05); o2.stop(now + 0.75);
+            } catch (e) {}
+        }
+
+        function reproducirSonidoVIP() {
+            try {
+                const ctx = getAudioCtx(); const now = ctx.currentTime;
+                const notas = [659.25, 783.99, 987.77, 1318.5, 1567.98];
+                notas.forEach((freq, i) => {
+                    const t0 = now + i * 0.12;
+                    const o = ctx.createOscillator(); const g = ctx.createGain();
+                    o.type = 'sine'; o.frequency.setValueAtTime(freq, t0);
+                    g.gain.setValueAtTime(0.0001, t0);
+                    g.gain.exponentialRampToValueAtTime(0.2, t0 + 0.03);
+                    g.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.7);
+                    o.connect(g); g.connect(ctx.destination); o.start(t0); o.stop(t0 + 0.75);
                 });
-            } catch (err) { console.error("Error de cámara: ", err); }
+            } catch (e) {}
         }
 
-        function loadUserData(phone) {
-            // Limpiar listener anterior
-            if (userListenerRef) {
-                userListenerRef.off();
-                userListenerRef = null;
-            }
-
-            telefonoOriginalEscaneado = phone;
-            userListenerRef = db.ref('lem_users/' + phone);
-
-            userListenerRef.on('value', (snap) => {
-                const data = snap.val();
-
-                if (!data) {
-                    document.getElementById('clientName').innerText = "Cliente no encontrado";
-                    document.getElementById('clientPhone').innerText = "WhatsApp: " + phone;
-                    document.getElementById('currentPoints').innerText = "0";
-                    document.getElementById('logMsg').innerText = "No existe este usuario en Firebase";
-                    document.getElementById('logMsg').style.color = "#ff6b6b";
-                    return;
-                }
-
-                // VIP si tiene bandera o código VIP emitido
-                isClientVIP = data.es_vip === true || !!(data.codigo_vip);
-                nombreClienteMemoria = data.nombre || "Cliente";
-                clienteFechaNac = data.fecha_nacimiento || "";
-                clienteCodigoVip = data.codigo_vip || "";
-
-                // 🔑 CLAVE: VIP usa puntos_vip | Normal usa puntos
-                let puntosNorm = data.puntos || 0;
-                let puntosVip = (typeof data.puntos_vip === 'number') ? data.puntos_vip : 0;
-
-                // Si es VIP y aún no existe puntos_vip en Firebase, lo creamos en 0
-                if (isClientVIP && typeof data.puntos_vip !== 'number') {
-                    userListenerRef.update({ puntos_vip: 0, es_vip: true });
-                    puntosVip = 0;
-                }
-
-                const puntosActivos = isClientVIP ? puntosVip : puntosNorm;
-
-                // Textos principales
-                document.getElementById('clientName').innerText = nombreClienteMemoria;
-                document.getElementById('clientPhone').innerText = "WhatsApp: " + phone;
-                document.getElementById('currentPoints').innerText = puntosActivos;
-
-                // Ficha completa
-                document.getElementById('infoTipo').innerText = isClientVIP ? "👑 ORO VIP" : "Miembro Elite";
-                document.getElementById('infoCodigoVip').innerText = clienteCodigoVip || "—";
-                document.getElementById('infoCumple').innerText = clienteFechaNac || "No registrado";
-                document.getElementById('infoWhatsapp').innerText = phone;
-                document.getElementById('infoPuntosNorm').innerText = puntosNorm + " / 8";
-                document.getElementById('infoPuntosVip').innerText = puntosVip + " / 8";
-                document.getElementById('infoCampoActivo').innerText = isClientVIP ? "puntos_vip (tarjeta VIP)" : "puntos (tarjeta normal)";
-
-                // Estilos VIP / Normal
-                const adminPanel = document.getElementById('adminPanel');
-                const vipBadge = document.getElementById('vipStatusBadge');
-                const adminTitle = document.getElementById('adminHeaderTitle');
-
-                if (isClientVIP) {
-                    document.body.classList.add('admin-vip-mode');
-                    adminPanel.classList.add('is-vip');
-                    vipBadge.style.display = 'inline-block';
-                    adminTitle.style.color = 'var(--vip-gold)';
-                    document.getElementById('pointsTitle').innerText = "Estampas Oro VIP:";
-                    document.getElementById('pointsHint').innerText = 'Ciclo VIP · se guarda en "puntos_vip"';
-                    document.getElementById('clientPhone').style.color = 'var(--vip-gold)';
-                } else {
-                    document.body.classList.remove('admin-vip-mode');
-                    adminPanel.classList.remove('is-vip');
-                    vipBadge.style.display = 'none';
-                    adminTitle.style.color = 'var(--lem-gold)';
-                    document.getElementById('pointsTitle').innerText = "Puntos Actuales:";
-                    document.getElementById('pointsHint').innerText = 'Ciclo normal · se guarda en "puntos"';
-                    document.getElementById('clientPhone').style.color = 'var(--lem-gold)';
-                }
-
-                // Cumpleaños
-                document.getElementById('bdayAlertBanner').style.display = esCumpleañosHoy(clienteFechaNac) ? 'block' : 'none';
-
-                updateAdminAlerts(puntosActivos);
-
-                const yaSaludado = data.bienvenida_enviada;
-                document.getElementById('welcomeBtn').style.display = yaSaludado ? 'none' : 'block';
-            });
-        }
-
-        const WEBAPP_URL = "https://lemmoda.vercel.app/";
-
-        function formatearWhatsAppEC(numero) {
-            let limpio = (numero || '').replace(/\D/g, ''); 
-            if (limpio.startsWith('0')) limpio = limpio.substring(1); 
-            if (!limpio.startsWith('593')) limpio = '593' + limpio;   
-            return limpio;
-        }
-
-        function abrirWhatsAppBusiness(phoneWA, texto) {
-            const esAndroid = /Android/i.test(navigator.userAgent);
-            const encoded = encodeURIComponent(texto);
-            const linkNormal = `https://wa.me/${phoneWA}?text=${encoded}`;
-
-            if (esAndroid) {
-                const fallback = encodeURIComponent(linkNormal);
-                const intentUrl = `intent://send?phone=${phoneWA}&text=${encoded}#Intent;scheme=whatsapp;package=com.whatsapp.w4b;S.browser_fallback_url=${fallback};end`;
-                window.location.href = intentUrl;
-            } else {
-                window.open(linkNormal, '_blank');
-            }
-        }
-
-        function enviarBienvenidaWA() {
-            const phone = telefonoOriginalEscaneado;
-            if (!phone) return;
-            const phoneWA = formatearWhatsAppEC(phone);
-            const texto = `Hola, ${nombreClienteMemoria}, es un gusto saludarte. ✨\n` +
-                `En LEM MODA, nuestra prioridad es que vivas una experiencia excepcional y cercana. Por ello, te invitamos a conocer tu nueva tarjeta de fidelidad digital:\n` +
-                `🗝️ Acceso privado: ${WEBAPP_URL}\n` +
-                `Gracias por ser parte de nuestra comunidad. ❤️`;
-
-            abrirWhatsAppBusiness(phoneWA, texto);
-            db.ref('lem_users/' + phone).update({ bienvenida_enviada: true });
-            document.getElementById('welcomeBtn').style.display = 'none';
-        }
-
-        function enviarFelicitacionWA() {
-            const phone = telefonoOriginalEscaneado;
-            if (!phone) return;
-            const phoneWA = formatearWhatsAppEC(phone);
-            
-            let textoCumple = `🎂 *¡FELIZ CUMPLEAÑOS DE PARTE DE LEM MODA!* 🎂\n\n` +
-                        `¡Hola, ${nombreClienteMemoria}! 👋✨\n\n` +
-                        `De parte de todo el equipo, queremos desearte un día lleno de estilo, alegría y momentos especiales. 🥳\n\n`;
-
-            if (isClientVIP) {
-                textoCumple += `Como eres nuestro *Cliente Oro VIP*, te tenemos un obsequio especial de cumpleaños esperándote en nuestra tienda. 🛍️🎁\n\n`;
-            } else {
-                textoCumple += `Pasa por nuestra tienda, ¡tenemos una sorpresa especial para ti por tu día! 🛍️✨\n\n`;
-            }
-            textoCumple += `¡Que lo disfrutes mucho! Un abrazo enorme. 🙌`;
-
-            abrirWhatsAppBusiness(phoneWA, textoCumple);
-        }
+        const NOMBRES_MASCULINOS = ['jose','luis','carlos','juan','andres','andrés','jesus','jesús','tomas','tomás','nicolas','nicolás','ismael','isaac','angel','ángel','gabriel','rafael','miguel','manuel','david','daniel','diego','fernando','francisco','javier','jorge','marcos','martin','martín','oscar','óscar','pablo','pedro','ricardo','roberto','ruben','rubén','sergio','victor','víctor','alexis','ariel','axel','bryan','brayan','cristian','cristhian','edison','edwin','efrain','efraín','elias','elías','esteban','ezequiel','gael','gonzalo','henry','ivan','iván','joel','jonathan','josue','josué','kevin','leonardo','mateo','mathias','matias','matías','maximiliano','moises','moisés','nelson','noe','noé','samuel','santiago','sebastian','sebastián','simon','simón','wilson','xavier'];
+        const NOMBRES_FEMENINOS = ['maria','maría','ana','sofia','sofía','isabel','mercedes','carmen','rosa','laura','andrea','valentina','camila','daniela','fernanda','gabriela','patricia','sandra','monica','mónica','veronica','verónica','paola','johanna','yolanda','martha','marta','alejandra','lucia','lucía','ximena','ines','inés','pilar','beatriz','elizabeth','katherine','catherine','estefania','estefanía','jessica','jessenia','yesenia','tatiana','vanessa','carolina','cristina','diana','evelyn','gladys','ivonne','jacqueline','karina','leslie','liliana','melany','melanie','michelle','nathaly','pamela','priscila','priscilla','samantha','stefania','stefanía','viviana','wendy','zoila','zoe'];
 
         function detectarGenero(nombreCompleto) {
-            const NOMBRES_MASCULINOS = ['jose','luis','carlos','juan','andres','andrés','jesus','jesús','tomas','tomás','nicolas','nicolás','ismael','isaac','angel','ángel','gabriel','rafael','miguel','manuel','david','daniel','diego','fernando','francisco','javier','jorge','marcos','martin','martín','oscar','óscar','pablo','pedro','ricardo','roberto','ruben','rubén','sergio','victor','víctor','alexis','ariel','axel','bryan','brayan','cristian','cristhian','edison','edwin','efrain','efraín','elias','elías','esteban','ezequiel','gael','gonzalo','henry','ivan','iván','joel','jonathan','josue','josué','kevin','leonardo','mateo','mathias','matias','matías','maximiliano','moises','moisés','nelson','noe','noé','samuel','santiago','sebastian','sebastián','simon','simón','wilson','xavier'];
-            const NOMBRES_FEMENINOS = ['maria','maría','ana','sofia','sofía','isabel','mercedes','carmen','rosa','laura','andrea','valentina','camila','daniela','fernanda','gabriela','patricia','sandra','monica','mónica','veronica','verónica','paola','johanna','yolanda','martha','marta','alejandra','lucia','lucía','ximena','ines','inés','pilar','beatriz','elizabeth','katherine','catherine','estefania','estefanía','jessica','jessenia','yesenia','tatiana','vanessa','carolina','cristina','diana','evelyn','gladys','ivonne','jacqueline','karina','leslie','liliana','melany','melanie','michelle','nathaly','pamela','priscila','priscilla','samantha','stefania','stefanía','viviana','wendy','zoila','zoe'];
             const primer = (nombreCompleto || '').trim().split(/\s+/)[0].toLowerCase().normalize('NFC');
             if (NOMBRES_MASCULINOS.includes(primer)) return 'm';
             if (NOMBRES_FEMENINOS.includes(primer)) return 'f';
@@ -567,242 +807,452 @@
             return 'f';
         }
 
-        function updateAdminAlerts(puntos) {
-            const alertBox = document.getElementById('adminRewardAlert');
-            const alertText = document.getElementById('rewardText');
-            const resetBtn = document.getElementById('resetBtn');
-            const genero = detectarGenero(nombreClienteMemoria);
+        function inicializarSelectsCumpleaños() {
+            const diaSel = document.getElementById('bday-dia');
+            for(let i=1; i<=31; i++) diaSel.innerHTML += `<option value="${i}">${i}</option>`;
+            const meses = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+            const mesSel = document.getElementById('bday-mes');
+            meses.forEach(m => mesSel.innerHTML += `<option value="${m}">${m}</option>`);
+            const anioSel = document.getElementById('bday-anio');
+            const currentYear = new Date().getFullYear();
+            for(let i = currentYear - 14; i >= currentYear - 80; i--) anioSel.innerHTML += `<option value="${i}">${i}</option>`;
+        }
+        inicializarSelectsCumpleaños();
 
-            alertBox.classList.remove('alert-silver', 'alert-gold', 'alert-vip-reward');
+        document.querySelectorAll('#userName, #userPhone, #userPin').forEach(input => {
+            input.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); accessSystem(); } });
+        });
 
-            if (isClientVIP) {
-                if (puntos === 4) {
-                    alertBox.style.display = 'block';
-                    alertBox.classList.add('alert-vip-reward');
-                    alertText.innerHTML = "🎁 RECOMPENSA ORO VIP:<br>REGALO VIP";
-                    resetBtn.style.display = 'none';
-                } else if (puntos >= 8) {
-                    alertBox.style.display = 'block';
-                    alertBox.classList.add('alert-vip-reward');
-                    alertText.innerHTML = "🏆 SUPER PREMIO ORO VIP:<br>CICLO COMPLETADO";
-                    resetBtn.style.display = 'block'; 
-                } else {
-                    alertBox.style.display = 'none';
-                    resetBtn.style.display = 'none';
-                }
-            } else {
-                if (puntos === 4) {
-                    alertBox.style.display = 'block';
-                    alertBox.classList.add('alert-silver');
-                    alertText.innerHTML = (genero === 'm' ? "💎 SOCIO PLATA:" : "💎 SOCIA PLATA:") + "<br>50% DESCUENTO";
-                    resetBtn.style.display = 'none';
-                } else if (puntos >= 8) {
-                    alertBox.style.display = 'block';
-                    alertBox.classList.add('alert-gold');
-                    alertText.innerHTML = (genero === 'm' ? "👑 SOCIO ORO VIP:" : "👑 SOCIA ORO VIP:") + "<br>PRENDA DE REGALO / ACTIVAR VIP";
-                    resetBtn.style.display = 'block'; 
-                } else {
-                    alertBox.style.display = 'none';
-                    resetBtn.style.display = 'none';
-                }
-            }
+        function toggleModal(show) { document.getElementById('modalBeneficios').style.display = show ? 'flex' : 'none'; }
+        function toggleVipLogin(show) {
+            document.getElementById('standardLoginForm').style.display = show ? 'none' : 'block';
+            document.getElementById('vipLoginForm').style.display = show ? 'block' : 'none';
         }
 
-        // 🔑 AQUÍ ESTÁ LA CORRECCIÓN PRINCIPAL
-        function adjustPoints(change) {
-            if (!telefonoOriginalEscaneado) {
-                alert("Error: No hay teléfono detectado.");
-                return;
-            }
+        // ── ACCESO NORMAL ──
+        function accessSystem() {
+            getAudioCtx();
+            const name = document.getElementById('userName').value.trim();
+            const phone = document.getElementById('userPhone').value.trim();
+            const pin = document.getElementById('userPin').value.trim();
+            if(!phone || !pin) { alert("Por favor, ingresa tu número de WhatsApp y tu PIN."); return; }
 
-            // Si es VIP → SOLO toca puntos_vip (la tarjeta nueva del cliente)
-            // Si es normal → toca puntos
-            const targetField = isClientVIP ? 'puntos_vip' : 'puntos';
-            const ref = db.ref('lem_users/' + telefonoOriginalEscaneado + '/' + targetField);
-            
-            document.getElementById('logMsg').innerText = isClientVIP ? "Sumando estampa VIP..." : "Sumando estampa...";
-            document.getElementById('logMsg').style.color = isClientVIP ? "#FFE082" : "#d4a373";
+            const btn = document.querySelector('#standardLoginForm .btn-pill');
+            const textOriginal = btn.innerText;
+            btn.innerText = "Ingresando..."; btn.disabled = true;
 
-            ref.transaction((c) => {
-                let newVal = (c || 0) + change;
-                if (newVal < 0) newVal = 0;
-                if (newVal > 8) newVal = 8;
-                return newVal;
-            }, (error, committed, snapshot) => {
-                if (error) {
-                    document.getElementById('logMsg').innerText = "Error: " + error.message;
-                    document.getElementById('logMsg').style.color = "#ff6b6b";
-                    return;
+            const userRef = db.ref('lem_users/' + phone);
+            const timestampActual = new Date().toISOString();
+
+            userRef.once('value', (snap) => {
+                const data = snap.val();
+                if(!data) {
+                    if(!name) { alert("¡Bienvenido! Al ser tu primera vez, por favor escribe tu Nombre Completo."); btn.innerText = textOriginal; btn.disabled = false; return; }
+                    nombreClienteActivo = name; telefonoClienteActivo = phone;
+                    const fechaHoy = timestampActual.split('T')[0];
+                    userRef.set({ nombre: name, pin: pin, puntos: 0, es_vip: false, fecha_registro: timestampActual, ultima_actividad: timestampActual }).then(() => {
+                        db.ref('registros_diarios/' + fechaHoy + '/' + phone).set({ nombre: name, hora_ingreso: timestampActual });
+                        login(phone);
+                    }).catch(err => { alert("Error: " + err.message); btn.innerText = textOriginal; btn.disabled = false; });
+                } else if(data.pin === pin) {
+                    nombreClienteActivo = data.nombre || name; telefonoClienteActivo = phone;
+                    if(!data.nombre && name) { userRef.update({ nombre: name }); nombreClienteActivo = name; }
+                    if (data.es_vip && data.codigo_vip) {
+                        loginVIP(phone, data.codigo_vip);
+                    } else {
+                        userRef.update({ ultima_actividad: timestampActual }).then(() => login(phone));
+                    }
+                } else {
+                    alert("PIN incorrecto."); btn.innerText = textOriginal; btn.disabled = false;
                 }
-                if (committed) {
-                    const val = snapshot.val() || 0;
-                    document.getElementById('logMsg').innerText = isClientVIP
-                        ? `✓ Estampas Oro VIP: ${val}/8`
-                        : `✓ Estampas normales: ${val}/8`;
-                    document.getElementById('logMsg').style.color = "var(--lem-verde)";
-                    actualizarRegistroDelDia(telefonoOriginalEscaneado, val);
+            }).catch((error) => { alert("Error de conexión."); btn.innerText = textOriginal; btn.disabled = false; });
+        }
+
+        // ── ACCESO CÓDIGO VIP ──
+        function accessSystemVIP() {
+            const enteredCode = document.getElementById('vipCodeField').value.trim().toUpperCase();
+            if(!enteredCode) { alert("Ingresa tu Código VIP."); return; }
+            const btn = document.getElementById('btnIngresarVIP');
+            btn.innerText = "Validando..."; btn.disabled = true;
+
+            db.ref('lem_users').orderByChild('codigo_vip').equalTo(enteredCode).once('value', (snap) => {
+                if(snap.exists()) {
+                    const phoneKey = Object.keys(snap.val())[0];
+                    const userData = snap.val()[phoneKey];
+                    if (userData.es_vip) {
+                        nombreClienteActivo = userData.nombre; telefonoClienteActivo = phoneKey;
+                        loginVIP(phoneKey, userData.codigo_vip);
+                    } else {
+                        alert("Este código existe pero la cuenta aún no ha sido activada como VIP.");
+                        btn.innerText = "Validar Acceso VIP"; btn.disabled = false;
+                    }
+                } else {
+                    alert("Código VIP inválido. Completa 8 estampas para obtener el tuyo.");
+                    btn.innerText = "Validar Acceso VIP"; btn.disabled = false;
                 }
+            }).catch(err => { alert("Error de conexión."); btn.innerText = "Validar Acceso VIP"; btn.disabled = false; });
+        }
+
+        // ── LOGIN TARJETA NORMAL ──
+        function login(phone) {
+            document.getElementById('authPanel').style.display = 'none';
+            document.getElementById('cardPanel').style.display = 'block';
+            document.getElementById('memberName').innerText = nombreClienteActivo;
+            const genero = detectarGenero(nombreClienteActivo);
+            document.getElementById('memberGreeting').innerText = (genero === 'm') ? 'Bienvenido' : 'Bienvenida';
+            QRCode.toCanvas(document.getElementById('qr-canvas'), phone, { width: 120, margin: 1 });
+
+            db.ref('lem_users/' + phone).on('value', (snap) => {
+                const userData = snap.val() || {};
+                const p = userData.puntos || 0;
+                const esVip = userData.es_vip || false;
+                if(esVip) return;
+
+                if (previousPoints !== null && p > previousPoints && p !== 4 && p < 8) reproducirSonidoSello();
+                previousPoints = p;
+
+                document.getElementById('counterLabel').innerText = `${p} DE 8 SELLOS`;
+                const tierBadge = document.getElementById('memberTier');
+                if (p >= 8) tierBadge.innerText = (genero === 'm') ? 'SOCIO ORO VIP' : 'SOCIA ORO VIP';
+                else if (p >= 4) tierBadge.innerText = (genero === 'm') ? 'SOCIO PLATA' : 'SOCIA PLATA';
+                else tierBadge.innerText = 'MIEMBRO ELITE';
+
+                document.getElementById('progressFill').style.width = Math.min((p / 8) * 100, 100) + '%';
+                const grid = document.getElementById('stampGrid');
+                grid.innerHTML = '';
+                for(let i=0; i<8; i++) {
+                    const s = document.createElement('div');
+                    const isActive = i < p; const index = i + 1;
+                    s.className = 'slot' + (isActive ? ' active' : '');
+                    s.setAttribute('data-index', index);
+                    if (isActive) s.style.animationDelay = (i * 0.07) + 's';
+                    if(index === 4) s.classList.add('silver-frame');
+                    if(index === 8) s.classList.add('gold-frame');
+                    if(isActive) s.innerHTML = '<img src="2.png.png">';
+                    else {
+                        if(index === 4) s.innerHTML = '<span class="premio-text silver">50% OFF<br>PRENDA</span>';
+                        else if (index === 8) s.innerHTML = '<span class="premio-text gold">PRENDA<br>REGALO</span>';
+                    }
+                    grid.appendChild(s);
+                }
+                checkMilestones(p, phone);
             });
         }
 
-        function resetCard() {
-            const tipo = isClientVIP ? "ciclo VIP (puntos_vip)" : "tarjeta normal (puntos)";
-            if(confirm(`¿Confirmas que ya entregaste el premio y quieres reiniciar el ${tipo} a 0?`)) {
-                if (!telefonoOriginalEscaneado) return;
-                const targetField = isClientVIP ? 'puntos_vip' : 'puntos';
-                db.ref('lem_users/' + telefonoOriginalEscaneado + '/' + targetField).set(0);
-                actualizarRegistroDelDia(telefonoOriginalEscaneado, 0);
+        function checkMilestones(p, phone) {
+            const overlay = document.getElementById('success-overlay');
+            const title = document.getElementById('successTitle');
+            const msg = document.getElementById('successMsg');
+            const waAction = document.getElementById('waAction');
+            const badge = document.getElementById('successIconBadge');
+
+            if (p === 4) {
+                lanzarConfeti(); reproducirSonidoFestejo();
+                overlay.style.display = 'flex';
+                badge.className = 'success-icon-badge tier-silver';
+                badge.innerHTML = '<i class="fa-solid fa-gem"></i>';
+                title.innerText = "¡Recompensa!";
+                msg.innerText = `¡Felicidades ${nombreClienteActivo}! Por tus 4 estampas tienes el 50% de descuento en una prenda.`;
+                waAction.innerHTML = `<button class="btn-main" style="background:#25d366; color:white; border-radius:50px;" onclick="enviarWA('${phone}', 4)">Reclamar por WhatsApp</button>`;
+            } 
+            else if (p >= 8 && !isVipMode) {
+                pendingVipPhone = phone;
+                lanzarConfetiVIP(); reproducirSonidoVIP();
+                document.getElementById('vip-upgrade-overlay').style.display = 'flex';
             }
         }
 
-        function restartScanner() {
-            if (userListenerRef) {
-                userListenerRef.off();
-                userListenerRef = null;
-            }
-            
-            telefonoOriginalEscaneado = "";
-            isClientVIP = false;
-            document.getElementById('adminPanel').style.display = 'none';
-            document.getElementById('reader-container').style.display = 'block';
-            
-            document.getElementById('clientName').innerText = "Cargando...";
-            document.getElementById('clientPhone').innerText = "WhatsApp: ---";
-            document.getElementById('logMsg').innerText = "";
-            document.getElementById('bdayAlertBanner').style.display = 'none';
-            
-            document.body.classList.remove('admin-vip-mode');
-            document.getElementById('adminPanel').classList.remove('is-vip');
-            document.getElementById('adminHeaderTitle').style.color = 'var(--lem-gold)';
-            
-            startScanner();
+        function guardarCumpleañosYEntrar() {
+            const dia = document.getElementById('bday-dia').value;
+            const mes = document.getElementById('bday-mes').value;
+            const anio = document.getElementById('bday-anio').value;
+            if(!dia || !mes || !anio) { alert("Por favor, selecciona tu fecha de nacimiento completa."); return; }
+
+            const fechaNac = `${dia} de ${mes} de ${anio}`;
+            const btn = document.getElementById('btnActivarVip');
+            btn.innerText = "Generando Credenciales..."; btn.disabled = true;
+
+            db.ref('lem_users/' + pendingVipPhone).update({ fecha_nacimiento: fechaNac }).then(() => {
+                return activarVIP(pendingVipPhone);
+            }).then((codigoGenerado) => {
+                document.getElementById('vip-upgrade-overlay').style.display = 'none';
+                alert(`¡Felicidades!\nHas sido ascendido a Cliente Oro VIP.\nTu código de acceso es: ${codigoGenerado}`);
+                loginVIP(pendingVipPhone, codigoGenerado);
+            }).catch(err => {
+                alert("Hubo un error de conexión.");
+                btn.innerText = "Activar Mi Cuenta VIP"; btn.disabled = false;
+            });
         }
 
-        window.onload = startScanner;
+        function generarCodigoVIP(phone) {
+            return new Promise((resolve) => {
+                const userRef = db.ref('lem_users/' + phone);
+                userRef.child('codigo_vip').once('value', (snap) => {
+                    if (snap.exists()) { resolve(snap.val()); }
+                    else {
+                        const charset = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+                        let r = "";
+                        for (let i = 0; i < 4; i++) r += charset.charAt(Math.floor(Math.random() * charset.length));
+                        const code = `VIP-${r}`;
+                        userRef.update({ codigo_vip: code }).then(() => resolve(code));
+                    }
+                });
+            });
+        }
+
+        function activarVIP(phone) {
+            return new Promise((resolve) => {
+                generarCodigoVIP(phone).then((codigo) => {
+                    db.ref('lem_users/' + phone).update({
+                        es_vip: true, puntos: 0, puntos_vip: 0, fecha_activacion_vip: new Date().toISOString()
+                    }).then(() => resolve(codigo));
+                });
+            });
+        }
+
+        // ═══ ENTRADA A LA ZONA ORO VIP ═══
+        function loginVIP(phone, codigoVip) {
+            isVipMode = true;
+            document.body.classList.add('vip-mode');
+            document.getElementById('authPanel').style.display = 'none';
+            document.getElementById('cardPanel').style.display = 'none';
+            document.getElementById('vipPanel').style.display = 'block';
+
+            document.getElementById('vipHolderName').innerText = nombreClienteActivo.toUpperCase();
+            document.getElementById('vipCodeNumber').innerText = codigoVip;
+
+            QRCode.toCanvas(document.getElementById('vip-qr-canvas'), phone, { width: 65, margin: 0 });
+            QRCode.toCanvas(document.getElementById('vip-stamp-qr'), phone, { width: 120, margin: 1 });
+
+            lanzarConfetiVIP();
+
+            if (!vipListenerAttached) {
+                vipListenerAttached = true;
+                db.ref('lem_users/' + phone).on('value', (snap) => {
+                    const data = snap.val() || {};
+                    const pv = data.puntos_vip || 0;
+                    
+                    if (previousVipPoints !== null && pv > previousVipPoints && pv !== 4 && pv < 8) reproducirSonidoSello();
+                    previousVipPoints = pv;
+                    
+                    renderVipStamps(pv);
+                    checkVipMilestones(pv, phone, codigoVip);
+                });
+            }
+        }
+
+        function renderVipStamps(pv) {
+            const grid = document.getElementById('vipStampGrid');
+            grid.innerHTML = '';
+            for(let i=0; i<8; i++) {
+                const s = document.createElement('div');
+                const isActive = i < pv; const index = i + 1;
+                s.className = 'vip-slot' + (isActive ? ' active' : '');
+                s.setAttribute('data-index', index);
+                if (isActive) s.style.animationDelay = (i * 0.08) + 's';
+
+                if (index === 4 || index === 8) s.classList.add('milestone');
+                if(isActive) {
+                    s.innerHTML = '<img src="2.png.png">';
+                } else {
+                    if(index === 4) s.innerHTML = '<span class="premio-text" style="color:#FFE082;">50%<br>OFF</span>';
+                    else if(index === 8) s.innerHTML = '<span class="premio-text" style="color:#FFE082;">PRENDA<br>GRATIS</span>';
+                }
+                grid.appendChild(s);
+            }
+            document.getElementById('vipProgressFill').style.width = Math.min((pv / 8) * 100, 100) + '%';
+            document.getElementById('vipCounterLabel').innerText = `${pv} DE 8 ESTAMPAS ORO`;
+        }
+
+        // 🌟 NUEVO: CELEBRACIONES AL LLEGAR A 4 y 8 EN LA TARJETA VIP 🌟
+        function checkVipMilestones(pv, phone, codigoVip) {
+            const overlay = document.getElementById('success-overlay');
+            const title = document.getElementById('successTitle');
+            const msg = document.getElementById('successMsg');
+            const waAction = document.getElementById('waAction');
+            const badge = document.getElementById('successIconBadge');
+
+            if (pv === 4) {
+                lanzarConfetiVIP(); reproducirSonidoFestejo();
+                overlay.style.display = 'flex';
+                badge.className = 'success-icon-badge tier-silver';
+                badge.innerHTML = '<i class="fa-solid fa-gem" style="color:#FFE082;"></i>';
+                badge.style.background = 'rgba(255,224,130,0.1)';
+                badge.style.borderColor = '#FFE082';
+                title.innerText = "¡Recompensa VIP!";
+                msg.innerText = `¡Felicidades ${nombreClienteActivo}! Por tus 4 estampas Oro tienes el 50% de descuento en una prenda.`;
+                waAction.innerHTML = `<button class="btn-main vip-btn-gold" style="border-radius:50px;" onclick="enviarWAVIP('mitad')">Reclamar 50% OFF</button>`;
+            } 
+            else if (pv >= 8) {
+                lanzarConfetiVIP(); reproducirSonidoVIP();
+                overlay.style.display = 'flex';
+                badge.className = 'success-icon-badge tier-gold';
+                badge.innerHTML = '<i class="fa-solid fa-crown"></i>';
+                title.innerText = "¡CICLO ORO COMPLETADO!";
+                msg.innerHTML = `¡Espectacular ${nombreClienteActivo}! Has completado tus 8 estampas Oro. Tienes una <b>PRENDA DE REGALO</b> esperándote.`;
+                waAction.innerHTML = `<button class="btn-main vip-btn-gold" style="border-radius:50px; margin-top:10px;" onclick="enviarWAVIP('nuevo_regalo')"><i class="fa-solid fa-gift" style="margin-right:8px;"></i> Reclamar Súper Premio</button>`;
+            }
+        }
+
+        function logoutVIP() {
+            isVipMode = false; document.body.classList.remove('vip-mode'); location.reload();
+        }
+
+        function lanzarConfeti() {
+            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#c9a84c', '#6DAE5A', '#ffffff', '#e8c87a'] });
+        }
+        function lanzarConfetiVIP() {
+            let end = Date.now() + 3500;
+            (function frame() {
+                confetti({ particleCount: 4, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#FFE082', '#c9a84c', '#fff', '#FFD54F'] });
+                confetti({ particleCount: 4, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#FFE082', '#c9a84c', '#fff', '#FFD54F'] });
+                if (Date.now() < end) requestAnimationFrame(frame);
+            }());
+        }
+
+        function reproducirSonidoFestejo() {
+            try {
+                const ctx = getAudioCtx(); const now = ctx.currentTime;
+                [523.25, 659.25, 783.99, 1046.5].forEach((freq, i) => {
+                    const t0 = now + i * 0.11;
+                    const o = ctx.createOscillator(); const g = ctx.createGain();
+                    o.type = 'triangle'; o.frequency.setValueAtTime(freq, t0);
+                    g.gain.setValueAtTime(0.0001, t0);
+                    g.gain.exponentialRampToValueAtTime(0.28, t0 + 0.02);
+                    g.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.5);
+                    o.connect(g); g.connect(ctx.destination); o.start(t0); o.stop(t0 + 0.55);
+                });
+            } catch (e) {}
+        }
+
+        function enviarWA(phone, hito) {
+            const waNumber = "593984909967";
+            let texto = `⭐ *¡BENEFICIO ELITE - LEM MODA!* ⭐\n\nHola, equipo de LEM. 👋\n\nHe completado mis primeras *4 ESTAMPAS* en mi Tarjeta Elite y quiero reclamar mi beneficio:\n🎁 *50% DE DESCUENTO* en una prenda de mi elección.\n\n📌 *Cliente:* ${nombreClienteActivo}\n📌 *WhatsApp registrado:* ${phone}\n\n¿Me ayudan para hacerlo efectivo? ¡Muchas gracias! 🙌`;
+            window.open(`https://wa.me/${waNumber}?text=${encodeURIComponent(texto)}`, '_blank');
+        }
+
+        function enviarWAVIP(tipo) {
+            const waNumber = "593984909967";
+            const codigoVip = document.getElementById('vipCodeNumber').innerText;
+            let texto = "";
+            if (tipo === 'regalo') {
+                texto = `🏆 *¡PRENDA DE BIENVENIDA VIP - LEM MODA!* 🏆\n\n¡Hola equipo LEM! 👋\n\nHe activado mi *Panel Oro VIP*.\n🛍️ ¡Quiero coordinar la entrega de mi *PRENDA DE REGALO GRATIS* por haber completado mi primera tarjeta!\n\n📌 *Cliente:* ${nombreClienteActivo}\n📌 *Código VIP:* ${codigoVip}\n\n¡Gracias! ✨`;
+            } else if (tipo === 'mitad') {
+                texto = `💎 *¡BENEFICIO 4 ESTAMPAS ORO - LEM MODA!* 💎\n\nHola equipo LEM 👋\n\nComo *Socio Oro VIP*, he llegado a mis 4 estampas en el nuevo ciclo y quiero reclamar mi *50% DE DESCUENTO*.\n\n📌 *Cliente:* ${nombreClienteActivo}\n📌 *Código VIP:* ${codigoVip}\n\n¡Gracias! ✨`;
+            } else if (tipo === 'nuevo_regalo') {
+                texto = `👑 *¡CICLO VIP COMPLETADO - LEM MODA!* 👑\n\n¡Hola equipo LEM! 👋\n\nHe completado mis *8 ESTAMPAS ORO*.\n🛍️ ¡Vengo por mi nueva *PRENDA DE REGALO*!\n\n📌 *Cliente:* ${nombreClienteActivo}\n📌 *Código VIP:* ${codigoVip}\n\n¡Muchísimas gracias! ✨`;
+            } else if (tipo === 'personal') {
+                texto = `👑 *¡PERSONAL SHOPPER ORO VIP!* 👑\n\nHola LEM Moda 👋\n\nComo *Socio Oro VIP* solicito asesoría personalizada.\n\n📌 *Cliente:* ${nombreClienteActivo}\n📌 *Código VIP:* ${codigoVip}\n\n¡Gracias! ✨`;
+            }
+            window.open(`https://wa.me/${waNumber}?text=${encodeURIComponent(texto)}`, '_blank');
+        }
+
+        const vipPass = document.getElementById('vipPass3D');
+        if (vipPass) {
+            document.addEventListener('mousemove', (e) => {
+                if(!isVipMode) return;
+                const xAxis = (window.innerWidth / 2 - e.pageX) / 30;
+                const yAxis = (window.innerHeight / 2 - e.pageY) / 30;
+                vipPass.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
+            });
+            document.addEventListener('mouseleave', () => {
+                if(!isVipMode) return;
+                vipPass.style.transition = 'all 0.5s ease';
+                vipPass.style.transform = `rotateY(0deg) rotateX(0deg)`;
+            });
+            document.addEventListener('mouseenter', () => {
+                if(!isVipMode) return;
+                vipPass.style.transition = 'none';
+            });
+        }
     </script>
 
     <script>
         (function() {
             const canvas = document.getElementById('lemCanvas');
             const ctx = canvas.getContext('2d');
-            let W, H;
-
-            const DOTS = Array.from({length: 60}, () => ({
+            let W, H, t = 0;
+            const DOTS = Array.from({length: 80}, () => ({
                 x: Math.random(), y: Math.random(), r: 0.5 + Math.random() * 1.8,
                 phase: Math.random() * Math.PI * 2, speed: 0.008 + Math.random() * 0.018,
                 vy: -(0.00008 + Math.random() * 0.00015), vx: (Math.random() - 0.5) * 0.00006
             }));
-
-            const NODES = Array.from({length: 14}, () => ({
-                x: Math.random(), y: Math.random(),
-                vx: (Math.random() - 0.5) * 0.0003, vy: (Math.random() - 0.5) * 0.0003,
+            const NODES = Array.from({length: 18}, () => ({
+                x: Math.random(), y: Math.random(), vx: (Math.random() - 0.5) * 0.0003, vy: (Math.random() - 0.5) * 0.0003,
             }));
-
-            const BRAND_WORDS = ['LEM MODA', 'ADMIN', 'ELITE', 'CONTROL', 'PANEL', 'STAFF', 'PREMIUM', 'QUITO'];
-            const VIP_WORDS = ['ORO VIP', 'PREMIUM', 'ELITE ADMIN', 'GOLD CLIENT', 'LUXURY'];
-            const GOLD_FILLS = ['#c9a84c', '#e8c87a', '#f0d080', '#b8965a'];
-            const BLUE_FILLS = ['#7a9fc2', '#5b85ad', '#a5c2de'];
-            const VIP_FILLS = ['#FFE082', '#FFD54F', '#FFCA28', '#c9a84c'];
-
+            const BRAND_WORDS = ['LEM MODA','ELITE','ATHLEISURE','QUITO','ESTILO','URBAN','LEM MODA','PREMIUM','COLECCIÓN','LEM','MODA','ELITE'];
+            const VIP_WORDS = ['ORO VIP','PREMIUM','EXCLUSIVE','LEM ELITE','VIP','GOLD','LUXURY','PRESTIGE'];
+            const GOLD_FILLS = ['#c9a84c','#e8c87a','#f0d080','#b8965a'];
+            const VIP_FILLS = ['#FFE082','#FFD54F','#FFCA28','#c9a84c','#FFE0B2'];
+            const GREEN_FILLS = ['#6DAE5A','#5a9e4a','#7dc46a'];
             let words = [];
             let fontReady = false;
             document.fonts.ready.then(() => { fontReady = true; });
-
             function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
             function rand(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
-
             function createWord() {
                 const side = Math.floor(Math.random() * 4);
                 let x, y, vx, vy;
                 const speed = 0.15 + Math.random() * 0.2;
-                if (side === 0)      { x = Math.random() * W; y = -20; vx = (Math.random()-0.5)*0.15; vy = speed; }
+                if (side === 0) { x = Math.random()*W; y = -20; vx = (Math.random()-0.5)*0.15; vy = speed; }
                 else if (side === 1) { x = W+20; y = Math.random()*H; vx = -speed; vy = (Math.random()-0.5)*0.15; }
                 else if (side === 2) { x = Math.random()*W; y = H+20; vx = (Math.random()-0.5)*0.15; vy = -speed; }
-                else                 { x = -20; y = Math.random()*H; vx = speed; vy = (Math.random()-0.5)*0.15; }
-                const isVip = document.body.classList.contains('admin-vip-mode');
-                const isGold = Math.random() > 0.35;
+                else { x = -20; y = Math.random()*H; vx = speed; vy = (Math.random()-0.5)*0.15; }
+                const isGold = Math.random() > 0.3;
                 return {
                     x, y, vx, vy,
-                    text: isVip ? rand(VIP_WORDS) : rand(BRAND_WORDS),
-                    fill: isVip ? rand(VIP_FILLS) : (isGold ? rand(GOLD_FILLS) : rand(BLUE_FILLS)),
-                    size: 9 + Math.floor(Math.random() * 8),
+                    text: isVipMode ? rand(VIP_WORDS) : rand(BRAND_WORDS),
+                    fill: isVipMode ? rand(VIP_FILLS) : (isGold ? rand(GOLD_FILLS) : rand(GREEN_FILLS)),
+                    size: isVipMode ? (11 + Math.floor(Math.random() * 9)) : (9 + Math.floor(Math.random() * 8)),
                     alpha: 0, life: 0, maxLife: 350 + Math.floor(Math.random() * 250),
                     angle: (Math.random() - 0.5) * 0.15
                 };
             }
-
             function draw() {
-                ctx.clearRect(0, 0, W, H);
-                const isVip = document.body.classList.contains('admin-vip-mode');
-
+                ctx.clearRect(0, 0, W, H); t += 0.012;
                 for (const d of DOTS) {
                     d.x += d.vx; d.y += d.vy; d.phase += d.speed;
                     if (d.y < -0.02) d.y = 1.02;
                     if (d.x < -0.01 || d.x > 1.01) d.vx *= -1;
-                    ctx.globalAlpha = isVip ? (0.12 + Math.abs(Math.sin(d.phase)) * 0.2) : (0.08 + Math.abs(Math.sin(d.phase)) * 0.18);
-                    ctx.fillStyle = isVip ? '#FFE082' : '#c9a84c';
-                    ctx.beginPath();
-                    ctx.arc(d.x * W, d.y * H, isVip ? d.r * 1.3 : d.r, 0, Math.PI * 2);
-                    ctx.fill();
+                    const alpha = isVipMode ? (0.14 + Math.abs(Math.sin(d.phase)) * 0.3) : (0.08 + Math.abs(Math.sin(d.phase)) * 0.18);
+                    ctx.globalAlpha = alpha; ctx.fillStyle = isVipMode ? '#FFE082' : '#c9a84c';
+                    ctx.beginPath(); ctx.arc(d.x * W, d.y * H, isVipMode ? (d.r * 1.4) : d.r, 0, Math.PI * 2); ctx.fill();
                 }
-
                 for (const n of NODES) {
                     n.x += n.vx; n.y += n.vy;
-                    if (n.x < 0 || n.x > 1) n.vx *= -1;
-                    if (n.y < 0 || n.y > 1) n.vy *= -1;
+                    if (n.x < 0 || n.x > 1) n.vx *= -1; if (n.y < 0 || n.y > 1) n.vy *= -1;
                 }
                 for (let i = 0; i < NODES.length; i++) {
                     for (let j = i + 1; j < NODES.length; j++) {
-                        const dx = (NODES[i].x - NODES[j].x) * W;
-                        const dy = (NODES[i].y - NODES[j].y) * H;
+                        const dx = (NODES[i].x - NODES[j].x) * W; const dy = (NODES[i].y - NODES[j].y) * H;
                         const dist = Math.sqrt(dx*dx + dy*dy);
                         if (dist < 180) {
-                            ctx.globalAlpha = isVip ? (1 - dist/180) * 0.1 : (1 - dist/180) * 0.06;
-                            ctx.strokeStyle = isVip ? '#FFE082' : '#c9a84c';
-                            ctx.lineWidth = isVip ? 0.7 : 0.5;
-                            ctx.beginPath();
-                            ctx.moveTo(NODES[i].x * W, NODES[i].y * H);
-                            ctx.lineTo(NODES[j].x * W, NODES[j].y * H);
-                            ctx.stroke();
+                            ctx.globalAlpha = isVipMode ? (1 - dist/180) * 0.14 : (1 - dist/180) * 0.06;
+                            ctx.strokeStyle = isVipMode ? '#FFE082' : '#c9a84c';
+                            ctx.lineWidth = isVipMode ? 0.8 : 0.5;
+                            ctx.beginPath(); ctx.moveTo(NODES[i].x * W, NODES[i].y * H); ctx.lineTo(NODES[j].x * W, NODES[j].y * H); ctx.stroke();
                         }
                     }
                 }
-
-                if (fontReady && words.length < 7 && Math.random() < 0.02) words.push(createWord());
-
+                if (fontReady && words.length < 8 && Math.random() < 0.025) words.push(createWord());
                 words = words.filter(w => {
-                    w.life++; w.x += w.vx; w.y += w.vy;
-                    const fz = 60;
+                    w.life++; w.x += w.vx; w.y += w.vy; const fz = 60;
                     if (w.life < fz) w.alpha = w.life / fz;
                     else if (w.life > w.maxLife - fz) w.alpha = Math.max(0, (w.maxLife - w.life) / fz);
                     else w.alpha = 1;
                     if (w.life >= w.maxLife || w.x < -150 || w.x > W+150 || w.y < -40 || w.y > H+40) return false;
                     ctx.save();
-                    ctx.globalAlpha = w.alpha * (isVip ? 0.65 : 0.5);
+                    ctx.globalAlpha = w.alpha * (isVipMode ? 0.7 : 0.55);
                     ctx.translate(w.x, w.y); ctx.rotate(w.angle);
-                    ctx.font = `700 ${w.size}px ${isVip ? "'Playfair Display', serif" : "'Inter', sans-serif"}`;
-                    ctx.textBaseline = 'middle';
-                    ctx.fillStyle = w.fill;
-                    ctx.fillText(w.text, 0, 0);
+                    ctx.font = `700 ${w.size}px ${isVipMode ? "'Playfair Display', serif" : "'Inter', sans-serif"}`;
+                    ctx.letterSpacing = '3px'; ctx.textBaseline = 'middle'; ctx.fillStyle = w.fill; ctx.fillText(w.text, 0, 0);
                     ctx.restore();
                     return true;
                 });
-
                 requestAnimationFrame(draw);
             }
-
-            resize();
-            window.addEventListener('resize', resize);
-            setTimeout(() => {
-                for (let i = 0; i < 4; i++) {
-                    const w = createWord();
-                    w.x = 30 + Math.random() * (W - 60);
-                    w.y = 30 + Math.random() * (H - 60);
-                    w.life = Math.floor(Math.random() * 150);
-                    words.push(w);
-                }
-                draw();
-            }, 300);
+            resize(); window.addEventListener('resize', resize);
+            setTimeout(() => { for (let i = 0; i < 5; i++) { const w = createWord(); w.x = 30 + Math.random() * (W - 60); w.y = 30 + Math.random() * (H - 60); w.life = Math.floor(Math.random() * 150); words.push(w); } draw(); }, 300);
         })();
     </script>
 </body>
