@@ -219,16 +219,8 @@
         .field-input::placeholder { color: rgba(255,255,255,0.28); }
         .field-icon { color: var(--lem-gold); opacity: 0.85; font-size: 0.95rem; margin-left: 10px; }
 
-        /* Estilos para los Select del Cumpleaños */
-        select.field-input {
-            appearance: none;
-            -webkit-appearance: none;
-            cursor: pointer;
-        }
-        select.field-input option {
-            background: #111;
-            color: #fff;
-        }
+        select.field-input { appearance: none; -webkit-appearance: none; cursor: pointer; }
+        select.field-input option { background: #111; color: #fff; }
 
         .btn-pill {
             background: linear-gradient(135deg, #d4a373 0%, #b08968 100%);
@@ -255,9 +247,7 @@
         }
         .btn-beneficios:hover { background: rgba(201, 168, 76, 0.15); }
 
-        .social-row {
-            display: flex; justify-content: center; gap: 16px; margin-top: 26px;
-        }
+        .social-row { display: flex; justify-content: center; gap: 16px; margin-top: 26px; }
         .social-btn {
             width: 44px; height: 44px; border-radius: 50%;
             display: flex; align-items: center; justify-content: center;
@@ -278,10 +268,8 @@
         .btn-pill-outline:hover { background: rgba(201, 168, 76, 0.08); border-color: var(--lem-gold); }
 
         .btn-web-store {
-            background: rgba(212, 163, 115, 0.05);
-            border: 1px solid rgba(212, 163, 115, 0.3);
-            color: var(--lem-gold);
-            display: flex; align-items: center; justify-content: center; gap: 12px;
+            background: rgba(212, 163, 115, 0.05); border: 1px solid rgba(212, 163, 115, 0.3);
+            color: var(--lem-gold); display: flex; align-items: center; justify-content: center; gap: 12px;
             margin-top: 20px; text-decoration: none; padding: 15px; border-radius: 50px;
             font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase;
             font-weight: 700; backdrop-filter: blur(10px); transition: 0.3s;
@@ -388,68 +376,45 @@
 
         .vip-title-main {
             font-family: 'Playfair Display', serif;
-            font-size: 2rem;
-            font-weight: 800;
-            letter-spacing: 2px;
+            font-size: 2rem; font-weight: 800; letter-spacing: 2px;
             background: linear-gradient(135deg, #FFE082, #ffffff, #FFE082);
             background-size: 300% auto;
             -webkit-background-clip: text; background-clip: text; color: transparent;
-            animation: vip-title-shimmer 4s linear infinite;
-            margin: 0;
+            animation: vip-title-shimmer 4s linear infinite; margin: 0;
         }
         @keyframes vip-title-shimmer { to { background-position: -300% center; } }
 
-        .vip-subtitle {
-            font-size: 0.6rem; letter-spacing: 4px; color: #888;
-            text-transform: uppercase; margin-top: 4px;
-        }
+        .vip-subtitle { font-size: 0.6rem; letter-spacing: 4px; color: #888; text-transform: uppercase; margin-top: 4px; }
+        .vip-divider { width: 60px; height: 1px; margin: 18px auto; background: linear-gradient(90deg, transparent, #FFE082, transparent); }
 
-        .vip-divider {
-            width: 60px; height: 1px; margin: 18px auto;
-            background: linear-gradient(90deg, transparent, #FFE082, transparent);
-        }
-
-        /* Pase VIP Interactivo 3D */
         .vip-pass-container { perspective: 900px; margin: 25px 0; }
-
         .vip-pass {
             width: 100%; box-sizing: border-box;
             background: linear-gradient(145deg, #141210 0%, #1c1914 40%, #0f0d0a 100%);
-            border: 1.5px solid rgba(255,224,130,0.35);
-            border-radius: 22px; padding: 28px 22px;
+            border: 1.5px solid rgba(255,224,130,0.35); border-radius: 22px; padding: 28px 22px;
             box-shadow: 0 25px 60px rgba(0,0,0,0.7), 0 0 40px rgba(255,224,130,0.08), inset 0 1px 0 rgba(255,255,255,0.05);
-            position: relative; transform-style: preserve-3d;
-            transition: transform 0.15s ease; overflow: hidden;
+            position: relative; transform-style: preserve-3d; transition: transform 0.15s ease; overflow: hidden;
         }
-
         .vip-pass::before {
             content: ''; position: absolute; top: 0; left: -200%; width: 80%; height: 100%;
             background: linear-gradient(105deg, transparent 40%, rgba(255,224,130,0.12) 50%, transparent 60%);
             transform: skewX(-20deg); animation: vip-pass-shine 6s ease-in-out infinite; pointer-events: none;
         }
-        @keyframes vip-pass-shine {
-            0% { left: -200%; } 40%, 100% { left: 200%; }
-        }
-
+        @keyframes vip-pass-shine { 0% { left: -200%; } 40%, 100% { left: 200%; } }
         .vip-pass::after {
             content: ''; position: absolute; inset: 8px; border-radius: 15px;
             border: 1px solid rgba(255,224,130,0.06); pointer-events: none;
         }
-
         .vip-pass-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; position: relative; z-index: 2; }
         .vip-pass-label { font-size: 0.5rem; letter-spacing: 3px; color: #FFE082; text-transform: uppercase; opacity: 0.8; }
         .vip-pass-type { font-family: 'Playfair Display', serif; font-size: 1.15rem; color: #fff; margin: 2px 0 0; font-weight: 700; letter-spacing: 1px; }
         .vip-pass-logo { width: 42px; height: 42px; border-radius: 50%; border: 1.5px solid #FFE082; background: #fff; padding: 3px; }
 
-        .vip-code-display {
-            text-align: center; margin: 22px 0; position: relative; z-index: 2;
-        }
+        .vip-code-display { text-align: center; margin: 22px 0; position: relative; z-index: 2; }
         .vip-code-label { font-size: 0.55rem; letter-spacing: 2px; color: #777; text-transform: uppercase; }
         .vip-code-value {
-            font-family: 'Playfair Display', monospace;
-            font-size: 1.6rem; font-weight: 900; color: #FFE082;
-            letter-spacing: 5px; margin-top: 5px;
-            text-shadow: 0 0 20px rgba(255,224,130,0.4);
+            font-family: 'Playfair Display', monospace; font-size: 1.6rem; font-weight: 900; color: #FFE082;
+            letter-spacing: 5px; margin-top: 5px; text-shadow: 0 0 20px rgba(255,224,130,0.4);
         }
 
         .vip-pass-footer { display: flex; justify-content: space-between; align-items: flex-end; position: relative; z-index: 2; }
@@ -457,14 +422,10 @@
         .vip-pass-holder-name { font-size: 0.8rem; font-weight: 700; color: #fff; letter-spacing: 1px; margin-top: 2px; }
         .vip-qr-box { background: #fff; padding: 5px; border-radius: 8px; box-shadow: 0 0 15px rgba(255,224,130,0.15); }
 
-        /* Tarjeta de Estampas VIP */
         .vip-stamp-card {
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255,224,130,0.18);
-            border-radius: 28px; padding: 25px;
-            backdrop-filter: blur(20px);
-            box-shadow: 0 20px 50px rgba(0,0,0,0.6);
-            position: relative; overflow: hidden; margin-top: 25px;
+            background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255,224,130,0.18);
+            border-radius: 28px; padding: 25px; backdrop-filter: blur(20px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.6); position: relative; overflow: hidden; margin-top: 25px;
         }
         .vip-stamp-card::before {
             content: ''; position: absolute; top: -60%; left: -60%; width: 220%; height: 220%;
@@ -473,169 +434,111 @@
         }
 
         .vip-stamp-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 0.85rem; letter-spacing: 3px; color: #FFE082;
+            font-family: 'Playfair Display', serif; font-size: 0.85rem; letter-spacing: 3px; color: #FFE082;
             text-transform: uppercase; margin: 0 0 5px; position: relative; z-index: 2;
         }
-        .vip-stamp-subtitle {
-            font-size: 0.6rem; color: #777; letter-spacing: 1px; margin: 0 0 18px;
-            position: relative; z-index: 2;
-        }
+        .vip-stamp-subtitle { font-size: 0.6rem; color: #777; letter-spacing: 1px; margin: 0 0 18px; position: relative; z-index: 2; }
 
-        .vip-stamp-grid {
-            display: grid; grid-template-columns: repeat(4, 1fr);
-            gap: 12px; margin: 15px 0; position: relative; z-index: 2;
-        }
+        .vip-stamp-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 15px 0; position: relative; z-index: 2; }
 
         .vip-slot {
-            aspect-ratio: 1; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            position: relative; overflow: hidden;
-            background: rgba(0,0,0,0.6);
-            border: 1.5px solid rgba(255,224,130,0.12);
-            transition: all 0.4s ease;
+            aspect-ratio: 1; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            position: relative; overflow: hidden; background: rgba(0,0,0,0.6);
+            border: 1.5px solid rgba(255,224,130,0.12); transition: all 0.4s ease;
         }
         .vip-slot::before {
             content: attr(data-index); color: rgba(255,224,130,0.25);
-            font-weight: 700; position: absolute; font-size: 0.75rem;
-            font-family: 'Playfair Display', serif;
+            font-weight: 700; position: absolute; font-size: 0.75rem; font-family: 'Playfair Display', serif;
         }
-
         .vip-slot.active {
-            background: linear-gradient(135deg, #FFE082, #c9a84c);
-            border: 2px solid #FFE082;
-            box-shadow: 0 0 15px rgba(255,224,130,0.4);
-            animation: vip-stamp-pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
+            background: linear-gradient(135deg, #FFE082, #c9a84c); border: 2px solid #FFE082;
+            box-shadow: 0 0 15px rgba(255,224,130,0.4); animation: vip-stamp-pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
         }
         .vip-slot.active::before { display: none; }
         .vip-slot.active img { display: block; width: 60%; filter: brightness(0) saturate(0); }
         .vip-slot img { display: none; }
+        @keyframes vip-stamp-pop { 0% { transform: scale(0.3) rotate(-15deg); opacity: 0; } 100% { transform: scale(1) rotate(0deg); opacity: 1; } }
 
-        @keyframes vip-stamp-pop {
-            0% { transform: scale(0.3) rotate(-15deg); opacity: 0; }
-            100% { transform: scale(1) rotate(0deg); opacity: 1; }
-        }
-
-        .vip-slot.milestone {
-            border-color: rgba(255,224,130,0.35) !important;
-        }
+        .vip-slot.milestone { border-color: rgba(255,224,130,0.35) !important; }
         .vip-slot.milestone .premio-text {
-            font-size: 0.5rem; line-height: 1.1; font-weight: 800;
-            color: #FFE082; text-transform: uppercase; padding: 2px;
+            font-size: 0.5rem; line-height: 1.1; font-weight: 800; color: #FFE082; text-transform: uppercase; padding: 2px;
         }
 
         .vip-progress-track {
-            width: 100%; height: 5px; border-radius: 5px;
-            background: rgba(255,224,130,0.08);
+            width: 100%; height: 5px; border-radius: 5px; background: rgba(255,224,130,0.08);
             margin: 18px 0 10px; overflow: hidden; position: relative; z-index: 2;
         }
         .vip-progress-fill {
-            height: 100%; width: 0%; border-radius: 5px;
-            background: linear-gradient(90deg, #8D6E63, #FFE082, #fff);
-            transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 0 8px rgba(255,224,130,0.5);
+            height: 100%; width: 0%; border-radius: 5px; background: linear-gradient(90deg, #8D6E63, #FFE082, #fff);
+            transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 0 8px rgba(255,224,130,0.5);
         }
-
         .vip-counter-label {
-            color: #FFE082; font-size: 0.7rem; letter-spacing: 2px;
-            position: relative; z-index: 2;
-            font-family: 'Playfair Display', serif;
+            color: #FFE082; font-size: 0.7rem; letter-spacing: 2px; position: relative; z-index: 2; font-family: 'Playfair Display', serif;
         }
 
-        /* Beneficios VIP */
         .vip-benefits-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 0.9rem; letter-spacing: 3px; color: #FFE082;
+            font-family: 'Playfair Display', serif; font-size: 0.9rem; letter-spacing: 3px; color: #FFE082;
             text-transform: uppercase; margin: 30px 0 15px; font-weight: 400;
         }
-
         .vip-benefit-card {
-            background: rgba(255,224,130,0.03);
-            border: 1px solid rgba(255,224,130,0.12);
-            border-radius: 18px; padding: 18px; margin-bottom: 12px;
-            display: flex; align-items: center; gap: 15px; text-align: left;
+            background: rgba(255,224,130,0.03); border: 1px solid rgba(255,224,130,0.12);
+            border-radius: 18px; padding: 18px; margin-bottom: 12px; display: flex; align-items: center; gap: 15px; text-align: left;
             position: relative; overflow: hidden; transition: 0.3s;
         }
         .vip-benefit-card:hover { border-color: rgba(255,224,130,0.3); background: rgba(255,224,130,0.06); }
-
         .vip-benefit-card::before {
             content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
             background: linear-gradient(90deg, transparent, rgba(255,224,130,0.06), transparent);
             animation: shine-sweep 4s ease-in-out infinite; pointer-events: none;
         }
-
         .vip-benefit-icon {
-            width: 45px; height: 45px; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            background: rgba(255,224,130,0.08); border: 1px solid rgba(255,224,130,0.2);
-            font-size: 1.1rem; flex-shrink: 0;
+            width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            background: rgba(255,224,130,0.08); border: 1px solid rgba(255,224,130,0.2); font-size: 1.1rem; flex-shrink: 0;
         }
-        .vip-benefit-icon i {
-            background: var(--vip-gold-gradient);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-        }
-
+        .vip-benefit-icon i { background: var(--vip-gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .vip-benefit-info { flex: 1; }
         .vip-benefit-info h4 { margin: 0; font-size: 0.85rem; color: #fff; font-weight: 600; letter-spacing: 0.5px; }
         .vip-benefit-info p { margin: 3px 0 0; font-size: 0.7rem; color: #999; line-height: 1.4; }
 
         .vip-btn-gold {
-            background: var(--vip-gold-gradient);
-            color: #000 !important; font-weight: 800; border: none;
-            box-shadow: 0 0 18px rgba(201,168,76,0.4);
-            letter-spacing: 1.5px; text-transform: uppercase;
+            background: var(--vip-gold-gradient); color: #000 !important; font-weight: 800; border: none;
+            box-shadow: 0 0 18px rgba(201,168,76,0.4); letter-spacing: 1.5px; text-transform: uppercase;
             cursor: pointer; transition: 0.3s;
         }
         .vip-btn-gold:hover { box-shadow: 0 0 28px rgba(201,168,76,0.7); transform: scale(1.02); }
-
         .vip-btn-elegant {
-            background: rgba(255,224,130,0.04);
-            border: 1px solid rgba(255,224,130,0.25);
-            color: #FFE082; border-radius: 50px; padding: 12px 20px;
-            font-size: 0.75rem; font-weight: 600; letter-spacing: 1px;
+            background: rgba(255,224,130,0.04); border: 1px solid rgba(255,224,130,0.25);
+            color: #FFE082; border-radius: 50px; padding: 12px 20px; font-size: 0.75rem; font-weight: 600; letter-spacing: 1px;
             cursor: pointer; transition: 0.3s; width: 100%;
         }
         .vip-btn-elegant:hover { background: rgba(255,224,130,0.1); border-color: #FFE082; }
-
-        .vip-footer-text {
-            font-family: 'Playfair Display', serif;
-            font-size: 0.5rem; letter-spacing: 3px; color: #555;
-            text-transform: uppercase; margin-top: 16px; position: relative; z-index: 2;
-        }
-
-        .vip-qr-section {
-            margin-top: 18px; position: relative; z-index: 2;
-        }
+        .vip-footer-text { font-family: 'Playfair Display', serif; font-size: 0.5rem; letter-spacing: 3px; color: #555; text-transform: uppercase; margin-top: 16px; position: relative; z-index: 2; }
+        .vip-qr-section { margin-top: 18px; position: relative; z-index: 2; }
     </style>
 </head>
 <body>
     <canvas id="lemCanvas" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1;opacity:0.6;"></canvas>
 
-    <!-- Modal Beneficios (Normal) -->
     <div id="modalBeneficios" class="modal">
         <div class="modal-content">
             <i class="fa-solid fa-crown" style="color: var(--lem-gold); font-size: 1.7rem; display: block; margin-bottom: 10px;"></i>
             <h3 style="color: #fff; letter-spacing: 2px; font-weight: 300; margin: 0 0 2px;">BENEFICIOS <span class="shimmer-text" style="font-weight: 700;">EXCLUSIVOS</span></h3>
             <p style="font-size: 0.65rem; color: #888; letter-spacing: 2px; margin-bottom: 24px;">TU LEALTAD, NUESTRA RECOMPENSA</p>
-
             <div class="benefit-tier benefit-tier-silver">
                 <div class="benefit-tier-top"><i class="fa-solid fa-gem benefit-icon"></i><span class="benefit-badge">4 SELLOS</span></div>
                 <h4 class="benefit-tier-title">Socio Plata</h4>
                 <p class="benefit-tier-desc">50% de descuento en una prenda de tu próxima compra.</p>
             </div>
-
             <div class="benefit-tier benefit-tier-gold">
                 <div class="benefit-tier-top"><i class="fa-solid fa-crown benefit-icon"></i><span class="benefit-badge benefit-badge-gold">8 SELLOS</span></div>
                 <h4 class="benefit-tier-title">Socio Oro VIP</h4>
                 <p class="benefit-tier-desc">Prenda de regalo + Acceso permanente a la Zona Oro VIP con nuevo ciclo de recompensas.</p>
             </div>
-
             <p style="font-size: 0.7rem; color: #777; margin-top: 6px; font-style: italic;">Cada sello te acerca un paso más a tu próxima recompensa ✨</p>
             <button class="btn-pill-outline" style="margin-top: 20px;" onclick="toggleModal(false)">Cerrar</button>
         </div>
     </div>
 
-    <!-- Overlay Éxito Nivel 4 -->
     <div id="success-overlay" class="overlay-fullscreen">
         <div class="success-card">
             <div id="successIconBadge" class="success-icon-badge tier-gold"><i class="fa-solid fa-gem"></i></div>
@@ -646,29 +549,24 @@
         </div>
     </div>
 
-    <!-- 🎁 NUEVO MODAL: ACTIVACIÓN VIP Y CUMPLEAÑOS 🎁 -->
+    <!-- 🎁 MODAL: ACTIVACIÓN VIP Y CUMPLEAÑOS -->
     <div id="vip-upgrade-overlay" class="overlay-fullscreen">
         <div class="success-card" style="border: 1px solid rgba(255,224,130,0.4); background: rgba(16, 14, 11, 0.85);">
             <div class="vip-header-crown"><i class="fa-solid fa-crown" style="color: #FFE082;"></i></div>
             <h2 style="color: #FFE082; font-family: 'Playfair Display', serif; font-weight: 800; font-size: 1.5rem; letter-spacing: 2px; margin: 10px 0;">¡BIENVENIDO A ORO VIP!</h2>
-            <p style="font-size: 0.8rem; color: #bbb; line-height: 1.4; margin-bottom: 20px;">Has completado tus 8 estampas. Para preparar tus regalos sorpresa exclusivos, por favor ingresa tu fecha de nacimiento.</p>
+            <p style="font-size: 0.8rem; color: #bbb; line-height: 1.4; margin-bottom: 20px;">Has completado tus 8 estampas. Para activar tu nuevo panel VIP y poder reclamar tu premio, por favor ingresa tu fecha de nacimiento.</p>
             
-            <!-- Formulario de Cumpleaños -->
             <div style="display: flex; gap: 10px; margin-bottom: 25px; justify-content: center;">
                 <select id="bday-dia" class="field-input" style="border-bottom: 1px solid #FFE082; padding: 8px 5px; color: #fff; width: auto; font-size: 0.9rem;">
                     <option value="" disabled selected>Día</option>
-                    <!-- JavaScript llenará los días -->
                 </select>
                 <select id="bday-mes" class="field-input" style="border-bottom: 1px solid #FFE082; padding: 8px 5px; color: #fff; width: auto; font-size: 0.9rem;">
                     <option value="" disabled selected>Mes</option>
-                    <!-- JavaScript llenará los meses -->
                 </select>
                 <select id="bday-anio" class="field-input" style="border-bottom: 1px solid #FFE082; padding: 8px 5px; color: #fff; width: auto; font-size: 0.9rem;">
                     <option value="" disabled selected>Año</option>
-                    <!-- JavaScript llenará los años -->
                 </select>
             </div>
-
             <button id="btnActivarVip" class="btn-pill vip-btn-gold" style="border-radius: 50px;" onclick="guardarCumpleañosYEntrar()">Activar Mi Cuenta VIP</button>
         </div>
     </div>
@@ -732,7 +630,6 @@
                 <h3 id="memberName" class="shimmer-text">Cliente VIP</h3>
                 <span id="memberTier" class="tier-badge">MIEMBRO ELITE</span>
             </div>
-
             <button class="btn-beneficios" onclick="toggleModal(true)">Ver Beneficios</button>
             <div class="card">
                 <div class="card-chip"></div>
@@ -744,49 +641,32 @@
                 <div class="qr-wrap"><canvas id="qr-canvas"></canvas></div>
                 <p class="card-footer-text">Miembro LEM Moda · Quito, Ecuador</p>
             </div>
-
-            <a href="aqui va la web" target="_blank" class="btn-web-store">
-                <i class="fa-solid fa-bag-shopping"></i> Muy Pronto Tienda Online
-            </a>
+            <a href="aqui va la web" target="_blank" class="btn-web-store"><i class="fa-solid fa-bag-shopping"></i> Muy Pronto Tienda Online</a>
             <button class="btn-pill-outline" style="margin-top:20px;" onclick="location.reload()">Cerrar Sesión</button>
         </div>
 
         <!-- ═══ 👑 ZONA ORO VIP — INTERFAZ ULTRA PREMIUM 👑 ═══ -->
         <div id="vipPanel" style="display:none">
-
-            <!-- Encabezado VIP Majestuoso -->
             <div style="margin-bottom: 10px;">
                 <div class="vip-header-crown"><i class="fa-solid fa-crown" style="color: #FFE082;"></i></div>
                 <h1 class="vip-title-main">ORO VIP</h1>
                 <p class="vip-subtitle">Miembro de Élite · LEM Moda</p>
             </div>
-
             <div class="vip-divider"></div>
-
             <!-- Pase Digital VIP 3D -->
             <div class="vip-pass-container">
                 <div class="vip-pass" id="vipPass3D">
                     <div class="vip-pass-header">
-                        <div>
-                            <p class="vip-pass-label">Pase Digital Exclusivo</p>
-                            <h4 class="vip-pass-type">VIP ELITE</h4>
-                        </div>
+                        <div><p class="vip-pass-label">Pase Digital Exclusivo</p><h4 class="vip-pass-type">VIP ELITE</h4></div>
                         <img src="1.png.png" class="vip-pass-logo">
                     </div>
-
                     <div class="vip-code-display">
                         <p class="vip-code-label">Código Único de Identificación</p>
                         <div class="vip-code-value" id="vipCodeNumber">VIP-0000</div>
                     </div>
-
                     <div class="vip-pass-footer">
-                        <div>
-                            <p class="vip-pass-holder-label">Titular</p>
-                            <p class="vip-pass-holder-name" id="vipHolderName">CLIENTE PREMIUM</p>
-                        </div>
-                        <div class="vip-qr-box">
-                            <canvas id="vip-qr-canvas" style="width: 65px; height: 65px; display: block;"></canvas>
-                        </div>
+                        <div><p class="vip-pass-holder-label">Titular</p><p class="vip-pass-holder-name" id="vipHolderName">CLIENTE PREMIUM</p></div>
+                        <div class="vip-qr-box"><canvas id="vip-qr-canvas" style="width: 65px; height: 65px; display: block;"></canvas></div>
                     </div>
                 </div>
             </div>
@@ -795,12 +675,9 @@
             <div class="vip-stamp-card">
                 <h4 class="vip-stamp-title">Estampas Oro</h4>
                 <p class="vip-stamp-subtitle">Tu nuevo ciclo de recompensas exclusivas</p>
-
                 <div class="vip-stamp-grid" id="vipStampGrid"></div>
-
                 <div class="vip-progress-track"><div class="vip-progress-fill" id="vipProgressFill"></div></div>
                 <p class="vip-counter-label" id="vipCounterLabel">Sincronizando...</p>
-
                 <div class="vip-qr-section">
                     <div class="qr-wrap" style="box-shadow: 0 0 0 1px rgba(255,224,130,0.3), 0 10px 25px rgba(0,0,0,0.5);">
                         <canvas id="vip-stamp-qr"></canvas>
@@ -811,7 +688,7 @@
 
             <!-- Beneficios Permanentes VIP -->
             <h3 class="vip-benefits-title">Privilegios Activos</h3>
-
+            
             <div class="vip-benefit-card">
                 <div class="vip-benefit-icon"><i class="fa-solid fa-gift"></i></div>
                 <div class="vip-benefit-info" style="flex:1">
@@ -821,11 +698,12 @@
                 </div>
             </div>
 
+            <!-- NUEVO: Beneficio Continuo (Igual a la normal) -->
             <div class="vip-benefit-card">
-                <div class="vip-benefit-icon"><i class="fa-solid fa-percent"></i></div>
+                <div class="vip-benefit-icon"><i class="fa-solid fa-gem"></i></div>
                 <div class="vip-benefit-info">
-                    <h4>15% OFF Permanente</h4>
-                    <p>Descuento aplicable de por vida en todas tus compras LEM Moda.</p>
+                    <h4>Recompensas Continuas</h4>
+                    <p>Obtén 50% OFF a las 4 estampas Oro y una nueva Prenda Gratis a las 8.</p>
                 </div>
             </div>
 
@@ -836,7 +714,6 @@
                     <p>Sé el primero en ver y comprar las nuevas colecciones antes que nadie.</p>
                 </div>
             </div>
-
             <div class="vip-benefit-card">
                 <div class="vip-benefit-icon"><i class="fa-solid fa-user-tie"></i></div>
                 <div class="vip-benefit-info" style="flex:1">
@@ -849,10 +726,8 @@
             <a href="aqui va la web" target="_blank" class="btn-web-store" style="border-color: rgba(255,224,130,0.2); color: #FFE082;">
                 <i class="fa-solid fa-bag-shopping"></i> Muy Pronto Tienda Online
             </a>
-
             <button class="vip-btn-elegant" style="margin-top: 25px;" onclick="logoutVIP()">Cerrar Sesión VIP</button>
         </div>
-
         <div class="social-row">
             <a href="http://wa.me/593984909967" target="_blank" rel="noopener" class="social-btn" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
             <a href="https://www.instagram.com/lemmoda.ec/" target="_blank" rel="noopener" class="social-btn" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
@@ -874,9 +749,10 @@
         let telefonoClienteActivo = "";
         let audioCtx = null;
         let previousPoints = null;
+        let previousVipPoints = null; // Para sonidos del ciclo VIP
         let isVipMode = false;
         let vipListenerAttached = false;
-        let pendingVipPhone = ""; // Almacena el número temporalmente durante el upgrade a VIP
+        let pendingVipPhone = ""; 
 
         function getAudioCtx() {
             if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -920,7 +796,7 @@
         }
 
         const NOMBRES_MASCULINOS = ['jose','luis','carlos','juan','andres','andrés','jesus','jesús','tomas','tomás','nicolas','nicolás','ismael','isaac','angel','ángel','gabriel','rafael','miguel','manuel','david','daniel','diego','fernando','francisco','javier','jorge','marcos','martin','martín','oscar','óscar','pablo','pedro','ricardo','roberto','ruben','rubén','sergio','victor','víctor','alexis','ariel','axel','bryan','brayan','cristian','cristhian','edison','edwin','efrain','efraín','elias','elías','esteban','ezequiel','gael','gonzalo','henry','ivan','iván','joel','jonathan','josue','josué','kevin','leonardo','mateo','mathias','matias','matías','maximiliano','moises','moisés','nelson','noe','noé','samuel','santiago','sebastian','sebastián','simon','simón','wilson','xavier'];
-        const NOMBRES_FEMENINOS = ['maria','maría','ana','sofia','sofía','isabel','mercedes','carmen','rosa','laura','andrea','valentina','camila','daniela','fernanda','gabriela','patricia','sandra','monica','mónica','veronica','verónica','paola','johanna','yolanda','martha','marta','alejandra','lucia','lucía','ximena','ines','inés','pilar','beatriz','elizabeth','katherine','catherine','estefania','estefanía','jessica','jessenia','yesenia','tatiana','vanessa','carolina','cristina','diana','evelyn','gladys','ivonne','jacqueline','karina','leslie','liliana','melany','melanie','michelle','nathaly','pamela','priscila','priscilla','samantha','stefania','stefanía','viviana','wendy','ximena','zoila','zoe'];
+        const NOMBRES_FEMENINOS = ['maria','maría','ana','sofia','sofía','isabel','mercedes','carmen','rosa','laura','andrea','valentina','camila','daniela','fernanda','gabriela','patricia','sandra','monica','mónica','veronica','verónica','paola','johanna','yolanda','martha','marta','alejandra','lucia','lucía','ximena','ines','inés','pilar','beatriz','elizabeth','katherine','catherine','estefania','estefanía','jessica','jessenia','yesenia','tatiana','vanessa','carolina','cristina','diana','evelyn','gladys','ivonne','jacqueline','karina','leslie','liliana','melany','melanie','michelle','nathaly','pamela','priscila','priscilla','samantha','stefania','stefanía','viviana','wendy','zoila','zoe'];
 
         function detectarGenero(nombreCompleto) {
             const primer = (nombreCompleto || '').trim().split(/\s+/)[0].toLowerCase().normalize('NFC');
@@ -931,15 +807,12 @@
             return 'f';
         }
 
-        // Llenar Selects de Cumpleaños
         function inicializarSelectsCumpleaños() {
             const diaSel = document.getElementById('bday-dia');
             for(let i=1; i<=31; i++) diaSel.innerHTML += `<option value="${i}">${i}</option>`;
-            
             const meses = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
             const mesSel = document.getElementById('bday-mes');
             meses.forEach(m => mesSel.innerHTML += `<option value="${m}">${m}</option>`);
-
             const anioSel = document.getElementById('bday-anio');
             const currentYear = new Date().getFullYear();
             for(let i = currentYear - 14; i >= currentYear - 80; i--) anioSel.innerHTML += `<option value="${i}">${i}</option>`;
@@ -951,7 +824,6 @@
         });
 
         function toggleModal(show) { document.getElementById('modalBeneficios').style.display = show ? 'flex' : 'none'; }
-
         function toggleVipLogin(show) {
             document.getElementById('standardLoginForm').style.display = show ? 'none' : 'block';
             document.getElementById('vipLoginForm').style.display = show ? 'block' : 'none';
@@ -963,7 +835,6 @@
             const name = document.getElementById('userName').value.trim();
             const phone = document.getElementById('userPhone').value.trim();
             const pin = document.getElementById('userPin').value.trim();
-
             if(!phone || !pin) { alert("Por favor, ingresa tu número de WhatsApp y tu PIN."); return; }
 
             const btn = document.querySelector('#standardLoginForm .btn-pill');
@@ -975,7 +846,6 @@
 
             userRef.once('value', (snap) => {
                 const data = snap.val();
-
                 if(!data) {
                     if(!name) { alert("¡Bienvenido! Al ser tu primera vez, por favor escribe tu Nombre Completo."); btn.innerText = textOriginal; btn.disabled = false; return; }
                     nombreClienteActivo = name; telefonoClienteActivo = phone;
@@ -987,8 +857,6 @@
                 } else if(data.pin === pin) {
                     nombreClienteActivo = data.nombre || name; telefonoClienteActivo = phone;
                     if(!data.nombre && name) { userRef.update({ nombre: name }); nombreClienteActivo = name; }
-
-                    // Si ya es VIP activado, lo mandamos directo a la Zona VIP
                     if (data.es_vip && data.codigo_vip) {
                         loginVIP(phone, data.codigo_vip);
                     } else {
@@ -1004,7 +872,6 @@
         function accessSystemVIP() {
             const enteredCode = document.getElementById('vipCodeField').value.trim().toUpperCase();
             if(!enteredCode) { alert("Ingresa tu Código VIP."); return; }
-
             const btn = document.getElementById('btnIngresarVIP');
             btn.innerText = "Validando..."; btn.disabled = true;
 
@@ -1013,8 +880,7 @@
                     const phoneKey = Object.keys(snap.val())[0];
                     const userData = snap.val()[phoneKey];
                     if (userData.es_vip) {
-                        nombreClienteActivo = userData.nombre;
-                        telefonoClienteActivo = phoneKey;
+                        nombreClienteActivo = userData.nombre; telefonoClienteActivo = phoneKey;
                         loginVIP(phoneKey, userData.codigo_vip);
                     } else {
                         alert("Este código existe pero la cuenta aún no ha sido activada como VIP.");
@@ -1032,32 +898,26 @@
             document.getElementById('authPanel').style.display = 'none';
             document.getElementById('cardPanel').style.display = 'block';
             document.getElementById('memberName').innerText = nombreClienteActivo;
-
             const genero = detectarGenero(nombreClienteActivo);
             document.getElementById('memberGreeting').innerText = (genero === 'm') ? 'Bienvenido' : 'Bienvenida';
-
             QRCode.toCanvas(document.getElementById('qr-canvas'), phone, { width: 120, margin: 1 });
 
             db.ref('lem_users/' + phone).on('value', (snap) => {
                 const userData = snap.val() || {};
                 const p = userData.puntos || 0;
                 const esVip = userData.es_vip || false;
-
-                // Si por alguna razón el listener lo detecta como VIP, evitamos errores
                 if(esVip) return;
 
                 if (previousPoints !== null && p > previousPoints && p !== 4 && p < 8) reproducirSonidoSello();
                 previousPoints = p;
 
                 document.getElementById('counterLabel').innerText = `${p} DE 8 SELLOS`;
-
                 const tierBadge = document.getElementById('memberTier');
                 if (p >= 8) tierBadge.innerText = (genero === 'm') ? 'SOCIO ORO VIP' : 'SOCIA ORO VIP';
                 else if (p >= 4) tierBadge.innerText = (genero === 'm') ? 'SOCIO PLATA' : 'SOCIA PLATA';
                 else tierBadge.innerText = 'MIEMBRO ELITE';
 
                 document.getElementById('progressFill').style.width = Math.min((p / 8) * 100, 100) + '%';
-
                 const grid = document.getElementById('stampGrid');
                 grid.innerHTML = '';
                 for(let i=0; i<8; i++) {
@@ -1084,7 +944,6 @@
             const title = document.getElementById('successTitle');
             const msg = document.getElementById('successMsg');
             const waAction = document.getElementById('waAction');
-            const notifBox = document.getElementById('premioNotif');
             const badge = document.getElementById('successIconBadge');
 
             if (p === 4) {
@@ -1095,55 +954,36 @@
                 title.innerText = "¡Recompensa!";
                 msg.innerText = `¡Felicidades ${nombreClienteActivo}! Por tus 4 estampas tienes el 50% de descuento en una prenda.`;
                 waAction.innerHTML = `<button class="btn-main" style="background:#25d366; color:white; border-radius:50px;" onclick="enviarWA('${phone}', 4)">Reclamar por WhatsApp</button>`;
-                notifBox.style.display = 'block';
-                notifBox.innerHTML = `<small style="color:var(--lem-verde)">✓ Tienes un 50% OFF disponible</small>`;
             } 
             else if (p >= 8 && !isVipMode) {
-                // Al llegar a 8, guardamos el teléfono en memoria y mostramos modal de Cumpleaños
                 pendingVipPhone = phone;
-                lanzarConfetiVIP();
-                reproducirSonidoVIP();
+                lanzarConfetiVIP(); reproducirSonidoVIP();
                 document.getElementById('vip-upgrade-overlay').style.display = 'flex';
-            } else {
-                notifBox.style.display = 'none';
             }
         }
 
-        // ── FLUJO: GUARDAR CUMPLEAÑOS Y ACTIVAR VIP ──
         function guardarCumpleañosYEntrar() {
             const dia = document.getElementById('bday-dia').value;
             const mes = document.getElementById('bday-mes').value;
             const anio = document.getElementById('bday-anio').value;
-
-            if(!dia || !mes || !anio) {
-                alert("Por favor, selecciona tu fecha de nacimiento completa (Día, Mes y Año).");
-                return;
-            }
+            if(!dia || !mes || !anio) { alert("Por favor, selecciona tu fecha de nacimiento completa."); return; }
 
             const fechaNac = `${dia} de ${mes} de ${anio}`;
             const btn = document.getElementById('btnActivarVip');
-            btn.innerText = "Generando Credenciales...";
-            btn.disabled = true;
+            btn.innerText = "Generando Credenciales..."; btn.disabled = true;
 
-            // 1. Guardar la fecha en Firebase
-            db.ref('lem_users/' + pendingVipPhone).update({
-                fecha_nacimiento: fechaNac
-            }).then(() => {
-                // 2. Activar VIP (Genera código, resetea puntos)
+            db.ref('lem_users/' + pendingVipPhone).update({ fecha_nacimiento: fechaNac }).then(() => {
                 return activarVIP(pendingVipPhone);
             }).then((codigoGenerado) => {
                 document.getElementById('vip-upgrade-overlay').style.display = 'none';
-                alert(`¡Felicidades!\nHas sido ascendido a Cliente Oro VIP.\nTu código único de acceso es: ${codigoGenerado}\n\nGuárdalo bien, está vinculado a tu Pase Digital.`);
-                // 3. Pasar a la Zona VIP
+                alert(`¡Felicidades!\nHas sido ascendido a Cliente Oro VIP.\nTu código de acceso es: ${codigoGenerado}`);
                 loginVIP(pendingVipPhone, codigoGenerado);
             }).catch(err => {
                 alert("Hubo un error de conexión.");
-                btn.innerText = "Activar Mi Cuenta VIP";
-                btn.disabled = false;
+                btn.innerText = "Activar Mi Cuenta VIP"; btn.disabled = false;
             });
         }
 
-        // ── GENERADOR CÓDIGO VIP ──
         function generarCodigoVIP(phone) {
             return new Promise((resolve) => {
                 const userRef = db.ref('lem_users/' + phone);
@@ -1160,15 +1000,11 @@
             });
         }
 
-        // ── ACTIVAR ESTATUS VIP + REINICIAR ESTAMPAS ──
         function activarVIP(phone) {
             return new Promise((resolve) => {
                 generarCodigoVIP(phone).then((codigo) => {
                     db.ref('lem_users/' + phone).update({
-                        es_vip: true,
-                        puntos: 0,          // ← REINICIO DE ESTAMPAS a 0
-                        puntos_vip: 0,       // ← Nuevo contador VIP
-                        fecha_activacion_vip: new Date().toISOString()
+                        es_vip: true, puntos: 0, puntos_vip: 0, fecha_activacion_vip: new Date().toISOString()
                     }).then(() => resolve(codigo));
                 });
             });
@@ -1178,7 +1014,6 @@
         function loginVIP(phone, codigoVip) {
             isVipMode = true;
             document.body.classList.add('vip-mode');
-
             document.getElementById('authPanel').style.display = 'none';
             document.getElementById('cardPanel').style.display = 'none';
             document.getElementById('vipPanel').style.display = 'block';
@@ -1186,21 +1021,22 @@
             document.getElementById('vipHolderName').innerText = nombreClienteActivo.toUpperCase();
             document.getElementById('vipCodeNumber').innerText = codigoVip;
 
-            // AHORA EL QR VIP CONTIENE SÓLO EL NÚMERO PARA QUE EL ADMIN PUEDA ESCANEARLO FÁCIL
             QRCode.toCanvas(document.getElementById('vip-qr-canvas'), phone, { width: 65, margin: 0 });
-            
-            // El código QR inferior para estampar también contiene el número de teléfono
             QRCode.toCanvas(document.getElementById('vip-stamp-qr'), phone, { width: 120, margin: 1 });
 
             lanzarConfetiVIP();
 
-            // Escuchar en tiempo real los puntos_vip para el nuevo ciclo
             if (!vipListenerAttached) {
                 vipListenerAttached = true;
                 db.ref('lem_users/' + phone).on('value', (snap) => {
                     const data = snap.val() || {};
                     const pv = data.puntos_vip || 0;
+                    
+                    if (previousVipPoints !== null && pv > previousVipPoints && pv !== 4 && pv < 8) reproducirSonidoSello();
+                    previousVipPoints = pv;
+                    
                     renderVipStamps(pv);
+                    checkVipMilestones(pv, phone, codigoVip);
                 });
             }
         }
@@ -1208,7 +1044,6 @@
         function renderVipStamps(pv) {
             const grid = document.getElementById('vipStampGrid');
             grid.innerHTML = '';
-
             for(let i=0; i<8; i++) {
                 const s = document.createElement('div');
                 const isActive = i < pv; const index = i + 1;
@@ -1217,30 +1052,55 @@
                 if (isActive) s.style.animationDelay = (i * 0.08) + 's';
 
                 if (index === 4 || index === 8) s.classList.add('milestone');
-
                 if(isActive) {
                     s.innerHTML = '<img src="2.png.png">';
                 } else {
-                    if(index === 4) s.innerHTML = '<span class="premio-text" style="color:#FFE082;">REGALO<br>VIP</span>';
-                    else if(index === 8) s.innerHTML = '<span class="premio-text" style="color:#FFE082;">SUPER<br>PREMIO</span>';
+                    if(index === 4) s.innerHTML = '<span class="premio-text" style="color:#FFE082;">50%<br>OFF</span>';
+                    else if(index === 8) s.innerHTML = '<span class="premio-text" style="color:#FFE082;">PRENDA<br>GRATIS</span>';
                 }
                 grid.appendChild(s);
             }
-
             document.getElementById('vipProgressFill').style.width = Math.min((pv / 8) * 100, 100) + '%';
             document.getElementById('vipCounterLabel').innerText = `${pv} DE 8 ESTAMPAS ORO`;
         }
 
+        // 🌟 NUEVO: CELEBRACIONES AL LLEGAR A 4 y 8 EN LA TARJETA VIP 🌟
+        function checkVipMilestones(pv, phone, codigoVip) {
+            const overlay = document.getElementById('success-overlay');
+            const title = document.getElementById('successTitle');
+            const msg = document.getElementById('successMsg');
+            const waAction = document.getElementById('waAction');
+            const badge = document.getElementById('successIconBadge');
+
+            if (pv === 4) {
+                lanzarConfetiVIP(); reproducirSonidoFestejo();
+                overlay.style.display = 'flex';
+                badge.className = 'success-icon-badge tier-silver';
+                badge.innerHTML = '<i class="fa-solid fa-gem" style="color:#FFE082;"></i>';
+                badge.style.background = 'rgba(255,224,130,0.1)';
+                badge.style.borderColor = '#FFE082';
+                title.innerText = "¡Recompensa VIP!";
+                msg.innerText = `¡Felicidades ${nombreClienteActivo}! Por tus 4 estampas Oro tienes el 50% de descuento en una prenda.`;
+                waAction.innerHTML = `<button class="btn-main vip-btn-gold" style="border-radius:50px;" onclick="enviarWAVIP('mitad')">Reclamar 50% OFF</button>`;
+            } 
+            else if (pv >= 8) {
+                lanzarConfetiVIP(); reproducirSonidoVIP();
+                overlay.style.display = 'flex';
+                badge.className = 'success-icon-badge tier-gold';
+                badge.innerHTML = '<i class="fa-solid fa-crown"></i>';
+                title.innerText = "¡CICLO ORO COMPLETADO!";
+                msg.innerHTML = `¡Espectacular ${nombreClienteActivo}! Has completado tus 8 estampas Oro. Tienes una <b>PRENDA DE REGALO</b> esperándote.`;
+                waAction.innerHTML = `<button class="btn-main vip-btn-gold" style="border-radius:50px; margin-top:10px;" onclick="enviarWAVIP('nuevo_regalo')"><i class="fa-solid fa-gift" style="margin-right:8px;"></i> Reclamar Súper Premio</button>`;
+            }
+        }
+
         function logoutVIP() {
-            isVipMode = false;
-            document.body.classList.remove('vip-mode');
-            location.reload();
+            isVipMode = false; document.body.classList.remove('vip-mode'); location.reload();
         }
 
         function lanzarConfeti() {
             confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#c9a84c', '#6DAE5A', '#ffffff', '#e8c87a'] });
         }
-
         function lanzarConfetiVIP() {
             let end = Date.now() + 3500;
             (function frame() {
@@ -1276,14 +1136,17 @@
             const codigoVip = document.getElementById('vipCodeNumber').innerText;
             let texto = "";
             if (tipo === 'regalo') {
-                texto = `🏆 *¡PRENDA REGALO ORO VIP - LEM MODA!* 🏆\n\n¡Hola equipo LEM! 👋\n\nHe ingresado como *Socio Oro VIP*.\n🛍️ ¡Quiero coordinar mi *PRENDA DE REGALO GRATIS*!\n\n📌 *Cliente:* ${nombreClienteActivo}\n📌 *Código VIP:* ${codigoVip}\n📌 *WhatsApp:* ${telefonoClienteActivo}\n\n¡Gracias! ✨`;
+                texto = `🏆 *¡PRENDA DE BIENVENIDA VIP - LEM MODA!* 🏆\n\n¡Hola equipo LEM! 👋\n\nHe activado mi *Panel Oro VIP*.\n🛍️ ¡Quiero coordinar la entrega de mi *PRENDA DE REGALO GRATIS* por haber completado mi primera tarjeta!\n\n📌 *Cliente:* ${nombreClienteActivo}\n📌 *Código VIP:* ${codigoVip}\n\n¡Gracias! ✨`;
+            } else if (tipo === 'mitad') {
+                texto = `💎 *¡BENEFICIO 4 ESTAMPAS ORO - LEM MODA!* 💎\n\nHola equipo LEM 👋\n\nComo *Socio Oro VIP*, he llegado a mis 4 estampas en el nuevo ciclo y quiero reclamar mi *50% DE DESCUENTO*.\n\n📌 *Cliente:* ${nombreClienteActivo}\n📌 *Código VIP:* ${codigoVip}\n\n¡Gracias! ✨`;
+            } else if (tipo === 'nuevo_regalo') {
+                texto = `👑 *¡CICLO VIP COMPLETADO - LEM MODA!* 👑\n\n¡Hola equipo LEM! 👋\n\nHe completado mis *8 ESTAMPAS ORO*.\n🛍️ ¡Vengo por mi nueva *PRENDA DE REGALO*!\n\n📌 *Cliente:* ${nombreClienteActivo}\n📌 *Código VIP:* ${codigoVip}\n\n¡Muchísimas gracias! ✨`;
             } else if (tipo === 'personal') {
                 texto = `👑 *¡PERSONAL SHOPPER ORO VIP!* 👑\n\nHola LEM Moda 👋\n\nComo *Socio Oro VIP* solicito asesoría personalizada.\n\n📌 *Cliente:* ${nombreClienteActivo}\n📌 *Código VIP:* ${codigoVip}\n\n¡Gracias! ✨`;
             }
             window.open(`https://wa.me/${waNumber}?text=${encodeURIComponent(texto)}`, '_blank');
         }
 
-        // Efecto 3D del Pase VIP
         const vipPass = document.getElementById('vipPass3D');
         if (vipPass) {
             document.addEventListener('mousemove', (e) => {
@@ -1309,32 +1172,24 @@
             const canvas = document.getElementById('lemCanvas');
             const ctx = canvas.getContext('2d');
             let W, H, t = 0;
-
             const DOTS = Array.from({length: 80}, () => ({
                 x: Math.random(), y: Math.random(), r: 0.5 + Math.random() * 1.8,
                 phase: Math.random() * Math.PI * 2, speed: 0.008 + Math.random() * 0.018,
                 vy: -(0.00008 + Math.random() * 0.00015), vx: (Math.random() - 0.5) * 0.00006
             }));
-
             const NODES = Array.from({length: 18}, () => ({
-                x: Math.random(), y: Math.random(),
-                vx: (Math.random() - 0.5) * 0.0003, vy: (Math.random() - 0.5) * 0.0003,
+                x: Math.random(), y: Math.random(), vx: (Math.random() - 0.5) * 0.0003, vy: (Math.random() - 0.5) * 0.0003,
             }));
-
             const BRAND_WORDS = ['LEM MODA','ELITE','ATHLEISURE','QUITO','ESTILO','URBAN','LEM MODA','PREMIUM','COLECCIÓN','LEM','MODA','ELITE'];
             const VIP_WORDS = ['ORO VIP','PREMIUM','EXCLUSIVE','LEM ELITE','VIP','GOLD','LUXURY','PRESTIGE'];
-
             const GOLD_FILLS = ['#c9a84c','#e8c87a','#f0d080','#b8965a'];
             const VIP_FILLS = ['#FFE082','#FFD54F','#FFCA28','#c9a84c','#FFE0B2'];
             const GREEN_FILLS = ['#6DAE5A','#5a9e4a','#7dc46a'];
-
             let words = [];
             let fontReady = false;
             document.fonts.ready.then(() => { fontReady = true; });
-
             function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
             function rand(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
-
             function createWord() {
                 const side = Math.floor(Math.random() * 4);
                 let x, y, vx, vy;
@@ -1343,92 +1198,61 @@
                 else if (side === 1) { x = W+20; y = Math.random()*H; vx = -speed; vy = (Math.random()-0.5)*0.15; }
                 else if (side === 2) { x = Math.random()*W; y = H+20; vx = (Math.random()-0.5)*0.15; vy = -speed; }
                 else { x = -20; y = Math.random()*H; vx = speed; vy = (Math.random()-0.5)*0.15; }
-
                 const isGold = Math.random() > 0.3;
                 return {
                     x, y, vx, vy,
                     text: isVipMode ? rand(VIP_WORDS) : rand(BRAND_WORDS),
                     fill: isVipMode ? rand(VIP_FILLS) : (isGold ? rand(GOLD_FILLS) : rand(GREEN_FILLS)),
                     size: isVipMode ? (11 + Math.floor(Math.random() * 9)) : (9 + Math.floor(Math.random() * 8)),
-                    alpha: 0, life: 0,
-                    maxLife: 350 + Math.floor(Math.random() * 250),
+                    alpha: 0, life: 0, maxLife: 350 + Math.floor(Math.random() * 250),
                     angle: (Math.random() - 0.5) * 0.15
                 };
             }
-
             function draw() {
                 ctx.clearRect(0, 0, W, H); t += 0.012;
-
                 for (const d of DOTS) {
                     d.x += d.vx; d.y += d.vy; d.phase += d.speed;
                     if (d.y < -0.02) d.y = 1.02;
                     if (d.x < -0.01 || d.x > 1.01) d.vx *= -1;
                     const alpha = isVipMode ? (0.14 + Math.abs(Math.sin(d.phase)) * 0.3) : (0.08 + Math.abs(Math.sin(d.phase)) * 0.18);
-                    ctx.globalAlpha = alpha;
-                    ctx.fillStyle = isVipMode ? '#FFE082' : '#c9a84c';
-                    ctx.beginPath();
-                    ctx.arc(d.x * W, d.y * H, isVipMode ? (d.r * 1.4) : d.r, 0, Math.PI * 2);
-                    ctx.fill();
+                    ctx.globalAlpha = alpha; ctx.fillStyle = isVipMode ? '#FFE082' : '#c9a84c';
+                    ctx.beginPath(); ctx.arc(d.x * W, d.y * H, isVipMode ? (d.r * 1.4) : d.r, 0, Math.PI * 2); ctx.fill();
                 }
-
                 for (const n of NODES) {
                     n.x += n.vx; n.y += n.vy;
-                    if (n.x < 0 || n.x > 1) n.vx *= -1;
-                    if (n.y < 0 || n.y > 1) n.vy *= -1;
+                    if (n.x < 0 || n.x > 1) n.vx *= -1; if (n.y < 0 || n.y > 1) n.vy *= -1;
                 }
                 for (let i = 0; i < NODES.length; i++) {
                     for (let j = i + 1; j < NODES.length; j++) {
-                        const dx = (NODES[i].x - NODES[j].x) * W;
-                        const dy = (NODES[i].y - NODES[j].y) * H;
+                        const dx = (NODES[i].x - NODES[j].x) * W; const dy = (NODES[i].y - NODES[j].y) * H;
                         const dist = Math.sqrt(dx*dx + dy*dy);
                         if (dist < 180) {
                             ctx.globalAlpha = isVipMode ? (1 - dist/180) * 0.14 : (1 - dist/180) * 0.06;
                             ctx.strokeStyle = isVipMode ? '#FFE082' : '#c9a84c';
                             ctx.lineWidth = isVipMode ? 0.8 : 0.5;
-                            ctx.beginPath();
-                            ctx.moveTo(NODES[i].x * W, NODES[i].y * H);
-                            ctx.lineTo(NODES[j].x * W, NODES[j].y * H);
-                            ctx.stroke();
+                            ctx.beginPath(); ctx.moveTo(NODES[i].x * W, NODES[i].y * H); ctx.lineTo(NODES[j].x * W, NODES[j].y * H); ctx.stroke();
                         }
                     }
                 }
-
                 if (fontReady && words.length < 8 && Math.random() < 0.025) words.push(createWord());
-
                 words = words.filter(w => {
-                    w.life++; w.x += w.vx; w.y += w.vy;
-                    const fz = 60;
+                    w.life++; w.x += w.vx; w.y += w.vy; const fz = 60;
                     if (w.life < fz) w.alpha = w.life / fz;
                     else if (w.life > w.maxLife - fz) w.alpha = Math.max(0, (w.maxLife - w.life) / fz);
                     else w.alpha = 1;
-                    if (w.life >= w.maxLife) return false;
-                    if (w.x < -150 || w.x > W+150 || w.y < -40 || w.y > H+40) return false;
-
+                    if (w.life >= w.maxLife || w.x < -150 || w.x > W+150 || w.y < -40 || w.y > H+40) return false;
                     ctx.save();
                     ctx.globalAlpha = w.alpha * (isVipMode ? 0.7 : 0.55);
                     ctx.translate(w.x, w.y); ctx.rotate(w.angle);
                     ctx.font = `700 ${w.size}px ${isVipMode ? "'Playfair Display', serif" : "'Inter', sans-serif"}`;
-                    ctx.letterSpacing = '3px'; ctx.textBaseline = 'middle';
-                    ctx.fillStyle = w.fill;
-                    ctx.fillText(w.text, 0, 0);
+                    ctx.letterSpacing = '3px'; ctx.textBaseline = 'middle'; ctx.fillStyle = w.fill; ctx.fillText(w.text, 0, 0);
                     ctx.restore();
                     return true;
                 });
-
                 requestAnimationFrame(draw);
             }
-
             resize(); window.addEventListener('resize', resize);
-            setTimeout(() => {
-                for (let i = 0; i < 5; i++) {
-                    const w = createWord();
-                    w.x = 30 + Math.random() * (W - 60);
-                    w.y = 30 + Math.random() * (H - 60);
-                    w.life = Math.floor(Math.random() * 150);
-                    words.push(w);
-                }
-                draw();
-            }, 300);
+            setTimeout(() => { for (let i = 0; i < 5; i++) { const w = createWord(); w.x = 30 + Math.random() * (W - 60); w.y = 30 + Math.random() * (H - 60); w.life = Math.floor(Math.random() * 150); words.push(w); } draw(); }, 300);
         })();
     </script>
 </body>
