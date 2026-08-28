@@ -219,6 +219,17 @@
         .field-input::placeholder { color: rgba(255,255,255,0.28); }
         .field-icon { color: var(--lem-gold); opacity: 0.85; font-size: 0.95rem; margin-left: 10px; }
 
+        /* Estilos para los Select del Cumpleaños */
+        select.field-input {
+            appearance: none;
+            -webkit-appearance: none;
+            cursor: pointer;
+        }
+        select.field-input option {
+            background: #111;
+            color: #fff;
+        }
+
         .btn-pill {
             background: linear-gradient(135deg, #d4a373 0%, #b08968 100%);
             color: #000; border: none; padding: 16px; border-radius: 50px;
@@ -277,9 +288,9 @@
         }
         .btn-web-store:hover { background: rgba(212, 163, 115, 0.15); border-color: var(--lem-gold); }
 
-        .modal {
+        .modal, .overlay-fullscreen {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.75); backdrop-filter: blur(6px); z-index: 1000; align-items: center; justify-content: center;
+            background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); z-index: 1000; align-items: center; justify-content: center;
         }
 
         .modal-content {
@@ -322,16 +333,11 @@
 
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        #success-overlay { 
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: rgba(0,0,0,0.85); backdrop-filter: blur(6px); z-index: 100; align-items: center; justify-content: center; 
-        }
-
         .success-card { 
-            background: rgba(20, 18, 15, 0.55); border: 1px solid rgba(201, 168, 76, 0.25); 
-            border-radius: 28px; padding: 38px 28px 30px; width: 80%; max-width: 340px; text-align: center; 
+            background: rgba(20, 18, 15, 0.65); border: 1px solid rgba(201, 168, 76, 0.25); 
+            border-radius: 28px; padding: 38px 28px 30px; width: 85%; max-width: 350px; text-align: center; 
             backdrop-filter: blur(22px); -webkit-backdrop-filter: blur(22px);
-            box-shadow: 0 25px 60px rgba(0,0,0,0.6);
+            box-shadow: 0 25px 60px rgba(0,0,0,0.8);
             position: relative; overflow: hidden;
             animation: overlay-pop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
@@ -357,7 +363,7 @@
             box-shadow: 0 0 32px rgba(201,168,76,0.4);
         }
 
-        .success-card h2, .success-card p, .success-card #waAction, .success-card button {
+        .success-card h2, .success-card p, .success-card #waAction, .success-card button, .success-card div {
             position: relative; z-index: 2;
         }
 
@@ -370,14 +376,14 @@
            ════════════════════════════════════════════════════════════ */
 
         .vip-header-crown {
-            font-size: 2.8rem;
+            font-size: 2.2rem;
             margin-bottom: 5px;
             animation: vip-crown-float 3s ease-in-out infinite;
             display: inline-block;
         }
         @keyframes vip-crown-float {
             0%, 100% { transform: translateY(0) scale(1); filter: drop-shadow(0 0 8px rgba(255,224,130,0.4)); }
-            50% { transform: translateY(-6px) scale(1.05); filter: drop-shadow(0 0 18px rgba(255,224,130,0.7)); }
+            50% { transform: translateY(-6px) scale(1.05); filter: drop-shadow(0 0 18px rgba(255,224,130,0.8)); }
         }
 
         .vip-title-main {
@@ -629,10 +635,10 @@
         </div>
     </div>
 
-    <!-- Overlay Éxito -->
-    <div id="success-overlay">
+    <!-- Overlay Éxito Nivel 4 -->
+    <div id="success-overlay" class="overlay-fullscreen">
         <div class="success-card">
-            <div id="successIconBadge" class="success-icon-badge tier-gold"><i class="fa-solid fa-crown"></i></div>
+            <div id="successIconBadge" class="success-icon-badge tier-gold"><i class="fa-solid fa-gem"></i></div>
             <h2 id="successTitle" style="color: var(--lem-gold); font-weight: 300; letter-spacing: 2px;">¡Felicidades!</h2>
             <p id="successMsg" style="font-size: 0.85rem; color: #aaa; line-height: 1.5;"></p>
             <div id="waAction"></div>
@@ -640,8 +646,35 @@
         </div>
     </div>
 
+    <!-- 🎁 NUEVO MODAL: ACTIVACIÓN VIP Y CUMPLEAÑOS 🎁 -->
+    <div id="vip-upgrade-overlay" class="overlay-fullscreen">
+        <div class="success-card" style="border: 1px solid rgba(255,224,130,0.4); background: rgba(16, 14, 11, 0.85);">
+            <div class="vip-header-crown"><i class="fa-solid fa-crown" style="color: #FFE082;"></i></div>
+            <h2 style="color: #FFE082; font-family: 'Playfair Display', serif; font-weight: 800; font-size: 1.5rem; letter-spacing: 2px; margin: 10px 0;">¡BIENVENIDO A ORO VIP!</h2>
+            <p style="font-size: 0.8rem; color: #bbb; line-height: 1.4; margin-bottom: 20px;">Has completado tus 8 estampas. Para preparar tus regalos sorpresa exclusivos, por favor ingresa tu fecha de nacimiento.</p>
+            
+            <!-- Formulario de Cumpleaños -->
+            <div style="display: flex; gap: 10px; margin-bottom: 25px; justify-content: center;">
+                <select id="bday-dia" class="field-input" style="border-bottom: 1px solid #FFE082; padding: 8px 5px; color: #fff; width: auto; font-size: 0.9rem;">
+                    <option value="" disabled selected>Día</option>
+                    <!-- JavaScript llenará los días -->
+                </select>
+                <select id="bday-mes" class="field-input" style="border-bottom: 1px solid #FFE082; padding: 8px 5px; color: #fff; width: auto; font-size: 0.9rem;">
+                    <option value="" disabled selected>Mes</option>
+                    <!-- JavaScript llenará los meses -->
+                </select>
+                <select id="bday-anio" class="field-input" style="border-bottom: 1px solid #FFE082; padding: 8px 5px; color: #fff; width: auto; font-size: 0.9rem;">
+                    <option value="" disabled selected>Año</option>
+                    <!-- JavaScript llenará los años -->
+                </select>
+            </div>
+
+            <button id="btnActivarVip" class="btn-pill vip-btn-gold" style="border-radius: 50px;" onclick="guardarCumpleañosYEntrar()">Activar Mi Cuenta VIP</button>
+        </div>
+    </div>
+
     <div class="container">
-        <!-- ═══ PORTAL DE ACCESO (IDÉNTICO AL ORIGINAL) ═══ -->
+        <!-- ═══ PORTAL DE ACCESO ═══ -->
         <div id="authPanel">
             <div class="brand-circle"><img src="1.png.png" class="circle-logo"></div>
             <p style="font-size: 0.6rem; letter-spacing: 4px; color: var(--lem-gold); margin: -20px 0 8px; text-transform: uppercase; opacity: 0.7;">TARJETA DE FIDELIDAD ELITE · QUITO</p>
@@ -692,7 +725,7 @@
             </div>
         </div>
 
-        <!-- ═══ TARJETA ESTÁNDAR (IDÉNTICA AL ORIGINAL) ═══ -->
+        <!-- ═══ TARJETA ESTÁNDAR ═══ -->
         <div id="cardPanel" style="display:none">
             <div class="member-header">
                 <p class="member-greeting" id="memberGreeting">Bienvenida</p>
@@ -723,7 +756,7 @@
 
             <!-- Encabezado VIP Majestuoso -->
             <div style="margin-bottom: 10px;">
-                <div class="vip-header-crown">👑</div>
+                <div class="vip-header-crown"><i class="fa-solid fa-crown" style="color: #FFE082;"></i></div>
                 <h1 class="vip-title-main">ORO VIP</h1>
                 <p class="vip-subtitle">Miembro de Élite · LEM Moda</p>
             </div>
@@ -843,6 +876,7 @@
         let previousPoints = null;
         let isVipMode = false;
         let vipListenerAttached = false;
+        let pendingVipPhone = ""; // Almacena el número temporalmente durante el upgrade a VIP
 
         function getAudioCtx() {
             if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -896,6 +930,21 @@
             if (sinTilde.endsWith('a')) return 'f';
             return 'f';
         }
+
+        // Llenar Selects de Cumpleaños
+        function inicializarSelectsCumpleaños() {
+            const diaSel = document.getElementById('bday-dia');
+            for(let i=1; i<=31; i++) diaSel.innerHTML += `<option value="${i}">${i}</option>`;
+            
+            const meses = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+            const mesSel = document.getElementById('bday-mes');
+            meses.forEach(m => mesSel.innerHTML += `<option value="${m}">${m}</option>`);
+
+            const anioSel = document.getElementById('bday-anio');
+            const currentYear = new Date().getFullYear();
+            for(let i = currentYear - 14; i >= currentYear - 80; i--) anioSel.innerHTML += `<option value="${i}">${i}</option>`;
+        }
+        inicializarSelectsCumpleaños();
 
         document.querySelectorAll('#userName, #userPhone, #userPin').forEach(input => {
             input.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); accessSystem(); } });
@@ -992,6 +1041,10 @@
             db.ref('lem_users/' + phone).on('value', (snap) => {
                 const userData = snap.val() || {};
                 const p = userData.puntos || 0;
+                const esVip = userData.es_vip || false;
+
+                // Si por alguna razón el listener lo detecta como VIP, evitamos errores
+                if(esVip) return;
 
                 if (previousPoints !== null && p > previousPoints && p !== 4 && p < 8) reproducirSonidoSello();
                 previousPoints = p;
@@ -1026,6 +1079,70 @@
             });
         }
 
+        function checkMilestones(p, phone) {
+            const overlay = document.getElementById('success-overlay');
+            const title = document.getElementById('successTitle');
+            const msg = document.getElementById('successMsg');
+            const waAction = document.getElementById('waAction');
+            const notifBox = document.getElementById('premioNotif');
+            const badge = document.getElementById('successIconBadge');
+
+            if (p === 4) {
+                lanzarConfeti(); reproducirSonidoFestejo();
+                overlay.style.display = 'flex';
+                badge.className = 'success-icon-badge tier-silver';
+                badge.innerHTML = '<i class="fa-solid fa-gem"></i>';
+                title.innerText = "¡Recompensa!";
+                msg.innerText = `¡Felicidades ${nombreClienteActivo}! Por tus 4 estampas tienes el 50% de descuento en una prenda.`;
+                waAction.innerHTML = `<button class="btn-main" style="background:#25d366; color:white; border-radius:50px;" onclick="enviarWA('${phone}', 4)">Reclamar por WhatsApp</button>`;
+                notifBox.style.display = 'block';
+                notifBox.innerHTML = `<small style="color:var(--lem-verde)">✓ Tienes un 50% OFF disponible</small>`;
+            } 
+            else if (p >= 8 && !isVipMode) {
+                // Al llegar a 8, guardamos el teléfono en memoria y mostramos modal de Cumpleaños
+                pendingVipPhone = phone;
+                lanzarConfetiVIP();
+                reproducirSonidoVIP();
+                document.getElementById('vip-upgrade-overlay').style.display = 'flex';
+            } else {
+                notifBox.style.display = 'none';
+            }
+        }
+
+        // ── FLUJO: GUARDAR CUMPLEAÑOS Y ACTIVAR VIP ──
+        function guardarCumpleañosYEntrar() {
+            const dia = document.getElementById('bday-dia').value;
+            const mes = document.getElementById('bday-mes').value;
+            const anio = document.getElementById('bday-anio').value;
+
+            if(!dia || !mes || !anio) {
+                alert("Por favor, selecciona tu fecha de nacimiento completa (Día, Mes y Año).");
+                return;
+            }
+
+            const fechaNac = `${dia} de ${mes} de ${anio}`;
+            const btn = document.getElementById('btnActivarVip');
+            btn.innerText = "Generando Credenciales...";
+            btn.disabled = true;
+
+            // 1. Guardar la fecha en Firebase
+            db.ref('lem_users/' + pendingVipPhone).update({
+                fecha_nacimiento: fechaNac
+            }).then(() => {
+                // 2. Activar VIP (Genera código, resetea puntos)
+                return activarVIP(pendingVipPhone);
+            }).then((codigoGenerado) => {
+                document.getElementById('vip-upgrade-overlay').style.display = 'none';
+                alert(`¡Felicidades!\nHas sido ascendido a Cliente Oro VIP.\nTu código único de acceso es: ${codigoGenerado}\n\nGuárdalo bien, está vinculado a tu Pase Digital.`);
+                // 3. Pasar a la Zona VIP
+                loginVIP(pendingVipPhone, codigoGenerado);
+            }).catch(err => {
+                alert("Hubo un error de conexión.");
+                btn.innerText = "Activar Mi Cuenta VIP";
+                btn.disabled = false;
+            });
+        }
+
         // ── GENERADOR CÓDIGO VIP ──
         function generarCodigoVIP(phone) {
             return new Promise((resolve) => {
@@ -1049,7 +1166,7 @@
                 generarCodigoVIP(phone).then((codigo) => {
                     db.ref('lem_users/' + phone).update({
                         es_vip: true,
-                        puntos: 0,          // ← REINICIO DE ESTAMPAS
+                        puntos: 0,          // ← REINICIO DE ESTAMPAS a 0
                         puntos_vip: 0,       // ← Nuevo contador VIP
                         fecha_activacion_vip: new Date().toISOString()
                     }).then(() => resolve(codigo));
@@ -1057,48 +1174,7 @@
             });
         }
 
-        function checkMilestones(p, phone) {
-            const overlay = document.getElementById('success-overlay');
-            const title = document.getElementById('successTitle');
-            const msg = document.getElementById('successMsg');
-            const waAction = document.getElementById('waAction');
-            const notifBox = document.getElementById('premioNotif');
-            const badge = document.getElementById('successIconBadge');
-
-            if (p === 4) {
-                lanzarConfeti(); reproducirSonidoFestejo();
-                overlay.style.display = 'flex';
-                badge.className = 'success-icon-badge tier-silver';
-                badge.innerHTML = '<i class="fa-solid fa-gem"></i>';
-                title.innerText = "¡Recompensa!";
-                msg.innerText = `¡Felicidades ${nombreClienteActivo}! Por tus 4 estampas tienes el 50% de descuento en una prenda.`;
-                waAction.innerHTML = `<button class="btn-main" style="background:#25d366; color:white; border-radius:50px;" onclick="enviarWA('${phone}', 4)">Reclamar por WhatsApp</button>`;
-                notifBox.style.display = 'block';
-                notifBox.innerHTML = `<small style="color:var(--lem-verde)">✓ Tienes un 50% OFF disponible</small>`;
-            } else if (p >= 8) {
-                activarVIP(phone).then((codigoGenerado) => {
-                    lanzarConfetiVIP(); reproducirSonidoVIP();
-                    overlay.style.display = 'flex';
-                    badge.className = 'success-icon-badge tier-gold';
-                    badge.innerHTML = '<i class="fa-solid fa-crown"></i>';
-                    title.innerText = "¡SOCIO ORO VIP!";
-                    msg.innerHTML = `¡Increíble ${nombreClienteActivo}! Has completado tus 8 estampas y has sido ascendido a <b>Cliente Oro VIP</b>. Tu código exclusivo es:<br><span style="font-size:1.4rem;color:#FFE082;font-weight:900;letter-spacing:3px;">${codigoGenerado}</span><br><small style="color:#999;">Guárdalo, es tu llave de acceso permanente.</small>`;
-                    waAction.innerHTML = `<button class="btn-pill vip-btn-gold" style="border-radius:50px; margin-top:10px;" onclick="entrarZonaVIP()"><i class="fa-solid fa-crown" style="margin-right:8px;"></i> Entrar a la Zona Oro VIP</button>`;
-                    notifBox.style.display = 'none';
-                });
-            } else {
-                notifBox.style.display = 'none';
-            }
-        }
-
-        function entrarZonaVIP() {
-            document.getElementById('success-overlay').style.display = 'none';
-            generarCodigoVIP(telefonoClienteActivo).then((codigo) => {
-                loginVIP(telefonoClienteActivo, codigo);
-            });
-        }
-
-        // ═══ ACTIVACIÓN DE LA ZONA ORO VIP ═══
+        // ═══ ENTRADA A LA ZONA ORO VIP ═══
         function loginVIP(phone, codigoVip) {
             isVipMode = true;
             document.body.classList.add('vip-mode');
@@ -1110,7 +1186,10 @@
             document.getElementById('vipHolderName').innerText = nombreClienteActivo.toUpperCase();
             document.getElementById('vipCodeNumber').innerText = codigoVip;
 
-            QRCode.toCanvas(document.getElementById('vip-qr-canvas'), `LEM-VIP:${phone}:${codigoVip}`, { width: 65, margin: 0 });
+            // AHORA EL QR VIP CONTIENE SÓLO EL NÚMERO PARA QUE EL ADMIN PUEDA ESCANEARLO FÁCIL
+            QRCode.toCanvas(document.getElementById('vip-qr-canvas'), phone, { width: 65, margin: 0 });
+            
+            // El código QR inferior para estampar también contiene el número de teléfono
             QRCode.toCanvas(document.getElementById('vip-stamp-qr'), phone, { width: 120, margin: 1 });
 
             lanzarConfetiVIP();
