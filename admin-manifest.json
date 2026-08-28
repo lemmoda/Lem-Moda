@@ -1,15 +1,23 @@
 {
-  "name": "LEM Admin | Panel de Control",
+  "name": "LEM Admin Panel Elite",
   "short_name": "LEM Admin",
-  "id": "/lem-moda-admin-v2",
-  "start_url": "./admin.html",
-  "scope": "./",
+  "description": "Panel de control Elite LEM MODA - Escanear clientes y gestionar estampas",
+  "start_url": "/admin.html",
+  "scope": "/",
   "display": "standalone",
-  "background_color": "#0a1628",
+  "orientation": "portrait",
+  "background_color": "#030a16",
   "theme_color": "#1a2e4a",
+  "lang": "es-EC",
   "icons": [
     {
-      "src": "2.png.png",
+      "src": "/1.png.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/1.png.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
