@@ -25,7 +25,6 @@
             --gold-admin: #c9a84c;
             --vip-gold: #FFE082;
             --navy: #1a2e4a;
-            --navy-light: #243d5e;
         }
         * { box-sizing: border-box; }
         body { 
@@ -67,14 +66,11 @@
             backdrop-filter: blur(20px); box-shadow: 0 25px 60px rgba(0,0,0,0.9);
             position: relative; overflow: hidden; transition: all 0.5s ease;
         }
-        
-        /* Tema VIP en la Tarjeta Admin */
         .admin-card.is-vip {
             border-color: var(--vip-gold);
             background: rgba(255,224,130,0.05);
             box-shadow: 0 25px 60px rgba(0,0,0,0.9), 0 0 30px rgba(255,224,130,0.15) inset;
         }
-
         .admin-card::before {
             content: ''; position: absolute; top: -60%; left: -60%; width: 220%; height: 220%;
             background: conic-gradient(from 0deg, transparent 0%, rgba(201,168,76,0.08) 8%, transparent 16%, transparent 100%);
@@ -83,7 +79,6 @@
         .admin-card.is-vip::before {
             background: conic-gradient(from 0deg, transparent 0%, rgba(255,224,130,0.15) 8%, transparent 16%, transparent 100%);
         }
-
         @keyframes card-rotate { to { transform: rotate(360deg); } }
         .admin-card::after {
             content: ''; position: absolute; inset: 9px; border-radius: 24px;
@@ -109,15 +104,31 @@
             box-shadow: 0 0 15px rgba(255,224,130,0.5); font-family: 'Playfair Display', serif;
         }
 
-        .admin-card h2#clientName { letter-spacing: 0.5px; font-weight: 700; }
-        .admin-card h3#clientPhone { letter-spacing: 1px; font-size: 0.85rem; opacity: 0.85; }
-
-        .vip-details-box {
-            display: none; background: rgba(0,0,0,0.5); border: 1px dashed var(--vip-gold);
-            border-radius: 15px; padding: 10px; margin: 15px 0;
+        .info-grid {
+            background: rgba(0,0,0,0.35);
+            border: 1px solid rgba(201,168,76,0.2);
+            border-radius: 16px;
+            padding: 14px 16px;
+            margin: 14px 0;
+            text-align: left;
         }
-        .vip-detail-text { font-size: 0.75rem; color: #FFE082; margin: 3px 0; letter-spacing: 1px; }
-        
+        .admin-card.is-vip .info-grid {
+            border-color: rgba(255,224,130,0.25);
+            background: rgba(0,0,0,0.45);
+        }
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 7px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            font-size: 0.78rem;
+        }
+        .info-row:last-child { border-bottom: none; }
+        .info-label { color: #888; letter-spacing: 0.5px; }
+        .info-value { color: #fff; font-weight: 600; text-align: right; word-break: break-word; }
+        .admin-card.is-vip .info-value.highlight { color: #FFE082; }
+
         .bday-alert-banner {
             display: none; background: rgba(255, 60, 100, 0.15); border: 2px solid #ff3c64;
             border-radius: 15px; padding: 15px; margin-bottom: 20px;
@@ -127,7 +138,6 @@
             0%, 100% { transform: scale(1); box-shadow: 0 0 20px rgba(255, 60, 100, 0.4); }
             50% { transform: scale(1.02); box-shadow: 0 0 35px rgba(255, 60, 100, 0.7); }
         }
-
         .btn-bday-wa {
             background: linear-gradient(135deg, #ff3c64 0%, #d41e45 100%); color: #fff;
             border: none; padding: 12px; border-radius: 50px; font-weight: bold; width: 100%;
@@ -146,12 +156,11 @@
             background: linear-gradient(135deg, #FFE082 0%, #c9a84c 100%);
             box-shadow: 0 10px 25px rgba(255, 224, 130, 0.25);
         }
-
         .btn-action:active { transform: scale(0.97); }
         .btn-action-minus { 
             background: rgba(255,255,255,0.06) !important; 
             border: 1px solid rgba(201, 168, 76, 0.3) !important; 
-            color: #fff !important; box-shadow: none;
+            color: #fff !important; box-shadow: none !important;
         }
 
         .btn-scan-again { 
@@ -163,7 +172,6 @@
         .admin-card.is-vip .btn-scan-again { color: var(--vip-gold); border-color: var(--vip-gold); }
 
         .status-msg { color: var(--lem-verde); font-weight: bold; margin-top: 15px; letter-spacing: 0.5px; }
-
         #currentPoints { text-shadow: 0 0 25px rgba(255,255,255,0.15); }
         .admin-card.is-vip #currentPoints { text-shadow: 0 0 30px rgba(255,224,130,0.5); color: #FFE082; }
 
@@ -172,22 +180,18 @@
             border-width: 1.5px; border-style: solid; letter-spacing: 0.5px;
             animation: pulse-soft 2s infinite; backdrop-filter: blur(10px);
         }
-
         .alert-silver { 
             background: rgba(189, 195, 199, 0.08); border-color: var(--silver-admin); color: var(--silver-admin);
             box-shadow: 0 0 25px rgba(122, 159, 194, 0.15);
         }
-
         .alert-gold { 
             background: rgba(212, 175, 55, 0.08); border-color: var(--gold-admin); color: var(--gold-admin);
             box-shadow: 0 0 25px rgba(201, 168, 76, 0.2);
         }
-
         .alert-vip-reward {
             background: rgba(255, 224, 130, 0.1); border-color: var(--vip-gold); color: var(--vip-gold);
             box-shadow: 0 0 35px rgba(255, 224, 130, 0.3);
         }
-
         @keyframes pulse-soft {
             0% { transform: scale(1); }
             50% { transform: scale(1.02); opacity: 0.85; }
@@ -213,6 +217,15 @@
             0%, 100% { box-shadow: 0 0 0 rgba(37, 211, 102, 0); }
             50% { box-shadow: 0 0 18px rgba(37, 211, 102, 0.35); }
         }
+
+        .field-hint {
+            font-size: 0.65rem;
+            letter-spacing: 1px;
+            color: #666;
+            margin-top: 4px;
+            text-transform: uppercase;
+        }
+        .admin-card.is-vip .field-hint { color: rgba(255,224,130,0.55); }
     </style>
 </head>
 <body>
@@ -230,7 +243,7 @@
     </div>
 
     <div id="adminPanel" class="admin-card">
-        <!-- Banner de Cumpleaños -->
+        <!-- Banner Cumpleaños -->
         <div id="bdayAlertBanner" class="bday-alert-banner">
             <h3 style="margin:0 0 5px; color:#fff; font-size:1.1rem;">🎉 ¡HOY ES SU CUMPLEAÑOS! 🎉</h3>
             <p style="margin:0 0 10px; font-size:0.75rem; color:#ffd0d8;">No olvides desearle lo mejor a nuestro cliente.</p>
@@ -243,15 +256,42 @@
 
         <h2 id="clientName" style="color: #fff; margin: 0 0 5px 0; font-weight: 700; font-size: 1.4rem;">Cargando...</h2>
         <h3 id="clientPhone" style="color: var(--lem-gold); font-weight: 300; margin-top: 0;">WhatsApp: ---</h3>
-        
-        <!-- Caja Detalles VIP (Código y Cumpleaños) -->
-        <div id="vipDetailsBox" class="vip-details-box">
-            <p class="vip-detail-text"><strong>Código:</strong> <span id="adminVipCode"></span></p>
-            <p class="vip-detail-text"><strong>Cumpleaños:</strong> <span id="adminVipBday">No registrado</span></p>
+
+        <!-- Ficha completa del cliente -->
+        <div class="info-grid" id="clientInfoGrid">
+            <div class="info-row">
+                <span class="info-label">Tipo</span>
+                <span class="info-value" id="infoTipo">—</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Código VIP</span>
+                <span class="info-value highlight" id="infoCodigoVip">—</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Cumpleaños</span>
+                <span class="info-value" id="infoCumple">—</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">WhatsApp</span>
+                <span class="info-value" id="infoWhatsapp">—</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Estampas normales</span>
+                <span class="info-value" id="infoPuntosNorm">—</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Estampas Oro VIP</span>
+                <span class="info-value highlight" id="infoPuntosVip">—</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Campo que se edita</span>
+                <span class="info-value highlight" id="infoCampoActivo">—</span>
+            </div>
         </div>
 
-        <p id="pointsTitle" style="margin: 5px 0; font-size: 0.8rem; color: #666;">Puntos Actuales:</p>
+        <p id="pointsTitle" style="margin: 12px 0 0; font-size: 0.8rem; color: #666;">Puntos Actuales:</p>
         <span id="currentPoints" style="font-size: 3rem; font-weight: bold;">0</span>
+        <p class="field-hint" id="pointsHint">Ciclo normal · campo "puntos"</p>
 
         <button id="welcomeBtn" class="btn-welcome-wa" style="display:none;" onclick="enviarBienvenidaWA()">
             📲 Enviar Bienvenida por WhatsApp
@@ -287,25 +327,51 @@
         let telefonoOriginalEscaneado = ""; 
         let isClientVIP = false;
         let clienteFechaNac = "";
+        let clienteCodigoVip = "";
+        let userListenerRef = null;
 
-        // Array de meses para parsear cumpleaños
         const MESES = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
 
         function esCumpleañosHoy(fechaString) {
             if(!fechaString) return false;
-            
             const hoy = new Date();
             const diaHoy = hoy.getDate().toString();
             const mesHoy = MESES[hoy.getMonth()];
-
-            // La fecha viene como "15 de Mayo de 1995"
             const partes = fechaString.toLowerCase().split(' de ');
             if (partes.length >= 2) {
-                const diaCli = partes[0].trim();
-                const mesCli = partes[1].trim();
-                return (diaCli === diaHoy && mesCli === mesHoy);
+                return partes[0].trim() === diaHoy && partes[1].trim() === mesHoy;
             }
             return false;
+        }
+
+        // Extrae el teléfono del QR (soporta teléfono puro o formatos VIP antiguos)
+        function extraerTelefonoDeQR(decodedText) {
+            let raw = (decodedText || '').trim();
+
+            // Formatos posibles:
+            // 1) "0979010077"
+            // 2) "LEM-VIP:0979010077"
+            // 3) "LEM-VIP:0979010077-VIP-XXXX"
+            // 4) "LEM-VIP-ID:0979010077-VIP-XXXX"
+            // 5) "LEM|INFO|0979010077" / "LEM|STAMP|0979010077"
+            if (raw.includes('|')) {
+                const parts = raw.split('|');
+                raw = parts[parts.length - 1];
+            }
+            if (raw.includes(':')) {
+                const after = raw.split(':').pop();
+                // after puede ser "0979...-VIP-XXXX" o solo el teléfono
+                raw = after.split('-')[0];
+            }
+
+            // Dejar solo dígitos por si acaso
+            const digits = raw.replace(/\D/g, '');
+            // Preferimos devolver tal cual estaba guardado en Firebase (con 0 inicial si aplica)
+            // Si el QR traía el número original con 0, raw ya lo tenía; si solo dígitos, usamos digits
+            if (raw.replace(/\D/g, '') === digits && raw.length >= 9) {
+                // Si raw tenía caracteres no numéricos ya los limpiamos arriba en branches
+            }
+            return digits.startsWith('0') || digits.startsWith('593') ? (raw.match(/\d+/) ? raw.replace(/[^\d]/g, '') : digits) : digits;
         }
 
         function actualizarRegistroDelDia(phone, puntosFinales) {
@@ -322,6 +388,7 @@
                 whatsapp: phone,
                 tipo_cliente: isClientVIP ? 'ORO VIP' : 'Normal',
                 puntos_al_cierre: puntosFinales,
+                campo_editado: isClientVIP ? 'puntos_vip' : 'puntos',
                 hora_ultima_accion: ahora.toLocaleTimeString()
             }).then(() => {
                 document.getElementById('logMsg').innerText = "¡Reporte guardado con éxito!";
@@ -339,16 +406,7 @@
                     html5QrCode.stop().then(() => {
                         document.getElementById('reader-container').style.display = 'none';
                         document.getElementById('adminPanel').style.display = 'block';
-                        
-                        // Parsear si el QR contiene texto extra accidental (Ej: LEM-VIP:09X-CODIGO)
-                        let phoneToLoad = decodedText;
-                        if(decodedText.includes(':')) {
-                            // Si dice LEM-VIP:0984909967-VIP-XXXX extraemos solo el número
-                            const parts = decodedText.split(':');
-                            const subParts = parts[1].split('-');
-                            phoneToLoad = subParts[0]; // Toma solo el teléfono
-                        }
-                        
+                        const phoneToLoad = extraerTelefonoDeQR(decodedText);
                         loadUserData(phoneToLoad);
                     });
                 });
@@ -356,52 +414,86 @@
         }
 
         function loadUserData(phone) {
-            telefonoOriginalEscaneado = phone;
+            // Limpiar listener anterior
+            if (userListenerRef) {
+                userListenerRef.off();
+                userListenerRef = null;
+            }
 
-            db.ref('lem_users/' + phone).on('value', (snap) => {
-                const data = snap.val() || {};
-                
-                isClientVIP = data.es_vip === true;
+            telefonoOriginalEscaneado = phone;
+            userListenerRef = db.ref('lem_users/' + phone);
+
+            userListenerRef.on('value', (snap) => {
+                const data = snap.val();
+
+                if (!data) {
+                    document.getElementById('clientName').innerText = "Cliente no encontrado";
+                    document.getElementById('clientPhone').innerText = "WhatsApp: " + phone;
+                    document.getElementById('currentPoints').innerText = "0";
+                    document.getElementById('logMsg').innerText = "No existe este usuario en Firebase";
+                    document.getElementById('logMsg').style.color = "#ff6b6b";
+                    return;
+                }
+
+                // VIP si tiene bandera o código VIP emitido
+                isClientVIP = data.es_vip === true || !!(data.codigo_vip);
                 nombreClienteMemoria = data.nombre || "Cliente";
                 clienteFechaNac = data.fecha_nacimiento || "";
-                const puntos = isClientVIP ? (data.puntos_vip || 0) : (data.puntos || 0);
-                
-                // Actualizar Textos
+                clienteCodigoVip = data.codigo_vip || "";
+
+                // 🔑 CLAVE: VIP usa puntos_vip | Normal usa puntos
+                let puntosNorm = data.puntos || 0;
+                let puntosVip = (typeof data.puntos_vip === 'number') ? data.puntos_vip : 0;
+
+                // Si es VIP y aún no existe puntos_vip en Firebase, lo creamos en 0
+                if (isClientVIP && typeof data.puntos_vip !== 'number') {
+                    userListenerRef.update({ puntos_vip: 0, es_vip: true });
+                    puntosVip = 0;
+                }
+
+                const puntosActivos = isClientVIP ? puntosVip : puntosNorm;
+
+                // Textos principales
                 document.getElementById('clientName').innerText = nombreClienteMemoria;
                 document.getElementById('clientPhone').innerText = "WhatsApp: " + phone;
-                document.getElementById('currentPoints').innerText = puntos;
-                
+                document.getElementById('currentPoints').innerText = puntosActivos;
+
+                // Ficha completa
+                document.getElementById('infoTipo').innerText = isClientVIP ? "👑 ORO VIP" : "Miembro Elite";
+                document.getElementById('infoCodigoVip').innerText = clienteCodigoVip || "—";
+                document.getElementById('infoCumple').innerText = clienteFechaNac || "No registrado";
+                document.getElementById('infoWhatsapp').innerText = phone;
+                document.getElementById('infoPuntosNorm').innerText = puntosNorm + " / 8";
+                document.getElementById('infoPuntosVip').innerText = puntosVip + " / 8";
+                document.getElementById('infoCampoActivo').innerText = isClientVIP ? "puntos_vip (tarjeta VIP)" : "puntos (tarjeta normal)";
+
+                // Estilos VIP / Normal
                 const adminPanel = document.getElementById('adminPanel');
                 const vipBadge = document.getElementById('vipStatusBadge');
-                const vipDetails = document.getElementById('vipDetailsBox');
                 const adminTitle = document.getElementById('adminHeaderTitle');
 
                 if (isClientVIP) {
                     document.body.classList.add('admin-vip-mode');
                     adminPanel.classList.add('is-vip');
                     vipBadge.style.display = 'inline-block';
-                    vipDetails.style.display = 'block';
                     adminTitle.style.color = 'var(--vip-gold)';
                     document.getElementById('pointsTitle').innerText = "Estampas Oro VIP:";
-                    document.getElementById('adminVipCode').innerText = data.codigo_vip || "N/A";
-                    document.getElementById('adminVipBday').innerText = clienteFechaNac || "No registrado";
+                    document.getElementById('pointsHint').innerText = 'Ciclo VIP · se guarda en "puntos_vip"';
+                    document.getElementById('clientPhone').style.color = 'var(--vip-gold)';
                 } else {
                     document.body.classList.remove('admin-vip-mode');
                     adminPanel.classList.remove('is-vip');
                     vipBadge.style.display = 'none';
-                    vipDetails.style.display = 'none';
                     adminTitle.style.color = 'var(--lem-gold)';
                     document.getElementById('pointsTitle').innerText = "Puntos Actuales:";
+                    document.getElementById('pointsHint').innerText = 'Ciclo normal · se guarda en "puntos"';
+                    document.getElementById('clientPhone').style.color = 'var(--lem-gold)';
                 }
 
-                // Lógica Cumpleaños
-                if (esCumpleañosHoy(clienteFechaNac)) {
-                    document.getElementById('bdayAlertBanner').style.display = 'block';
-                } else {
-                    document.getElementById('bdayAlertBanner').style.display = 'none';
-                }
+                // Cumpleaños
+                document.getElementById('bdayAlertBanner').style.display = esCumpleañosHoy(clienteFechaNac) ? 'block' : 'none';
 
-                updateAdminAlerts(puntos);
+                updateAdminAlerts(puntosActivos);
 
                 const yaSaludado = data.bienvenida_enviada;
                 document.getElementById('welcomeBtn').style.display = yaSaludado ? 'none' : 'block';
@@ -459,7 +551,6 @@
             } else {
                 textoCumple += `Pasa por nuestra tienda, ¡tenemos una sorpresa especial para ti por tu día! 🛍️✨\n\n`;
             }
-            
             textoCumple += `¡Que lo disfrutes mucho! Un abrazo enorme. 🙌`;
 
             abrirWhatsAppBusiness(phoneWA, textoCumple);
@@ -468,13 +559,11 @@
         function detectarGenero(nombreCompleto) {
             const NOMBRES_MASCULINOS = ['jose','luis','carlos','juan','andres','andrés','jesus','jesús','tomas','tomás','nicolas','nicolás','ismael','isaac','angel','ángel','gabriel','rafael','miguel','manuel','david','daniel','diego','fernando','francisco','javier','jorge','marcos','martin','martín','oscar','óscar','pablo','pedro','ricardo','roberto','ruben','rubén','sergio','victor','víctor','alexis','ariel','axel','bryan','brayan','cristian','cristhian','edison','edwin','efrain','efraín','elias','elías','esteban','ezequiel','gael','gonzalo','henry','ivan','iván','joel','jonathan','josue','josué','kevin','leonardo','mateo','mathias','matias','matías','maximiliano','moises','moisés','nelson','noe','noé','samuel','santiago','sebastian','sebastián','simon','simón','wilson','xavier'];
             const NOMBRES_FEMENINOS = ['maria','maría','ana','sofia','sofía','isabel','mercedes','carmen','rosa','laura','andrea','valentina','camila','daniela','fernanda','gabriela','patricia','sandra','monica','mónica','veronica','verónica','paola','johanna','yolanda','martha','marta','alejandra','lucia','lucía','ximena','ines','inés','pilar','beatriz','elizabeth','katherine','catherine','estefania','estefanía','jessica','jessenia','yesenia','tatiana','vanessa','carolina','cristina','diana','evelyn','gladys','ivonne','jacqueline','karina','leslie','liliana','melany','melanie','michelle','nathaly','pamela','priscila','priscilla','samantha','stefania','stefanía','viviana','wendy','zoila','zoe'];
-
             const primer = (nombreCompleto || '').trim().split(/\s+/)[0].toLowerCase().normalize('NFC');
             if (NOMBRES_MASCULINOS.includes(primer)) return 'm';
             if (NOMBRES_FEMENINOS.includes(primer)) return 'f';
             const sinTilde = primer.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
             if (sinTilde.endsWith('a')) return 'f';
-            if (sinTilde.endsWith('o') || sinTilde.endsWith('or') || sinTilde.endsWith('el') || sinTilde.endsWith('is')) return 'm';
             return 'f';
         }
 
@@ -487,7 +576,6 @@
             alertBox.classList.remove('alert-silver', 'alert-gold', 'alert-vip-reward');
 
             if (isClientVIP) {
-                // Alertas Exclusivas VIP
                 if (puntos === 4) {
                     alertBox.style.display = 'block';
                     alertBox.classList.add('alert-vip-reward');
@@ -503,7 +591,6 @@
                     resetBtn.style.display = 'none';
                 }
             } else {
-                // Alertas Normales
                 if (puntos === 4) {
                     alertBox.style.display = 'block';
                     alertBox.classList.add('alert-silver');
@@ -521,24 +608,46 @@
             }
         }
 
+        // 🔑 AQUÍ ESTÁ LA CORRECCIÓN PRINCIPAL
         function adjustPoints(change) {
-            if (!telefonoOriginalEscaneado) { alert("Error: No hay teléfono detectado."); return; }
+            if (!telefonoOriginalEscaneado) {
+                alert("Error: No hay teléfono detectado.");
+                return;
+            }
 
+            // Si es VIP → SOLO toca puntos_vip (la tarjeta nueva del cliente)
+            // Si es normal → toca puntos
             const targetField = isClientVIP ? 'puntos_vip' : 'puntos';
             const ref = db.ref('lem_users/' + telefonoOriginalEscaneado + '/' + targetField);
             
+            document.getElementById('logMsg').innerText = isClientVIP ? "Sumando estampa VIP..." : "Sumando estampa...";
+            document.getElementById('logMsg').style.color = isClientVIP ? "#FFE082" : "#d4a373";
+
             ref.transaction((c) => {
                 let newVal = (c || 0) + change;
-                return (newVal < 0) ? 0 : (newVal > 8 ? 8 : newVal);
+                if (newVal < 0) newVal = 0;
+                if (newVal > 8) newVal = 8;
+                return newVal;
             }, (error, committed, snapshot) => {
+                if (error) {
+                    document.getElementById('logMsg').innerText = "Error: " + error.message;
+                    document.getElementById('logMsg').style.color = "#ff6b6b";
+                    return;
+                }
                 if (committed) {
-                    actualizarRegistroDelDia(telefonoOriginalEscaneado, snapshot.val());
+                    const val = snapshot.val() || 0;
+                    document.getElementById('logMsg').innerText = isClientVIP
+                        ? `✓ Estampas Oro VIP: ${val}/8`
+                        : `✓ Estampas normales: ${val}/8`;
+                    document.getElementById('logMsg').style.color = "var(--lem-verde)";
+                    actualizarRegistroDelDia(telefonoOriginalEscaneado, val);
                 }
             });
         }
 
         function resetCard() {
-            if(confirm("¿Confirmas que ya entregaste el premio y quieres reiniciar el ciclo de puntos a 0?")) {
+            const tipo = isClientVIP ? "ciclo VIP (puntos_vip)" : "tarjeta normal (puntos)";
+            if(confirm(`¿Confirmas que ya entregaste el premio y quieres reiniciar el ${tipo} a 0?`)) {
                 if (!telefonoOriginalEscaneado) return;
                 const targetField = isClientVIP ? 'puntos_vip' : 'puntos';
                 db.ref('lem_users/' + telefonoOriginalEscaneado + '/' + targetField).set(0);
@@ -547,11 +656,13 @@
         }
 
         function restartScanner() {
-            if(telefonoOriginalEscaneado) {
-                db.ref('lem_users/' + telefonoOriginalEscaneado).off(); 
+            if (userListenerRef) {
+                userListenerRef.off();
+                userListenerRef = null;
             }
             
             telefonoOriginalEscaneado = "";
+            isClientVIP = false;
             document.getElementById('adminPanel').style.display = 'none';
             document.getElementById('reader-container').style.display = 'block';
             
@@ -560,8 +671,8 @@
             document.getElementById('logMsg').innerText = "";
             document.getElementById('bdayAlertBanner').style.display = 'none';
             
-            // Restablecer estilos en caso de haber quedado en VIP
             document.body.classList.remove('admin-vip-mode');
+            document.getElementById('adminPanel').classList.remove('is-vip');
             document.getElementById('adminHeaderTitle').style.color = 'var(--lem-gold)';
             
             startScanner();
@@ -574,28 +685,21 @@
         (function() {
             const canvas = document.getElementById('lemCanvas');
             const ctx = canvas.getContext('2d');
-            let W, H, t = 0;
+            let W, H;
 
             const DOTS = Array.from({length: 60}, () => ({
-                x: Math.random(),
-                y: Math.random(),
-                r: 0.5 + Math.random() * 1.8,
-                phase: Math.random() * Math.PI * 2,
-                speed: 0.008 + Math.random() * 0.018,
-                vy: -(0.00008 + Math.random() * 0.00015),
-                vx: (Math.random() - 0.5) * 0.00006
+                x: Math.random(), y: Math.random(), r: 0.5 + Math.random() * 1.8,
+                phase: Math.random() * Math.PI * 2, speed: 0.008 + Math.random() * 0.018,
+                vy: -(0.00008 + Math.random() * 0.00015), vx: (Math.random() - 0.5) * 0.00006
             }));
 
             const NODES = Array.from({length: 14}, () => ({
-                x: Math.random(),
-                y: Math.random(),
-                vx: (Math.random() - 0.5) * 0.0003,
-                vy: (Math.random() - 0.5) * 0.0003,
+                x: Math.random(), y: Math.random(),
+                vx: (Math.random() - 0.5) * 0.0003, vy: (Math.random() - 0.5) * 0.0003,
             }));
 
             const BRAND_WORDS = ['LEM MODA', 'ADMIN', 'ELITE', 'CONTROL', 'PANEL', 'STAFF', 'PREMIUM', 'QUITO'];
             const VIP_WORDS = ['ORO VIP', 'PREMIUM', 'ELITE ADMIN', 'GOLD CLIENT', 'LUXURY'];
-
             const GOLD_FILLS = ['#c9a84c', '#e8c87a', '#f0d080', '#b8965a'];
             const BLUE_FILLS = ['#7a9fc2', '#5b85ad', '#a5c2de'];
             const VIP_FILLS = ['#FFE082', '#FFD54F', '#FFCA28', '#c9a84c'];
@@ -604,25 +708,19 @@
             let fontReady = false;
             document.fonts.ready.then(() => { fontReady = true; });
 
-            function resize() {
-                W = canvas.width  = window.innerWidth;
-                H = canvas.height = window.innerHeight;
-            }
-
+            function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
             function rand(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
 
             function createWord() {
                 const side = Math.floor(Math.random() * 4);
                 let x, y, vx, vy;
                 const speed = 0.15 + Math.random() * 0.2;
-                if (side === 0)      { x = Math.random() * W; y = -20;   vx = (Math.random()-0.5)*0.15; vy = speed; }
-                else if (side === 1) { x = W+20;  y = Math.random()*H;   vx = -speed; vy = (Math.random()-0.5)*0.15; }
-                else if (side === 2) { x = Math.random()*W; y = H+20;    vx = (Math.random()-0.5)*0.15; vy = -speed; }
-                else                 { x = -20;   y = Math.random()*H;   vx = speed;  vy = (Math.random()-0.5)*0.15; }
-
-                const isGold = Math.random() > 0.35;
+                if (side === 0)      { x = Math.random() * W; y = -20; vx = (Math.random()-0.5)*0.15; vy = speed; }
+                else if (side === 1) { x = W+20; y = Math.random()*H; vx = -speed; vy = (Math.random()-0.5)*0.15; }
+                else if (side === 2) { x = Math.random()*W; y = H+20; vx = (Math.random()-0.5)*0.15; vy = -speed; }
+                else                 { x = -20; y = Math.random()*H; vx = speed; vy = (Math.random()-0.5)*0.15; }
                 const isVip = document.body.classList.contains('admin-vip-mode');
-                
+                const isGold = Math.random() > 0.35;
                 return {
                     x, y, vx, vy,
                     text: isVip ? rand(VIP_WORDS) : rand(BRAND_WORDS),
@@ -635,19 +733,16 @@
 
             function draw() {
                 ctx.clearRect(0, 0, W, H);
-                t += 0.012;
                 const isVip = document.body.classList.contains('admin-vip-mode');
 
                 for (const d of DOTS) {
-                    d.x += d.vx; d.y += d.vy;
-                    d.phase += d.speed;
+                    d.x += d.vx; d.y += d.vy; d.phase += d.speed;
                     if (d.y < -0.02) d.y = 1.02;
                     if (d.x < -0.01 || d.x > 1.01) d.vx *= -1;
-                    const alpha = isVip ? (0.12 + Math.abs(Math.sin(d.phase)) * 0.2) : (0.08 + Math.abs(Math.sin(d.phase)) * 0.18);
-                    ctx.globalAlpha = alpha;
+                    ctx.globalAlpha = isVip ? (0.12 + Math.abs(Math.sin(d.phase)) * 0.2) : (0.08 + Math.abs(Math.sin(d.phase)) * 0.18);
                     ctx.fillStyle = isVip ? '#FFE082' : '#c9a84c';
                     ctx.beginPath();
-                    ctx.arc(d.x * W, d.y * H, isVip ? (d.r * 1.3) : d.r, 0, Math.PI * 2);
+                    ctx.arc(d.x * W, d.y * H, isVip ? d.r * 1.3 : d.r, 0, Math.PI * 2);
                     ctx.fill();
                 }
 
@@ -673,9 +768,7 @@
                     }
                 }
 
-                if (fontReady && words.length < 7 && Math.random() < 0.02) {
-                    words.push(createWord());
-                }
+                if (fontReady && words.length < 7 && Math.random() < 0.02) words.push(createWord());
 
                 words = words.filter(w => {
                     w.life++; w.x += w.vx; w.y += w.vy;
@@ -683,14 +776,12 @@
                     if (w.life < fz) w.alpha = w.life / fz;
                     else if (w.life > w.maxLife - fz) w.alpha = Math.max(0, (w.maxLife - w.life) / fz);
                     else w.alpha = 1;
-                    if (w.life >= w.maxLife) return false;
-                    if (w.x < -150 || w.x > W+150 || w.y < -40 || w.y > H+40) return false;
-
+                    if (w.life >= w.maxLife || w.x < -150 || w.x > W+150 || w.y < -40 || w.y > H+40) return false;
                     ctx.save();
                     ctx.globalAlpha = w.alpha * (isVip ? 0.65 : 0.5);
                     ctx.translate(w.x, w.y); ctx.rotate(w.angle);
                     ctx.font = `700 ${w.size}px ${isVip ? "'Playfair Display', serif" : "'Inter', sans-serif"}`;
-                    ctx.letterSpacing = '3px'; ctx.textBaseline = 'middle';
+                    ctx.textBaseline = 'middle';
                     ctx.fillStyle = w.fill;
                     ctx.fillText(w.text, 0, 0);
                     ctx.restore();
@@ -702,7 +793,6 @@
 
             resize();
             window.addEventListener('resize', resize);
-
             setTimeout(() => {
                 for (let i = 0; i < 4; i++) {
                     const w = createWord();
