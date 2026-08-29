@@ -604,12 +604,12 @@
                 <p onclick="toggleVipLogin(true)" style="font-size: 0.68rem; color: #666; cursor: pointer; margin: 22px 0 -5px; letter-spacing: 1.5px; text-transform: uppercase;">✨ Acceso Clientes Oro VIP ✨</p>
             
               <a id="btnDownloadClienteApk"
-           href="https://github.com/lemmoda/Lem-Moda/releases/download/v1.0.0/LEM-Cliente.apk"
-           class="btn-pill-outline"
-           style="display:none; margin-top:14px; align-items:center; justify-content:center; gap:10px; text-decoration:none;"
-           download>
-          <i class="fa-brands fa-android"></i> Descargar App Android
-        </a>
+   href="https://github.com/lemmoda/Lem-Moda/releases/download/v1.0.0/LEM-Cliente.apk"
+   class="btn-pill-outline"
+   style="display: none; margin-top: 14px; width: 100%; box-sizing: border-box; align-items: center; justify-content: center; gap: 10px; text-decoration: none;"
+   download>
+  <i class="fa-brands fa-android"></i> Descargar App Android
+</a>
         </div>
             <!-- Login exclusivo VIP -->
             <div class="login-card" id="vipLoginForm" style="display: none; border-color: rgba(255,224,130,0.3);">
@@ -1262,17 +1262,16 @@
             setTimeout(() => { for (let i = 0; i < 5; i++) { const w = createWord(); w.x = 30 + Math.random() * (W - 60); w.y = 30 + Math.random() * (H - 60); w.life = Math.floor(Math.random() * 150); words.push(w); } draw(); }, 300);
         })();
     </script>
-        <script>
+<script>
 (function () {
   var KEY = 'lem_cliente_apk_descargada';
   var btn = document.getElementById('btnDownloadClienteApk');
   if (!btn) return;
 
   function esAppInstalada() {
-    // Abrió la app instalada (PWA / WebAPK / pantalla completa)
     if (window.matchMedia('(display-mode: standalone)').matches) return true;
     if (window.matchMedia('(display-mode: minimal-ui)').matches) return true;
-    if (navigator.standalone === true) return true; // iOS
+    if (navigator.standalone === true) return true;
     return false;
   }
 
@@ -1281,9 +1280,9 @@
   }
 
   function debeMostrar() {
-    if (!esAndroid()) return false;                 // solo Android
-    if (esAppInstalada()) return false;             // ya la tiene abierta como app
-    if (localStorage.getItem(KEY) === '1') return false; // ya descargó antes
+    if (!esAndroid()) return false;                 // Solo se muestra en celulares Android
+    if (esAppInstalada()) return false;             // Si abrió la app instalada, NO se muestra
+    if (localStorage.getItem(KEY) === '1') return false; // Si ya descargó el APK, NO se muestra
     return true;
   }
 
@@ -1292,8 +1291,8 @@
   }
 
   btn.addEventListener('click', function () {
-    // Al tocar descargar, no se vuelve a mostrar en este dispositivo
-    localStorage.setItem(KEY, '1');
+    localStorage.setItem(KEY, '1'); // Oculta el botón en descargas futuras
+    setTimeout(function() { btn.style.display = 'none'; }, 1000);
   });
 })();
 </script>
