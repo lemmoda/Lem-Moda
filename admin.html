@@ -264,6 +264,21 @@
         
         <span id="vipStatusBadge" class="vip-status-badge"><i class="fa-solid fa-crown"></i> CLIENTE ORO VIP</span>
 
+                <!-- Regalo bienvenida VIP -->
+        <div id="boxRegaloBienvenidaAdmin" style="display:none; margin: 12px 0; padding: 14px; border-radius: 14px; border: 1px dashed rgba(255,224,130,0.45); background: rgba(255,224,130,0.06);">
+            <p id="txtRegaloAdmin" style="margin:0 0 10px; font-size:0.78rem; color:#FFE082; letter-spacing:0.5px;">
+                🎁 Prenda gratis de bienvenida VIP
+            </p>
+            <button id="btnEntregarRegaloBienvenida"
+                    type="button"
+                    onclick="marcarRegaloBienvenidaEntregado()"
+                    style="width:100%; padding:12px; border-radius:50px; border:none; cursor:pointer;
+                           font-weight:800; letter-spacing:1px; text-transform:uppercase; font-size:0.72rem;
+                           background: linear-gradient(135deg,#FFE082,#c9a84c); color:#000;">
+                Prenda de regalo entregada
+            </button>
+        </div>
+
         <h2 id="clientName" style="color: #fff; margin: 0 0 5px 0; font-weight: 700; font-size: 1.4rem;">Cargando...</h2>
         <h3 id="clientPhone" style="color: var(--lem-gold); font-weight: 300; margin-top: 0;">WhatsApp: ---</h3>
 
@@ -504,6 +519,7 @@
                 document.getElementById('bdayAlertBanner').style.display = esCumpleañosHoy(clienteFechaNac) ? 'block' : 'none';
 
                 updateAdminAlerts(puntosActivos);
+                actualizarUIRegaloAdmin(data);
 
                 const yaSaludado = data.bienvenida_enviada;
                 document.getElementById('welcomeBtn').style.display = yaSaludado ? 'none' : 'block';
@@ -665,7 +681,7 @@
             }
         }
 
-        function restartScanner() {
+                function restartScanner() {
             if (userListenerRef) {
                 userListenerRef.off();
                 userListenerRef = null;
@@ -680,12 +696,76 @@
             document.getElementById('clientPhone').innerText = "WhatsApp: ---";
             document.getElementById('logMsg').innerText = "";
             document.getElementById('bdayAlertBanner').style.display = 'none';
+
+            // ✅ AQUÍ (ocultar caja del regalo al volver a escanear)
+            const boxRegalo = document.getElementById('boxRegaloBienvenidaAdmin');
+            if (boxRegalo) boxRegalo.style.display = 'none';
             
             document.body.classList.remove('admin-vip-mode');
             document.getElementById('adminPanel').classList.remove('is-vip');
             document.getElementById('adminHeaderTitle').style.color = 'var(--lem-gold)';
             
             startScanner();
+        }
+
+                function actualizarUIRegaloAdmin(data) {
+            const box = document.getElementById('boxRegaloBienvenidaAdmin');
+            const txt = document.getElementById('txtRegaloAdmin');
+            const btn = document.getElementById('btnEntregarRegaloBienvenida');
+            if (!box || !btn || !txt) return;
+
+            if (!isClientVIP) {
+                box.style.display = 'none';
+                return;
+            }
+
+            box.style.display = 'block';
+            const estado = (data && data.regalo_bienvenida) ? data.regalo_bienvenida : 'pendiente';
+
+            if (estado === 'entregado') {
+                txt.innerHTML = '✅ Prenda de bienvenida <b>YA ENTREGADA</b>';
+                txt.style.color = '#6DAE5A';
+                btn.disabled = true;
+                btn.innerText = '✓ Entregada';
+                btn.style.background = '#444';
+                btn.style.color = '#999';
+                btn.style.cursor = 'not-allowed';
+            } else if (estado === 'reclamado') {
+                txt.innerHTML = '🎁 Cliente ya reclamó por WhatsApp — <b>pendiente de entrega</b>';
+                txt.style.color = '#FFE082';
+                btn.disabled = false;
+                btn.innerText = 'Prenda de regalo entregada';
+                btn.style.background = 'linear-gradient(135deg,#FFE082,#c9a84c)';
+                btn.style.color = '#000';
+                btn.style.cursor = 'pointer';
+            } else {
+                txt.innerHTML = '🎁 Prenda gratis de bienvenida VIP — <b>aún no reclamada</b>';
+                txt.style.color = '#FFE082';
+                btn.disabled = false;
+                btn.innerText = 'Prenda de regalo entregada';
+                btn.style.background = 'linear-gradient(135deg,#FFE082,#c9a84c)';
+                btn.style.color = '#000';
+                btn.style.cursor = 'pointer';
+            }
+        }
+
+        function marcarRegaloBienvenidaEntregado() {
+            if (!telefonoOriginalEscaneado) {
+                alert('No hay cliente escaneado.');
+                return;
+            }
+            if (!isClientVIP) return;
+            if (!confirm('¿Confirmas que ya entregaste la PRENDA GRATIS DE BIENVENIDA a este cliente VIP?')) return;
+
+            db.ref('lem_users/' + telefonoOriginalEscaneado).update({
+                regalo_bienvenida: 'entregado',
+                regalo_bienvenida_fecha_entrega: new Date().toISOString()
+            }).then(() => {
+                document.getElementById('logMsg').innerText = '✓ Prenda de bienvenida marcada como entregada';
+                document.getElementById('logMsg').style.color = 'var(--lem-verde)';
+            }).catch((err) => {
+                alert('Error al guardar: ' + err.message);
+            });
         }
 
         window.onload = startScanner;
