@@ -241,6 +241,13 @@
         <p style="font-size: 0.6rem; color: #3a5a8a; margin: 6px 0 2px; letter-spacing: 2px;">PANEL DE CONTROL · ACCESO ELITE</p>
     </div>
 
+<a id="btnDownloadAdminApk"
+   href="https://github.com/lemmoda/Lem-Moda/releases/download/v1.0.0/LEM-Admin.apk"
+   style="display: none; margin: 14px auto; padding: 12px 18px; border-radius: 50px; border: 1px solid rgba(201,168,76,0.45); color: #c9a84c; text-decoration: none; font-size: 0.75rem; letter-spacing: 1px; text-transform: uppercase; font-weight: 700; align-items: center; justify-content: center; gap: 8px; width: 100%; max-width: 320px; box-sizing: border-box;"
+   download>
+  <i class="fa-brands fa-android"></i> Descargar Admin Android
+</a>
+        
     <div id="reader-container">
         <div id="reader"></div>
     </div>
@@ -814,5 +821,39 @@
         navigator.serviceWorker.register('/sw.js').catch(function () {});
       }
     </script>
+    <script>
+(function () {
+  var KEY = 'lem_admin_apk_descargada';
+  var btn = document.getElementById('btnDownloadAdminApk');
+  if (!btn) return;
+
+  function esAppInstalada() {
+    if (window.matchMedia('(display-mode: standalone)').matches) return true;
+    if (window.matchMedia('(display-mode: minimal-ui)').matches) return true;
+    if (navigator.standalone === true) return true;
+    return false;
+  }
+
+  function esAndroid() {
+    return /Android/i.test(navigator.userAgent);
+  }
+
+  function debeMostrar() {
+    if (!esAndroid()) return false;
+    if (esAppInstalada()) return false;
+    if (localStorage.getItem(KEY) === '1') return false;
+    return true;
+  }
+
+  if (debeMostrar()) {
+    btn.style.display = 'inline-flex';
+  }
+
+  btn.addEventListener('click', function () {
+    localStorage.setItem(KEY, '1');
+    setTimeout(function() { btn.style.display = 'none'; }, 1000);
+  });
+})();
+</script>
 </body>
 </html>
