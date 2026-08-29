@@ -1011,7 +1011,11 @@
             return new Promise((resolve) => {
                 generarCodigoVIP(phone).then((codigo) => {
                     db.ref('lem_users/' + phone).update({
-                        es_vip: true, puntos: 0, puntos_vip: 0, fecha_activacion_vip: new Date().toISOString()
+                        es_vip: true,
+                        puntos: 0,
+                        puntos_vip: 0,
+                        regalo_bienvenida: 'pendiente',
+                        fecha_activacion_vip: new Date().toISOString()
                     }).then(() => resolve(codigo));
                 });
             });
@@ -1033,7 +1037,7 @@
 
             lanzarConfetiVIP();
 
-            if (!vipListenerAttached) {
+                       if (!vipListenerAttached) {
                 vipListenerAttached = true;
                 db.ref('lem_users/' + phone).on('value', (snap) => {
                     const data = snap.val() || {};
@@ -1044,6 +1048,7 @@
                     
                     renderVipStamps(pv);
                     checkVipMilestones(pv, phone, codigoVip);
+                    actualizarBotonRegaloBienvenida(data.regalo_bienvenida || 'pendiente');
                 });
             }
         }
@@ -1137,6 +1142,63 @@
             let texto = `⭐ *¡BENEFICIO ELITE - LEM MODA!* ⭐\n\nHola, equipo de LEM. 👋\n\nHe completado mis primeras *4 ESTAMPAS* en mi Tarjeta Elite y quiero reclamar mi beneficio:\n🎁 *50% DE DESCUENTO* en una prenda de mi elección.\n\n📌 *Cliente:* ${nombreClienteActivo}\n📌 *WhatsApp registrado:* ${phone}\n\n¿Me ayudan para hacerlo efectivo? ¡Muchas gracias! 🙌`;
             window.open(`https://wa.me/${waNumber}?text=${encodeURIComponent(texto)}`, '_blank');
         }
+                function actualizarBotonRegaloBienvenida(estado) {
+            const btn = document.getElementById('btnRegaloBienvenida');
+            const txt = document.getElementById('txtRegaloBienvenida');
+            if (!btn) return;
+
+            if (estado === 'entregado') {
+                btn.disabled = true;
+                btn.innerHTML = '✓ Prenda entregada';
+                btn.style.background = '#444';
+                btn.style.color = '#999';
+                btn.style.boxShadow = 'none';
+                btn.style.cursor = 'not-allowed';
+                btn.style.opacity = '0.75';
+                if (txt) txt.innerText = 'Tu prenda de bienvenida ya fue entregada en tienda.';
+            } else if (estado === 'reclamado') {
+                btn.disabled = true;
+                btn.innerHTML = '✓ Reclamo enviado';
+                btn.style.background = '#555';
+                btn.style.color = '#bbb';
+                btn.style.boxShadow = 'none';
+                btn.style.cursor = 'not-allowed';
+                btn.style.opacity = '0.8';
+                if (txt) txt.innerText = 'Ya enviaste tu reclamo. En tienda marcarán la entrega.';
+            } else {
+                btn.disabled = false;
+                btn.innerHTML = 'Reclamar Ahora';
+                btn.className = 'btn-pill vip-btn-gold';
+                btn.style.padding = '8px 15px';
+                btn.style.fontSize = '0.7rem';
+                btn.style.marginTop = '10px';
+                btn.style.width = 'auto';
+                btn.style.borderRadius = '50px';
+                btn.style.background = '';
+                btn.style.color = '';
+                btn.style.boxShadow = '';
+                btn.style.cursor = 'pointer';
+                btn.style.opacity = '1';
+                if (txt) txt.innerText = 'Has completado tu ciclo anterior. Reclama tu obsequio premium.';
+            }
+        }
+
+        function reclamarRegaloBienvenida() {
+            const btn = document.getElementById('btnRegaloBienvenida');
+            if (!btn || btn.disabled) return;
+            if (!telefonoClienteActivo) return;
+
+            db.ref('lem_users/' + telefonoClienteActivo).update({
+                regalo_bienvenida: 'reclamado',
+                regalo_bienvenida_fecha_reclamo: new Date().toISOString()
+            }).then(() => {
+                actualizarBotonRegaloBienvenida('reclamado');
+                enviarWAVIP('regalo');
+            }).catch(() => {
+                alert('No se pudo registrar el reclamo. Intenta de nuevo.');
+            });
+        }
+        
 
         function enviarWAVIP(tipo) {
             const waNumber = "593984909967";
