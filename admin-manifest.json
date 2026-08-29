@@ -1,9 +1,10 @@
 {
+  "id": "/admin-app",
   "name": "LEM Admin Panel Elite",
   "short_name": "LEM Admin",
   "description": "Panel de control Elite LEM MODA - Escanear clientes y gestionar estampas",
   "start_url": "/admin.html",
-  "scope": "/",
+  "scope": "/admin.html",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#030a16",
