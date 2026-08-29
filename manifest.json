@@ -1,15 +1,24 @@
 {
-  "name": "LEM MODA | Tarjeta Elite",
+  "id": "/client-app",
+  "name": "LEM MODA Tarjeta Elite",
   "short_name": "LEM Cliente",
-  "id": "/lem-moda-cliente-v2",
-  "start_url": "./index.html",
-  "scope": "./",
+  "description": "Tarjeta de Fidelidad Elite LEM MODA",
+  "start_url": "/",
+  "scope": "/",
   "display": "standalone",
+  "orientation": "portrait",
   "background_color": "#000000",
   "theme_color": "#0a1628",
+  "lang": "es-EC",
   "icons": [
     {
-      "src": "1.png.png",
+      "src": "/1.png.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/1.png.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
